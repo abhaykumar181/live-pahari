@@ -1,0 +1,42 @@
+@font-face {
+    font-family: 'Figtree';
+    src: url('/font/Figtree-VariableFont_wght.ttf');
+}
+
+
+body{padding:0px; margin:0px; font-family: 'Figtree'; background-color: #f4f6f9; height:100%;}
+html{height:100%;}
+h1,h2,h3,h4,h5,h6{font-family: 'Figtree'; }
+h1{font-size: 2rem;}
+body .sidebar-fix{z-index: 999999;}
+[class*=sidebar-dark] .brand-link{color: rgba(255,255,255,.8); border-bottom: 1px solid #4b545c;}
+.brand-link{display: block;font-size: 1.25rem;line-height: 1.5;padding: 0.8125rem 0.5rem;transition: width .3s ease-in-out;white-space: nowrap;}
+.sidebar-dark{box-shadow: 0 14px 28px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.22)!important;}
+.sidebar-dark .sidebar a{color: #c2c7d0;}
+.layout-fixed .wrapper .sidebar{height: calc(100vh - (3.5rem + 1px));}
+.content-wrapper{ background-color: #f4f6f9;}
+.box-shadow-none { box-shadow: none ! important;}
+li.nav-item.active {background: #0d6efd ! important;}
+li.nav-item.active a{color:#fff ! important;}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {color: #fff ! important; background-color: #404e67;border-color: #404e67;}
+body .table thead th{ vertical-align: bottom; border-bottom: 2px solid #e3e6f0 ! important;}
+tbody, td, tfoot, th, thead, tr{border-color: #e3e6f0 ! important;}
+body .sidebar-fix{  z-index: 1000;bottom: 0;top: 0; position: fixed;}
+body .content-right {margin-left: 16.7%;position: relative;}
+.accordion-button:not(.collapsed){color: #fff;background-color:#212529 !important;}
+.accordion-button:not(.collapsed)::after{filter: brightness(0) invert(1) !important;}
+select.form-control { -webkit-appearance: menulist; }
+.fixed-bottom-footer{position: absolute;right: 0; bottom: 0; left: 0; z-index: 1030;}
+.logout-menu{margin-left: auto;}
+.logout-menu .dropdown-menu[data-bs-popper]{left: -98px;}
+.logout-menu  a .logout-dropdown{font-size: 23px;font-weight: bold;width: 40px;height: 40px; border-radius: 30px ! important; text-align: center; line-height: 41px; font-family: 'Figtree';}
+.logout-menu i{color: #ddd;}
+.dropdown img{width: 37px;margin: 0px 3px;}
+.dropdown-toggle {text-decoration: none;}
+
+.content-wrapper{min-height: 100vh;}
+.accordion-button{ background-color: #f4f6f9;}
+@media (min-width: 768px){
+    .navbar-white{background-color: #fff;color: #1f2d3d;}
+    .main-header{border-bottom: 1px solid #dee2e6;z-index: 1034;}
+}
