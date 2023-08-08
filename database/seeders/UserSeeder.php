@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'firstName' => $Faker->firstName,
             'lastName' => $Faker->lastName,
             'email' => $Faker->email,
-            'password' => Hash::make(1),
+            'password' => Hash::make(12345),
             'role' => "admin",
             'status' => 1,
             'phone' => '9876543210',

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\backend;
+namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function dashboard(){
-        return view('backend.auth.dashboard');
+    protected function dashboard(){
+        return view('backend.dashboard');
     }
 
-    public function logout(){
+    protected function logout(){
         Auth::logout();
-        return redirect()->route('admin.login');
+        return redirect()->route('admin.login')->with('message','logged out successful.');
     }
 }
