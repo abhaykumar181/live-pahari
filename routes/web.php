@@ -20,7 +20,7 @@ Route::group(['as'=>'admin.'], function(){
             Route::group(['as'=>'locations.','prefix'=>'locations', 'controller'=>App\Http\Controllers\Backend\LocationController::class],function(){
                 Route::get('/','index')->name('index');
                 Route::get('/edit/{locationId}','edit')->name('edit');
-                Route::post('/create','store')->name('store');
+                Route::post('/','store')->name('store');
 
             });
 

@@ -8,28 +8,40 @@ use App\Models\Locations;
 
 class LocationController extends Controller
 {
+
     protected function index(){
         $locations = Locations::all();
-        return view("backend.locations.index",compact('locations'));
+        return view("backend.locations.index",compact('locations'));       
     }
 
-    protected function edit($loactionId=''){
-        // return view 
+    protected function edit($loactionId=''){ 
+       $data['locations'] = Locations::all();  
+       $data['location'] = Locations::find($loactionId);
+       return view("backend.locations.index", $data);
+
     }
 
     protected function store(Request $request){
         try{
             $validateInput = [
-                'location' => 'required'
+                'locationName' => 'required'
             ];
             $request->validate($validateInput);
 
-            $location = new Locations;
-            $location->name = $request->location;
-            $location->slug = getSlug($request->location);
+            if($request->input('locationId')){
+                $location = Locations::find($request->input('locationId'));
+            }else{
+                $location = new Locations;
+            }
+            $location->name = $request->locationName;
+            $location->slug = getSlug($request->locationName);
             
             if($location->save()){
-                return redirect()->route('admin.locations.index')->with('message','Location added successfully.');
+                $successMessage = "Location added successfully.";
+                if($request->input('locationId')){
+                    $successMessage = "Location updated successfully.";
+                }
+                return redirect()->route('admin.locations.index')->with('message',$successMessage);
             }
 
         }catch(\Illuminate\Database\QueryException $e){

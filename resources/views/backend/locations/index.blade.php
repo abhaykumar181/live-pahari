@@ -45,9 +45,12 @@
                                             @csrf
                                             <div class="mb-3">
                                                 <label for="location" class="form-label">Enter Location</label>
-                                                <input type="text" class="form-control shadow-sm" name="location" id="location">
+                                                <input type="text" class="form-control shadow-sm" name="locationName"  id="location" placeholder="Location Name" value="{{ isset($location) ? $location->name : '' }}">
                                             </div>
                                             <button type="submit" class="btn btn-success shadow-sm">Save</button>
+                                            @if(isset($location))
+                                                <input type="hidden" name="locationId" value="{{ $location->id }}" />
+                                            @endif
                                         </form>
                                         </div>
                                     </div>
