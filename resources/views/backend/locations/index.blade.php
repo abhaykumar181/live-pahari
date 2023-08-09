@@ -11,7 +11,7 @@
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right mb-0 justify-content-end">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
                         <li class="breadcrumb-item active">Locations</li>
                     </ol>
                 </div><!-- /.col -->
@@ -39,15 +39,15 @@
                                 <div class="row">
                                     <!-- add locations -->
                                     <div class="col-md-4">
-                                        <div class="fw-bold fs-5">Add Location</div>
+                                        <div class="fw-bold fs-5">{{ isset($location) ? "Edit Location" : "Add New Location" }}</div>
                                         <div class="input-group my-3">
-                                        <form class="form" action="{{route('admin.locations.store')}}" method="post" enctype="multipart/form-data">
+                                        <form class="location_form" action="{{route('admin.locations.store')}}" method="post" enctype="multipart/form-data">
                                             @csrf
                                             <div class="mb-3">
-                                                <label for="location" class="form-label">Enter Location</label>
-                                                <input type="text" class="form-control shadow-sm" name="locationName"  id="location" placeholder="Location Name" value="{{ isset($location) ? $location->name : '' }}">
+                                                <label for="location" class="form-label">Location Name</label>
+                                                <input type="text" class="form-control shadow-sm" name="locationName" id="location" placeholder="Location Name" value="{{ isset($location) ? $location->name : '' }}">
                                             </div>
-                                            <button type="submit" class="btn btn-success shadow-sm">Save</button>
+                                            <button type="submit" class="btn btn-success shadow-sm">{{ isset($location) ? "Update" : "Create" }}</button>
                                             @if(isset($location))
                                                 <input type="hidden" name="locationId" value="{{ $location->id }}" />
                                             @endif
@@ -70,7 +70,7 @@
                                                 <tr>
                                                     <th scope="row">{{$serialno++}}</th>
                                                     <td>{{$location->name}}</td>
-                                                    <td><a href="{{route('admin.locations.edit', ['locationId' => $location->id])}}" class="btn-sm btn-primary text-decoration-none shadow-sm">Edit</a></td>
+                                                    <td><a href="{{route('admin.locations.edit', ['locationId' => $location->id])}}" class="btn-sm btn-primary text-decoration-none shadow-sm"><i class="fa-solid fa-pencil"></i></a></td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>

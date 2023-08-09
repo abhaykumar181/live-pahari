@@ -23,6 +23,12 @@ if(!function_exists('getSlug')){
     }
 }
 
+if(!function_exists('setTextlimit')){
+    function setTextlimit($text){
+        return str::limit($text,130);
+    }
+}
+
 
 
 /**

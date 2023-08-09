@@ -14,7 +14,7 @@
                     <div class="login-form">
                         <div class="text-center fs-2 text-white mb-3 fw-bold">Pahari Host</div>
                         <div class="bg-white p-5 py-4">
-                            <form class="form" action="{{route('admin.checklogin')}}" method="post" enctype="multipart/form-data">
+                            <form class="login_form" action="{{route('admin.checklogin')}}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3 text-center fw-medium">Sign in to start your session</div>
                                 @include('backend.layouts.includes.notices')

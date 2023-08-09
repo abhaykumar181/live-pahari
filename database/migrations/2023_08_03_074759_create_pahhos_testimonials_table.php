@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title',255);
             $table->text('testimonial');
             $table->integer('status');
-            $table->string('thumbnail',55);
+            $table->string('thumbnail',55)->nullable();
             $table->timestamps();
         });
     }

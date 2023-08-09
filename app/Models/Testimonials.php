@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Testimonials extends Model
 {
     use HasFactory;
+    protected $table = "pahhos_testimonials";
 }

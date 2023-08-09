@@ -28,6 +28,16 @@ class LocationController extends Controller
             ];
             $request->validate($validateInput);
 
+            $query = Locations::where("name", $request->input('locationName'));
+            if($request->input('locationId')){
+                $query->where("id", "!=", $request->input('locationId'));
+            }
+
+            $location = $query->first();
+            if(!is_null($location)){
+                return redirect()->back()->with('error', "Same Location already exists.")->withInput();
+            }
+
             if($request->input('locationId')){
                 $location = Locations::find($request->input('locationId'));
             }else{
@@ -43,10 +53,8 @@ class LocationController extends Controller
                 }
                 return redirect()->route('admin.locations.index')->with('message',$successMessage);
             }
-
         }catch(\Illuminate\Database\QueryException $e){
             return redirect()->route('admin.locations.index')->with('error','Failed to add location.');
         }
     }
-
 }

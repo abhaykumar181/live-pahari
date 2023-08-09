@@ -21,7 +21,16 @@ Route::group(['as'=>'admin.'], function(){
                 Route::get('/','index')->name('index');
                 Route::get('/edit/{locationId}','edit')->name('edit');
                 Route::post('/','store')->name('store');
+            });
 
+            // Web Routes for Testimonials
+            Route::group(['as'=>'testimonials.','prefix'=>'testimonials','controller'=>App\Http\Controllers\Backend\TestimonialController::class], function(){
+                Route::get('/','index')->name('index');
+                Route::get('/create','create')->name('create');
+                Route::post('/create','store')->name('store');
+                Route::get('/edit/{testimonialId}','edit')->name('edit');
+                Route::post('/edit','store')->name('update');
+                Route::get('/delete/{testimonialId}','delete')->name('delete');
             });
 
         });
