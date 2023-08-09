@@ -43,6 +43,7 @@
                                             @csrf
                                             <div class="mb-3">
                                                 <label for="name" class="form-label">Name <span class="required">*</span></label>
+                                                <input type="hidden" class="form-control shadow-sm" name="id" value="{{$testimonial->id}}" >
                                                 <input type="text" class="form-control shadow-sm" name="name" id="name" value="{{$testimonial->name}}" >
                                             </div>
                                             <div class="mb-3">
@@ -58,6 +59,7 @@
                                             <div class="mb-3 ">
                                                 <label for="formFile" class="form-label">Choose Image</label>
                                                 <input class="form-control shadow-sm file-placeholder" name="thumbnail" type="file" id="thumbnail" value="{{old('thumbnail','')}}">
+                                                <input class="form-control shadow-sm file-placeholder" name="thumbnailName" type="hidden" value="{{$testimonial->thumbnail}}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="status" class="form-label">Status <span class="required">*</span></label>

@@ -32,13 +32,18 @@ class TestimonialController extends Controller
             ];
             $request->validate($validateInput);
     
-            $imageName = null;
+            $imageName = $request->thumbnailName? $request->thumbnailName : null;
             if($request->hasFile('thumbnail')){
                 $imageName = time() . '.' . $request->thumbnail->extension();
                 $request->thumbnail->move(public_path('/testimonials/images'), $imageName);
             }
 
-            $testmonial = new Testimonials;
+            if($request->post('id')){
+                $testmonial = Testimonials::find($request->post('id'));
+            }else{
+                $testmonial = new Testimonials;
+            }
+
             $testmonial->name = $request->name;
             $testmonial->title = $request->title;
             $testmonial->testimonial = $request->testimonial;
@@ -46,11 +51,19 @@ class TestimonialController extends Controller
             $testmonial->status = $request->testimonial_status;
             
             if($testmonial->save()){
-                return redirect()->route('admin.testimonials.index')->with('message','Testimonial added successfully.');
+                if($request->post('id')){
+                    return redirect()->route('admin.testimonials.index')->with('message','Testimonial updated successfully.');
+                }else{
+                    return redirect()->route('admin.testimonials.index')->with('message','Testimonial added successfully.');
+                }
             }
         }
         catch(\Illuminate\Database\QueryException $e){
-            return redirect()->route('admin.testimonials.index')->with('error',"Failed to add Testimonial .'$e'.");
+            if($request->post('id')){
+                return redirect()->route('admin.testimonials.index')->with('error','Failed to update Testimonial.');
+            }else{
+                return redirect()->route('admin.testimonials.index')->with('error','Failed to add Testimonial.');
+            }
         }
 
     }
