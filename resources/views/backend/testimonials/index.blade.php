@@ -60,7 +60,7 @@
                                         <td>{{ $testimonial->status === 1 ? 'Active' : 'Inactive' }}</td>
                                         <td>
                                              <a href="{{route('admin.testimonials.edit', ['testimonialId'=> $testimonial->id ])}}" class="btn-sm btn-primary text-decoration-none shadow-sm d-inline-block"> <i class="fa-solid fa-pencil"></i> </a>
-                                             <a href="javascript:;" class="btn-sm btn-danger text-decoration-none shadow-sm d-inline-block delete" data-type="testimonial" data-id="{{ $testimonial->id }}"> <i class="fa-solid fa-trash"></i> </a>
+                                             <a href="javascript:;" class="btn-sm btn-danger text-decoration-none shadow-sm d-inline-block delete " data-type="testimonial" data-id="{{ $testimonial->id }}"> <i class="fa-solid fa-trash"></i> </a>
                                         </td>
                                     </tr>
                                     @endforeach

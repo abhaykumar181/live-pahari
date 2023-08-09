@@ -35,7 +35,7 @@ class TestimonialController extends Controller
             $imageName = $request->thumbnailName? $request->thumbnailName : null;
             if($request->hasFile('thumbnail')){
                 $imageName = time() . '.' . $request->thumbnail->extension();
-                $request->thumbnail->move(public_path('/testimonials/images'), $imageName);
+                $request->thumbnail->move(public_path('storage/testimonials/images'), $imageName);
             }
 
             if($request->post('id')){
