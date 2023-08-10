@@ -10,6 +10,9 @@
             <li class="nav-item mb-1 {{ (getControllerName() == 'LocationController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.locations.index') }}"> <i class="fa-solid fa-list"></i> Locations</a></li>
             
             <li class="nav-item mb-1 {{ (getControllerName() == 'TestimonialController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.testimonials.index') }}"> <i class="fa-solid fa-comment-dots"></i> Testimonials</a></li>
+            
+            <li class="nav-item mb-1 {{ (getControllerName() == 'AddonsController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.addons.index') }}"> <i class="fa-solid fa-puzzle-piece"></i> Addons</a></li>
+            
         
         </ul>
     </div>

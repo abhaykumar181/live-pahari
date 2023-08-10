@@ -34,7 +34,7 @@ class TestimonialController extends Controller
     
             $imageName = $request->thumbnailName? $request->thumbnailName : null;
             if($request->hasFile('thumbnail')){
-                $imageName = time() . '.' . $request->thumbnail->extension();
+                $imageName = getSlug($request->title) . '.' . $request->thumbnail->extension();
                 $request->thumbnail->move(public_path('storage/testimonials/images'), $imageName);
             }
 
@@ -67,5 +67,25 @@ class TestimonialController extends Controller
         }
 
     }
+
+    protected function delete($testimonialId){
+        try{
+            $testimonial = Testimonials::find($testimonialId);
+            if(!$testimonial){
+                return redirect()->back()->with('error','Failed to delete Testimonial.');
+            }else{
+                if($testimonial->delete()){
+                    return redirect()->back()->with('message','Testimonial deleted successfully.');
+                }else{
+                    return redirect()->back()->with('error','Failed to delete Testimonial.');
+                }
+            }
+        }catch(\Illuminate\Database\QueryException $e){
+            return redirect()->route('admin.testimonials.index')->with('error','Failed to delete Testimonial.');
+        }
+    }
+
+
+
 
 }

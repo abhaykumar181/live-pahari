@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->enum('objectType',['testimonial','addon','property','package']);
             $table->bigInteger('objectId');
+            $table->bigInteger('locationId');
             $table->timestamps();
         });
     }

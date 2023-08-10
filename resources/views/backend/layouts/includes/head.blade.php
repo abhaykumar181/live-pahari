@@ -4,7 +4,10 @@
 
 <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/dashboard-styles.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+
+<script src="{{ asset('js/select2.min.js') }}"></script>

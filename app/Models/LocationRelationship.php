@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class LocationRelationship extends Model
 {
     use HasFactory;
+    protected $table = "pahhos_location_relationship";
 }

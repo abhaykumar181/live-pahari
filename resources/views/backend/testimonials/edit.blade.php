@@ -35,7 +35,7 @@
                             <h5 class="mb-0">Edit Testimonial</h5>
                         </div>
 
-                        <form class="testimonial_form" action="{{route('admin.testimonials.update')}}" method="post" enctype="multipart/form-data" >
+                        <form class="testimonial_form" action="{{route('admin.testimonials.store')}}" method="post" enctype="multipart/form-data" >
                             <div class="card-body">
                                 <div class="container">
                                     <div class="row">
@@ -58,8 +58,14 @@
                                         <div class="col-md-3">
                                             <div class="mb-3 ">
                                                 <label for="formFile" class="form-label">Choose Image</label>
-                                                <input class="form-control shadow-sm file-placeholder" name="thumbnail" type="file" id="thumbnail" value="{{old('thumbnail','')}}">
-                                                <input class="form-control shadow-sm file-placeholder" name="thumbnailName" type="hidden" value="{{$testimonial->thumbnail}}">
+                                                @if($testimonial->thumbnail === NULL)
+                                                <img id="uploadPreview" class="img-thumbnail d-none" alt="image" >
+                                                <p class="imgMessage">No image selected</p>
+                                                @else
+                                                <img src="{{ asset('storage/testimonials/images/'.$testimonial->thumbnail.'') }}" id="uploadPreview" class="img-thumbnail" style="height:130px;width:100%" alt="image">
+                                                @endif
+                                                <input class="form-control shadow-sm file-placeholder" name="thumbnail" type="file" id="thumbnail"  onchange="PreviewImage();" value="{{old('thumbnail','')}}">
+                                                <input name="thumbnailName" type="hidden" value="{{$testimonial->thumbnail}}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="status" class="form-label">Status <span class="required">*</span></label>
@@ -75,7 +81,7 @@
                             </div>
                             <div class="card-footer">
                                 <div class="text-end">
-                                    <button type="submit" class="btn btn-success">Update</button>
+                                    <button type="submit" class="btn btn-success shadow-sm">Update</button>
                                 </div>                        
                             </div>                        
                         </form>

@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Addons extends Model
 {
     use HasFactory;
+    protected $table = "pahhos_addons";
 }
