@@ -7,12 +7,12 @@
         <div class="container-fluid">
             <div class="row mb-2 align-items-center py-3">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Add-ons</h1>
+                    <h1 class="m-0">Properties</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right mb-0 justify-content-end">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                        <li class="breadcrumb-item active">Add-ons</li>
+                        <li class="breadcrumb-item active">Properties</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -32,8 +32,8 @@
                         
                         <div class="card-header bg-white py-3 ">
                             <div class="row">
-                                <div class="col-md-6 mb-0 my-auto"><h5>All Add-ons</h5></div>
-                                <div class="col-md-6 mb-0 my-auto text-end"><a class="btn shadow-sm btn-primary" href="{{route('admin.addons.create')}}">Create Add-on</a></div>
+                                <div class="col-md-6 mb-0 my-auto"><h5>All Properties</h5></div>
+                                <div class="col-md-6 mb-0 my-auto text-end"><a class="btn shadow-sm btn-primary" href="{{route('admin.properties.create')}}">Create Property</a></div>
                             </div>
                         </div>
 
@@ -52,7 +52,7 @@
 
                                 <tbody>
                                     @php $serialno= 1;  @endphp
-                                    @foreach($addons as $key => $addon)
+                                    @foreach($properties as $key => $addon)
                                     <tr>
                                         <th>{{$serialno++}}</th>
                                         <td>{{$addon->title}}</td>

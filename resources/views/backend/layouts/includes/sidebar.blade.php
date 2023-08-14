@@ -11,7 +11,9 @@
             
             <li class="nav-item mb-1 {{ (getControllerName() == 'TestimonialController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.testimonials.index') }}"> <i class="fa-solid fa-comment-dots"></i> Testimonials</a></li>
             
-            <li class="nav-item mb-1 {{ (getControllerName() == 'AddonsController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.addons.index') }}"> <i class="fa-solid fa-puzzle-piece"></i> Addons</a></li>
+            <li class="nav-item mb-1 {{ (getControllerName() == 'AddonsController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.addons.index') }}"> <i class="fa-solid fa-puzzle-piece"></i> Add-ons</a></li>
+           
+            <li class="nav-item mb-1 {{ (getControllerName() == 'PropertiesController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.properties.index') }}"> <i class="fa-solid fa-house"></i> Properties</a></li>
             
         
         </ul>

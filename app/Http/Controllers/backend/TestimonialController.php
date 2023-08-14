@@ -19,7 +19,11 @@ class TestimonialController extends Controller
 
     protected function edit($testimonialId){
         $testimonial = Testimonials::find($testimonialId);
-        return view('backend.testimonials.edit',compact('testimonial'));
+        if($testimonial){
+            return view('backend.testimonials.edit',compact('testimonial'));
+        }else{
+            return redirect()->route('admin.testimonials.index')->with('error', "This testimonial doesn't exists.")->withInput();
+        }
     }
 
     protected function store(Request $request){

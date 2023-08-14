@@ -8,29 +8,63 @@ use App\Models\Addons;
 use App\Models\Locations;
 use App\Models\LocationRelationship;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class AddonsController extends Controller
 {
+    /**
+     * add-on listing
+     * 
+     * @since 1.0.0
+     * 
+     * @return html
+     */
     protected function index(){
         $addons = Addons::all();
         return view('backend.addons.index',compact('addons'));
     }
 
+    /**
+     * create add-on
+     * 
+     * @since 1.0.0
+     * 
+     * @return html
+     */
     protected function create(){
         $data['allLocations'] = Locations::all();
         return view('backend.addons.create',$data);
     }
 
-    protected function edit($addonId){
+    /**
+     * edit add-on
+     * 
+     * @since 1.0.0
+     * 
+     * @accept addonId | Integer
+     * @return html | redirection
+     */
+    protected function edit($addonId=''){
         $data['allLocations'] = Locations::all();
         $data['addons'] = Addons::find($addonId);
-        return view('backend.addons.edit', $data);
+        $data['addOnLocations'] = LocationRelationship::where('objectType','=','addon')->where('objectId','=',$addonId)->pluck('locationId')->toArray();
+        if(($data['addons'])){
+            return view('backend.addons.edit', $data);
+        }else{
+            return redirect()->route('admin.addons.index')->with('error', "Add-on doesn't exists.")->withInput();
+        }
     }
 
+
+    /**
+     * store add-on
+     * 
+     * @since 1.0.0
+     * 
+     * @accept request
+     * @return redirection
+     */
     protected function store(Request $request){
         try{
-            dd($request->all());
             $validateInput = [
                 'title' => 'required',
                 'description' => 'required',
@@ -53,10 +87,9 @@ class AddonsController extends Controller
             
             if($request->post('id')){
                 $addon = Addons::find($request->post('id'));
-            }else{
+            }else{  
                 $addon = new Addons;
                 $addon->userId = Auth::user()->id;
-                
             }
             
             $addon->title = $request->title;
@@ -68,35 +101,85 @@ class AddonsController extends Controller
             $addon->status = $request->addon_status;
             
             if($addon->save()){
+
+                $updateLocations = false;
+                if($request->post('id')){
+                    $existingAddonLocations = LocationRelationship::where([
+                        'objectId' => $request->post('id'),
+                        'objectType' => 'addon',
+                    ])->pluck('locationId')->toArray();
+
+                    if(!empty($existingAddonLocations)){
+                        foreach($existingAddonLocations as $locationId){
+                            if(!in_array($locationId, $request->locations)){
+                                $updateLocations = true;
+                            }
+                        }
+
+                        if(count(array_diff($request->locations,$existingAddonLocations)) > 0){
+                            $updateLocations = true;
+                        }
+                    }
+                }else{
+                    $updateLocations = true;
+                }
+
+
+                if($updateLocations == true){
+
+                    if($request->post('id')){
+                        LocationRelationship::where([
+                            'objectId' => $request->post('id'),
+                            'objectType' => 'addon',
+                        ])->delete();
+                    }
+
+                    $data = [];
+
+                    if(!empty($request->locations)){
+                        foreach($request->locations as $locationId){
+                            $data[] = [
+                                'objectType' => "addon",
+                                'objectId' => $addon->id,
+                                'locationId' => $locationId,
+                            ]; 
+                        }
+                    }
+            
+                    if(!empty($data)){
+                        LocationRelationship::insert($data);
+                    }
+                }
+
                 if($request->post('id')){
                     return redirect()->route('admin.addons.index')->with('message','Addon updated successfully.');
                 }else{
-                    foreach($request->locations as $location){
-                        $data[] = [
-                            'objectType' => "addon",
-                            'objectId' => $addon->id,
-                            'locationId' => $location,
-                        ]; 
-                    }
-
-                    DB::table('pahhos_location_relationship')->insert($data);
                     return redirect()->route('admin.addons.index')->with('message','Addon added successfully.');
                 }
+
             }
         }
         catch(\Illuminate\Database\QueryException $e){
             if($request->post('id')){
                 return redirect()->route('admin.addons.index')->with('error','Failed to update Addon.');
             }else{
-                return redirect()->route('admin.addons.index')->with('error','Failed to add Addon.');
+                return redirect()->route('admin.addons.index')->with('error',"Failed to add Addon.");
             }
         }
 
     }
 
 
+    /**
+     * Delete add-on
+     * 
+     * @since 1.0.0
+     * 
+     * @accept $addonId |  Integer
+     * @return redirection
+     */
     protected function delete($addonId){
-        try{
+        try{            
             $addon = Addons::find($addonId);
             if(!$addon){
                 return redirect()->back()->with('error','Failed to delete Addon.');
@@ -111,8 +194,4 @@ class AddonsController extends Controller
             return redirect()->route('admin.addons.index')->with('error','Failed to delete addon.');
         }
     }
-
-
-
-
 }

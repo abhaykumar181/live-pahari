@@ -137,6 +137,9 @@ jQuery(document).ready(function($) {
             addon_status: {
                 required: true
             },
+            locations: {
+                required: true
+            },
             
         },
         messages: {
@@ -157,6 +160,89 @@ jQuery(document).ready(function($) {
             },
             addon_status: {
                 required: "Please select the Status."
+            },
+            locations: {
+                required: "Please select locations."
+            },
+        }, 
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.parent('div').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+
+
+
+    // Validate Addon Form
+    $(".property_form").validate({
+        errorElement: 'span',
+        errorClass: 'error',
+        onkeyup: false,
+        rules: {
+            title: {
+                required: true
+            },
+            description: {
+                required: true
+            },
+            thumbnail: {
+                required: function(element){
+                    return ($("input[name='thumbnailName']").length < 1 || $("input[name='thumbnailName']").val() == "");
+                }
+            },
+            price: {
+                required: true
+            },
+            priceType: {
+                required: true
+            },
+            addon_status: {
+                required: true
+            },
+            ownerName: {
+                required: true
+            },
+            email: {
+                required: true
+            },
+            phone: {
+                required: true
+            },
+            
+        },
+        messages: {
+            title: {
+                required: "Please enter Title."
+            },
+            description: {
+                required: "Please enter Description."
+            },
+            thumbnail: {
+                required: "Please select an Image."
+            },
+            price: {
+                required: "Please enter Price."
+            },
+            priceType: {
+                required: "Please select the Price type."
+            },
+            addon_status: {
+                required: "Please select the Status."
+            },
+            ownerName: {
+                required: "Please enter the Owner Name."
+            },
+            email: {
+                required: "Please enter the Owner Email."
+            },
+            phone: {
+                required: "Please enter the Phone Number."
             },
         }, 
         errorPlacement: function (error, element) {

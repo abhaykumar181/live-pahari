@@ -7,13 +7,13 @@
         <div class="container-fluid">
             <div class="row mb-2 align-items-center py-3">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Addons</h1>
+                    <h1 class="m-0">Add-ons</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right mb-0 justify-content-end">
                         <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{route('admin.addons.index')}}">Addons</a></li>
-                        <li class="breadcrumb-item active">Create</li>
+                        <li class="breadcrumb-item"><a href="{{route('admin.addons.index')}}">Add-ons</a></li>
+                        <li class="breadcrumb-item active">Edit</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -32,7 +32,7 @@
                     <div class="card card-white rounded-0">
                         
                         <div class="card-header bg-white py-3 ">
-                            <h5 class="mb-0">Edit Addon</h5>
+                            <h5 class="mb-0">Edit Add-on</h5>
                         </div>
 
                         <form class="addon_form" action="{{route('admin.addons.store')}}" method="post" enctype="multipart/form-data" >
@@ -56,9 +56,9 @@
                                                     Select Locations <span class="required">*</span>
                                                 </label>
 
-                                                <select class="js-example-basic-multiple js-states form-control" id="id_label_multiple" multiple="multiple">
+                                                <select class="js-example-basic-multiple js-states form-control" id="id_label_multiple"  name="locations[]" multiple="multiple">
                                                     @foreach($allLocations as $location)
-                                                    <option value="{{$location->id}}">{{$location->name}}</option>
+                                                        <option value="{{$location->id}}" {{ (isset($addOnLocations) && in_array($location->id, $addOnLocations)) ? "selected" : "" }} >{{$location->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

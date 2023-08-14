@@ -7,12 +7,12 @@
         <div class="container-fluid">
             <div class="row mb-2 align-items-center py-3">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Add-ons</h1>
+                    <h1 class="m-0">Properties</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right mb-0 justify-content-end">
                         <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{route('admin.addons.index')}}">Add-ons</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('admin.addons.index')}}">Properties</a></li>
                         <li class="breadcrumb-item active">Create</li>
                     </ol>
                 </div><!-- /.col -->
@@ -32,10 +32,10 @@
                     <div class="card card-white rounded-0">
                         
                         <div class="card-header bg-white py-3 ">
-                            <h5 class="mb-0">Create Add-on</h5>
+                            <h5 class="mb-0">Create Property</h5>
                         </div>
 
-                        <form class="addon_form" method="post" enctype="multipart/form-data" >
+                        <form class="property_form" method="post" enctype="multipart/form-data" >
                             <div class="card-body">
                                 <div class="container">
                                     <div class="row">
@@ -56,7 +56,7 @@
 
                                                 <select class="js-example-basic-multiple js-states form-control" name="locations[]" id="id_label_multiple" multiple="multiple">
                                                     @foreach($allLocations as $location)
-                                                    <option value="{{$location->id}}">{{$location->name}}</option>
+                                                        <option value="{{$location->id}}">{{$location->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -91,6 +91,57 @@
                                     </div>
                                 </div>
                             </div>
+
+
+                            <div class="card-header bg-white py-3 border-top ">
+                                <h5 class="mb-0">Property Details</h5>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="ownerName" class="form-label">Owner Name <span class="required">*</span></label>
+                                                <input type="text" class="form-control shadow-sm" name="ownerName" id="ownerName" value="{{old('ownerName','')}}" >
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email <span class="required">*</span></label>
+                                                <input type="email" class="form-control shadow-sm" name="email" id="email" value="{{old('email','')}}" >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="phone" class="form-label">Phone Number <span class="required">*</span></label>
+                                                <input type="number" class="form-control shadow-sm" name="phone" id="phone" min="0" value="{{old('phone','')}}" >
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="phone" class="form-label">confirmation <span class="required">*</span></label>
+                                                <div class="d-flex">
+                                                    <div >
+                                                        <input class="form-check-input shadow-sm" type="radio" name="confirmation" id="radio1" value="{{old('confirmation','1')}}">
+                                                        <label class="form-check-label" for="radio1">
+                                                            Yes
+                                                        </label>
+                                                    </div>
+                                                    <div class="mx-3">
+                                                        <input class="form-check-input shadow-sm" type="radio" name="confirmation" id="radio2" value="{{old('confirmation','0')}}" checked>
+                                                        <label class="form-check-label" for="radio2">
+                                                            No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
                             <div class="card-footer">
                                 <div class="text-end">
                                     <button type="submit" class="btn btn-success shadow-sm">Create</button>

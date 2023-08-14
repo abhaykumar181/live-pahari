@@ -41,6 +41,13 @@ Route::group(['as'=>'admin.'], function(){
                 Route::get('/delete/{addonId}','delete')->name('delete');
             });
 
+            // Web Routes for Properties
+            Route::group(['as'=>'properties.','prefix'=>'properties','controller'=>App\Http\Controllers\Backend\PropertiesController::class], function(){
+                Route::get('/','index')->name('index');
+                Route::get('/create','create')->name('create');
+                Route::post('/create','store')->name('store');
+            });
+
         });
 
     });

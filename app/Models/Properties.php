@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Properties extends Model
 {
     use HasFactory;
+    protected $table = "pahhos_properties";
 }

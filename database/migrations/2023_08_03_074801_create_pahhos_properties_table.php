@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('thumbnail',55);
             $table->enum('priceType',['fixed','unit']);
             $table->decimal('price');
-            $table->integer('phone');
+            $table->bigInteger('phone');
             $table->string('ownerName',55);
             $table->string('email',55);
             $table->integer('confirmationRequired');
