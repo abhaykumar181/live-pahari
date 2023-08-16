@@ -268,6 +268,72 @@ jQuery(document).ready(function($) {
     });
 
 
+
+     // Validate Package Form
+     $(".package_form").validate({
+        errorElement: 'span',
+        errorClass: 'error',
+        onkeyup: false,
+        ignore: ".ignore",
+        rules: {
+            title: {
+                required: true
+            },
+            description: {
+                required: true
+            },
+            howtoReach: {
+                required: true
+            },
+            extraDetails: {
+                required: true
+            },
+            "locations[]": "required",
+            thumbnail: {
+                required: function(element){
+                    return ($("input[name='thumbnailName']").length < 1 || $("input[name='thumbnailName']").val() == "");
+                }
+            },
+            price: {
+                required: true
+            },
+            
+            
+        },
+        messages: {
+            title: {
+                required: "Please enter Title."
+            },
+            description: {
+                required: "Please enter Description."
+            },
+            howtoReach: {
+                required:  "Please enter How to reach."
+            },
+            extraDetails: {
+                required:  "Please enter Extra Details."
+            },
+            "locations[]": "Please choose Locations.",
+            thumbnail: {
+                required: "Please select an Image."
+            },
+            price: {
+                required: "Please enter Price."
+            },
+        }, 
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.parent('div').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+
+
     
 });
 

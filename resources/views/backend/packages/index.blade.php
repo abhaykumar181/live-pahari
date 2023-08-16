@@ -44,15 +44,25 @@
                                     <th>S.No</th>
                                     <th>Title</th>
                                     <th>Price</th>
-                                    <th>Price Type</th>
-                                    <th>Confirmation</th>
-                                    <th>Status</th>
+                                    <th>Days</th>
                                     <th>Actions</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                  
+                                    @php $serialno= 1;  @endphp
+                                    @foreach($packages as $key => $package)
+                                    <tr>
+                                        <th>{{$serialno++}}</th>
+                                        <td>{{$package->title}}</td>
+                                        <td>{{$package->price}}</td>
+                                        <td>{{$package->days}}</td>
+                                        <td>
+                                             <a href="{{route('admin.packages.edit', ['packageId'=> $package->id ])}}" class="btn-sm btn-primary text-decoration-none shadow-sm d-inline-block"> <i class="fa-solid fa-pencil"></i> </a>
+                                             <a href="javascript:void();" class="btn-sm btn-danger text-decoration-none shadow-sm d-inline-block delete-package " data-type="package" data-id="{{ $package->id }}"> <i class="fa-solid fa-trash"></i> </a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
                                 </tbody>
                                 
                             </table>

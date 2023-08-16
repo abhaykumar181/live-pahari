@@ -14,6 +14,28 @@ jQuery(document).ready(function ($) {
 	$(document).on("click", ".delete-property", function(){
 		showConfirmModal("Are you sure?", "This action will delete you selected Property. Confirm to proceed!", $(this));
 	});
+
+	/**** Add or Remove Itineraries  */
+
+	$(document).on("change", "#days", function(){
+		const numberofDays = $(this).val();
+		$.ajax({
+			url: "get-accordion",
+			method: "GET",
+			data: {days: numberofDays },
+			success : function(response){
+				console.log(response[1] + " " + numberofDays);
+				if(response[1] < numberofDays){
+					$('.accordion').last().remove();
+				}
+				else{
+					$('.accordion').append(response);
+				}
+				
+			}
+		});
+	});
+
 	
 });
 
@@ -50,7 +72,7 @@ function PreviewImage() {
 
 /******* Tiny MCE textarea */
 tinymce.init({
-	selector: 'textarea#description', 
+	selector: '.post-description', 
 	plugins: 'code table lists',
 	toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table',
 });

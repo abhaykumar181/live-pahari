@@ -57,6 +57,7 @@ Route::group(['as'=>'admin.'], function(){
                 Route::post('/create','store')->name('store');
                 Route::get('/edit/{packageId}','edit')->name('edit');
                 Route::get('/delete/{packageId}','delete')->name('delete');
+                Route::get('/get-accordion','getAccordion')->name('accordion');
             });
 
         });

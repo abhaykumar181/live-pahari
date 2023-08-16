@@ -48,7 +48,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="description" class="form-label">Description <span class="required">*</span></label>
-                                                <textarea class="form-control shadow-sm" name="description" id="description" rows="11">{{$property->description}}</textarea>
+                                                <textarea class="form-control shadow-sm post-description" name="description" id="description" rows="11">{{$property->description}}</textarea>
                                             </div>
 
                                             <div class="mb-3">

@@ -35,7 +35,7 @@
                             <h5 class="mb-0">Create New Package</h5>
                         </div>
 
-                        <form class="property_form" method="post" enctype="multipart/form-data" >
+                        <form class="package_form" method="post" enctype="multipart/form-data" >
                             <div class="card-body">
                                 <div class="container">
                                     <div class="row">
@@ -47,16 +47,9 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="description" class="form-label">Description <span class="required">*</span></label>
-                                                <textarea class="form-control shadow-sm" name="description" id="description" rows="11">{{old('description','')}}</textarea>
+                                                <textarea class="form-control shadow-sm post-description" name="description" id="description" rows="11">{{old('description','')}}</textarea>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="description" class="form-label">How to Reach <span class="required">*</span></label>
-                                                <textarea class="form-control shadow-sm" name="howtoReach" id="description" rows="11">{{old('howtoReach','')}}</textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="description" class="form-label">Extra Details <span class="required">*</span></label>
-                                                <textarea class="form-control shadow-sm" name="extraDetails" id="description" rows="11">{{old('extraDetails','')}}</textarea>
-                                            </div>
+                                            
                                             
                                         </div>
                                         <div class="col-md-3">
@@ -98,70 +91,30 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label for="ownerName" class="form-label ">Select Days <span class="required">*</span></label>
-                                                <select class="form-select shadow-sm" aria-label="Default select example">
-                                                    <option selected>Select Days</option>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                    <option value="5">5</option>
-                                                    <option value="6">6</option>
-                                                    <option value="7">7</option>
-                                                    <option value="8">8</option>
-                                                    <option value="9">9</option>
-                                                    <option value="10">10</option>
-                                                </select>
+                                                <label for="ownerName" class="form-label ">Number of days <span class="required">*</span></label>
+                                                <input type="number" class="form-control shadow-sm" name="days" id="days" min="0" value="{{old('days','')}}" >
                                             </div>
                                             <div class="mb-3">
                                                 <label for="email" class="form-label">Itineraries <span class="required">*</span></label>
                                                 
                                                 <!-- Accordion Start -->
-                                                <div class="accordion" id="accordionExample">
-                                                    <div class="accordion-item">
-                                                        <h2 class="accordion-header" id="headingOne">
-                                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                            Day 1
-                                                        </button>
-                                                        </h2>
-                                                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                                        <div class="accordion-body">
-                                                            <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="accordion-item">
-                                                        <h2 class="accordion-header" id="headingTwo">
-                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                            Day 2
-                                                        </button>
-                                                        </h2>
-                                                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                                        <div class="accordion-body">
-                                                            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="accordion-item">
-                                                        <h2 class="accordion-header" id="headingThree">
-                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                            Day 3
-                                                        </button>
-                                                        </h2>
-                                                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                                        <div class="accordion-body">
-                                                            <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    </div>
+                                                <div class="accordion" id="accordionPanelsStayOpenExample">
+                                                    
+                                                </div>
                                                 <!-- Accordion End -->
                                                 
                                             </div>
+                                            <div class="mb-3">
+                                                <label for="howtoReach" class="form-label">How to Reach <span class="required">*</span></label>
+                                                <textarea class="form-control shadow-sm post-description" name="howtoReach" id="howtoReach" rows="11">{{old('howtoReach','')}}</textarea>
+                                            </div>
+                                            
                                         </div>
                                         <div class="col-md-6">
-                                           
-                                           
+                                            <div class="mb-3">
+                                                <label for="extraDetails" class="form-label">Extra Details <span class="required">*</span></label>
+                                                <textarea class="form-control shadow-sm post-description" name="extraDetails" id="extraDetails" rows="11">{{old('extraDetails','')}}</textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

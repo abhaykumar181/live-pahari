@@ -177,7 +177,7 @@ class PropertiesController extends Controller
             }
 
         }catch(\Illuminate\Database\QueryException $e){
-            return redirect()->route('admin.properties.index')->with('error','Failed to delete addon.');
+            return redirect()->route('admin.properties.index')->with('error','Failed to delete Property.');
         }
     }
 
