@@ -15,6 +15,8 @@
            
             <li class="nav-item mb-1 {{ (getControllerName() == 'PropertiesController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.properties.index') }}"> <i class="fa-solid fa-house"></i> Properties</a></li>
             
+            <li class="nav-item mb-1 {{ (getControllerName() == 'PackageController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.packages.index') }}"> <i class="fa-solid fa-box"></i> Packages</a></li>
+            
         
         </ul>
     </div>

@@ -47,3 +47,10 @@ function PreviewImage() {
 		document.querySelector(".imgMessage").classList.add("d-none");
 	};
 };
+
+/******* Tiny MCE textarea */
+tinymce.init({
+	selector: 'textarea#description', 
+	plugins: 'code table lists',
+	toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table',
+});

@@ -11,3 +11,4 @@
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="{{ asset('js/tinymce.min.js') }}"></script>

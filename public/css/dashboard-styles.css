@@ -62,3 +62,6 @@ select.form-control { -webkit-appearance: menulist; }
     .navbar-white{background-color: #fff;color: #1f2d3d;}
     .main-header{border-bottom: 1px solid #dee2e6;z-index: 1034;}
 }
+/********************2023-08-16 Start  *****************/
+.tox-notification { display: none !important }
+/********************2023-08-16 End  *****************/
