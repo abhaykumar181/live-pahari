@@ -15,6 +15,10 @@ jQuery(document).ready(function ($) {
 		showConfirmModal("Are you sure?", "This action will delete you selected Property. Confirm to proceed!", $(this));
 	});
 
+	$(document).on("click", ".delete-package", function(){
+		showConfirmModal("Are you sure?", "This action will delete you selected Package. Confirm to proceed!", $(this));
+	});
+
 	/**** Add or Remove Itineraries  */
 
 	$(document).on("change", "#days", function(){
@@ -25,7 +29,7 @@ jQuery(document).ready(function ($) {
 			data: {days: numberofDays },
 			success : function(response){
 				console.log(response[1] + " " + numberofDays);
-				if(response[1] < numberofDays){
+				if(response[1] > numberofDays){
 					$('.accordion').last().remove();
 				}
 				else{

@@ -37,6 +37,24 @@ class PackageController extends Controller
     }
 
     /**
+     *  Create Package
+     * 
+     *  @since 1.0.0
+     * 
+     *  return html 
+     */
+    protected function edit($packageId){
+        $data['package'] = Packages::find($packageId);
+        $data['allLocations'] = Locations::all();
+        $data['propertyLocations'] = LocationRelationship::where(['objectType'=>'package', 'objectId'=> $packageId])->pluck('locationId')->toArray();
+        if($data['package']){
+            return view('backend.packages.edit',$data);
+        }else{
+            return redirect()->back()->with('error','Package doesn\'t exist');
+        }
+    }
+
+    /**
      *  get Accordion
      * 
      *  @since 1.0.0
@@ -70,17 +88,11 @@ class PackageController extends Controller
             ';
         }
 
-        $dayCount = 1;
-        if($request->days > $dayCount ){
-            $dayCount = $request->days + 1;
-        }
-        elseif ($request->days == $dayCount ) {
-            $dayCount = $request->days;
-        }else{
-            $dayCount = $request->days - 1;
-        }
+        $lastday = $request->days;
+      
+        
 
-        return response()->json([$content,$dayCount]);
+        return response()->json([$content,$lastday]);
     }
 
     /**
@@ -214,7 +226,7 @@ class PackageController extends Controller
      */
     protected function delete($packageId){
         try{
-            $package = Properties::find($packageId);
+            $package = Packages::find($packageId);
             if(!$package){
                 return redirect()->back()->with('error','Package doesn\'t exist');
             }else{

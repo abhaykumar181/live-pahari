@@ -91,7 +91,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label for="ownerName" class="form-label ">Number of days <span class="required">*</span></label>
+                                                <label for="days" class="form-label ">Number of days <span class="required">*</span></label>
                                                 <input type="number" class="form-control shadow-sm" name="days" id="days" min="0" value="{{old('days','')}}" >
                                             </div>
                                             <div class="mb-3">
