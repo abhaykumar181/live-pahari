@@ -32,7 +32,7 @@
                     <div class="card card-white rounded-0">
                         
                         <div class="card-header bg-white py-3 ">
-                            <h5 class="mb-0">Create Testimonial</h5>
+                            <h5 class="mb-0">Create New Testimonial</h5>
                         </div>
 
                         <form class="testimonial_form" method="post" enctype="multipart/form-data" >

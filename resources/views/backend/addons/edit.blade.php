@@ -53,7 +53,7 @@
 
                                             <div class="mb-3">
                                                 <label for="id_label_multiple">
-                                                    Select Locations <span class="required">*</span>
+                                                    Add-on Locations <span class="required">*</span>
                                                 </label>
 
                                                 <select class="js-example-basic-multiple js-states form-control" id="id_label_multiple"  name="locations[]" multiple="multiple">
@@ -73,16 +73,16 @@
                                                 <input name="thumbnailName" type="hidden" value="{{$addons->thumbnail}}">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="price" class="form-label">Price <span class="required">*</span></label>
-                                                <input type="number" class="form-control shadow-sm" name="price" id="price" min="0" value="{{$addons->price}}" >
-                                            </div>
-                                            <div class="mb-3">
                                                 <label for="status" class="form-label">Price Type <span class="required">*</span></label>
                                                 <select class="form-select shadow-sm" name="priceType" id="status">
                                                     <option selected value="">Select price type</option>
                                                     <option value="fixed" {{ $addons->priceType === 'fixed'  ? 'selected' : '' }}>Fixed</option>
                                                     <option value="unit" {{ $addons->priceType === 'unit'  ? 'selected' : '' }}>Unit</option>
                                                 </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="price" class="form-label">Price <span class="required">*</span></label>
+                                                <input type="number" class="form-control shadow-sm" name="price" id="price" min="0" value="{{$addons->price}}" >
                                             </div>
                                             <div class="mb-3">
                                                 <label for="addonStatus" class="form-label">Status <span class="required">*</span></label>

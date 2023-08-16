@@ -1,12 +1,18 @@
 jQuery(document).ready(function ($) {
 	$('.table').DataTable();
+
 	$('.js-example-basic-multiple').select2();
+
 	$(document).on("click", ".delete", function(){
 		showConfirmModal("Are you sure?", "This action will delete you selected Testimonial. Confirm to proceed!", $(this));
 	});
 
 	$(document).on("click", ".delete-addon", function(){
 		showConfirmModal("Are you sure?", "This action will delete you selected Addon. Confirm to proceed!", $(this));
+	});
+	
+	$(document).on("click", ".delete-property", function(){
+		showConfirmModal("Are you sure?", "This action will delete you selected Property. Confirm to proceed!", $(this));
 	});
 	
 });

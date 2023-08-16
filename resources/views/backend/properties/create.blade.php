@@ -32,7 +32,7 @@
                     <div class="card card-white rounded-0">
                         
                         <div class="card-header bg-white py-3 ">
-                            <h5 class="mb-0">Create Property</h5>
+                            <h5 class="mb-0">Create New Property</h5>
                         </div>
 
                         <form class="property_form" method="post" enctype="multipart/form-data" >
@@ -51,7 +51,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="id_label_multiple">
-                                                    Select Locations <span class="required">*</span>
+                                                    Property Locations <span class="required">*</span>
                                                 </label>
 
                                                 <select class="js-example-basic-multiple js-states form-control" name="locations[]" id="id_label_multiple" multiple="multiple">
@@ -68,16 +68,16 @@
                                                 <input class="form-control shadow-sm file-placeholder" name="thumbnail" type="file" id="thumbnail" onchange="PreviewImage();" value="{{old('thumbnail','')}}">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="price" class="form-label">Price <span class="required">*</span></label>
-                                                <input type="number" class="form-control shadow-sm" name="price" id="price" min="0" value="{{old('price','')}}" >
-                                            </div>
-                                            <div class="mb-3">
                                                 <label for="status" class="form-label">Price Type <span class="required">*</span></label>
                                                 <select class="form-select shadow-sm" name="priceType" id="status">
                                                     <option selected value="">Select price type</option>
                                                     <option value="fixed" {{ "1" === old('priceType') ? 'selected' : '' }}>Fixed</option>
                                                     <option value="unit" {{ "0" === old('priceType') ? 'selected' : '' }}>Unit</option>
                                                 </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="price" class="form-label">Price <span class="required">*</span></label>
+                                                <input type="number" class="form-control shadow-sm" name="price" id="price" min="0" value="{{old('price','')}}" >
                                             </div>
                                             <div class="mb-3">
                                                 <label for="addonStatus" class="form-label">Status <span class="required">*</span></label>
@@ -117,7 +117,7 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="phone" class="form-label">confirmation <span class="required">*</span></label>
+                                                <label for="phone" class="form-label">Confirmation <span class="required">*</span></label>
                                                 <div class="d-flex">
                                                     <div >
                                                         <input class="form-check-input shadow-sm" type="radio" name="confirmation" id="radio1" value="{{old('confirmation','1')}}">

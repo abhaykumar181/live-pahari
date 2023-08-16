@@ -33,7 +33,7 @@
                         <div class="card-header bg-white py-3 ">
                             <div class="row">
                                 <div class="col-md-6 mb-0 my-auto"><h5>All Properties</h5></div>
-                                <div class="col-md-6 mb-0 my-auto text-end"><a class="btn shadow-sm btn-primary" href="{{route('admin.properties.create')}}">Create Property</a></div>
+                                <div class="col-md-6 mb-0 my-auto text-end"><a class="btn shadow-sm btn-primary" href="{{route('admin.properties.create')}}">Create New Property</a></div>
                             </div>
                         </div>
 
@@ -45,6 +45,7 @@
                                     <th>Title</th>
                                     <th>Price</th>
                                     <th>Price Type</th>
+                                    <th>Confirmation</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                     </tr>
@@ -52,16 +53,17 @@
 
                                 <tbody>
                                     @php $serialno= 1;  @endphp
-                                    @foreach($properties as $key => $addon)
+                                    @foreach($properties as $key => $property)
                                     <tr>
                                         <th>{{$serialno++}}</th>
-                                        <td>{{$addon->title}}</td>
-                                        <td>{{$addon->price}}</td>
-                                        <td>{{ucwords($addon->priceType)}}</td>
-                                        <td>{{$addon->status === 1 ? 'Active' : 'Inactive'}}</td>
+                                        <td>{{$property->title}}</td>
+                                        <td>{{$property->price}}</td>
+                                        <td>{{ucwords($property->priceType)}}</td>
+                                        <td>{{$property->confirmationRequired === 1 ? 'Confirmed' : 'Not Confirmed'}}</td>
+                                        <td>{{$property->status === 1 ? 'Active' : 'Inactive'}}</td>
                                         <td>
-                                             <a href="{{route('admin.addons.edit', ['addonId'=> $addon->id ])}}" class="btn-sm btn-primary text-decoration-none shadow-sm d-inline-block"> <i class="fa-solid fa-pencil"></i> </a>
-                                             <a href="javascript:void();" class="btn-sm btn-danger text-decoration-none shadow-sm d-inline-block delete-addon " data-type="addon" data-id="{{ $addon->id }}"> <i class="fa-solid fa-trash"></i> </a>
+                                             <a href="{{route('admin.properties.edit', ['propertyId'=> $property->id ])}}" class="btn-sm btn-primary text-decoration-none shadow-sm d-inline-block"> <i class="fa-solid fa-pencil"></i> </a>
+                                             <a href="javascript:void();" class="btn-sm btn-danger text-decoration-none shadow-sm d-inline-block delete-property " data-type="property" data-id="{{ $property->id }}"> <i class="fa-solid fa-trash"></i> </a>
                                         </td>
                                     </tr>
                                     @endforeach

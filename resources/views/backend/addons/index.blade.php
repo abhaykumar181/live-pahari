@@ -33,7 +33,7 @@
                         <div class="card-header bg-white py-3 ">
                             <div class="row">
                                 <div class="col-md-6 mb-0 my-auto"><h5>All Add-ons</h5></div>
-                                <div class="col-md-6 mb-0 my-auto text-end"><a class="btn shadow-sm btn-primary" href="{{route('admin.addons.create')}}">Create Add-on</a></div>
+                                <div class="col-md-6 mb-0 my-auto text-end"><a class="btn shadow-sm btn-primary" href="{{route('admin.addons.create')}}">Create New Add-on</a></div>
                             </div>
                         </div>
 

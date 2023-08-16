@@ -33,7 +33,7 @@
                         <div class="card-header bg-white py-3  ">
                             <div class="row">
                                 <div class="col-md-6 mb-0 my-auto"><h5>All Testimonials</h5></div>
-                                <div class="col-md-6 mb-0 my-auto text-end"><a class="btn shadow-sm btn-primary" href="{{route('admin.testimonials.create')}}">Create Testimonial</a></div>
+                                <div class="col-md-6 mb-0 my-auto text-end"><a class="btn shadow-sm btn-primary" href="{{route('admin.testimonials.create')}}">Create New Testimonial</a></div>
                             </div>
                         </div>
 

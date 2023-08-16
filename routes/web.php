@@ -46,6 +46,17 @@ Route::group(['as'=>'admin.'], function(){
                 Route::get('/','index')->name('index');
                 Route::get('/create','create')->name('create');
                 Route::post('/create','store')->name('store');
+                Route::get('/edit/{propertyId}','edit')->name('edit');
+                Route::get('/delete/{propertyId}','delete')->name('delete');
+            });
+
+            // Web Routes for Packages
+            Route::group(['as'=>'packages.', 'prefix'=>'packages', 'controller'=>App\Http\Controllers\Backend\PackageController::class], function(){
+                Route::get('/','index')->name('index');
+                Route::get('/create','create')->name('create');
+                Route::post('/create','store')->name('store');
+                Route::get('/edit/{packageId}','edit')->name('edit');
+                Route::get('/delete/{packageId}','delete')->name('delete');
             });
 
         });

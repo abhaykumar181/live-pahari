@@ -21,6 +21,17 @@ class PropertiesController extends Controller
         return view('backend.properties.create',$data);
     }
 
+    protected function edit($propertyId=''){
+        $data['property'] = Properties::find($propertyId);
+        $data['allLocations'] = Locations::all();
+        $data['propertyLocations'] = LocationRelationship::where(['objectType'=>'property', 'objectId'=> $propertyId])->pluck('locationId')->toArray();
+        if($data['property']){
+            return view('backend.properties.edit',$data);
+        }else{
+            return redirect()->back()->with('error','Property doesn\'t exist');
+        }
+    }
+
     protected function store(Request $request){
         
        try{
@@ -33,6 +44,7 @@ class PropertiesController extends Controller
             'ownerName' => 'required',
             'email' => 'required',
             'phone' => 'required',
+            'confirmation' => 'required',
         ];
 
         $request->validate($validateInput);
@@ -113,14 +125,7 @@ class PropertiesController extends Controller
                 if(!empty($data)){
                     LocationRelationship::insert($data);
                 }
-
-
-
             }
-
-
-
-
 
             if($request->post('id')){
                 return redirect()->route('admin.properties.index')->with('message','Property updated successfully.');
@@ -148,6 +153,32 @@ class PropertiesController extends Controller
             }
        }
 
+    }
+
+    /**
+     * Delete Property
+     * 
+     * @since 1.0.0
+     * 
+     * @accept $propertyId | Integer
+     * return redirection
+     */
+    protected function delete($propertyId){
+        try{
+            $property = Properties::find($propertyId);
+            if(!$property){
+                return redirect()->back()->with('error','Property doesn\'t exist');
+            }else{
+                if($property->delete()){
+                    return redirect()->back()->with('message','Property deleted successfully.');
+                }else{
+                    return redirect()->back()->with('error','Failed to delete Property.');
+                }
+            }
+
+        }catch(\Illuminate\Database\QueryException $e){
+            return redirect()->route('admin.properties.index')->with('error','Failed to delete addon.');
+        }
     }
 
 }

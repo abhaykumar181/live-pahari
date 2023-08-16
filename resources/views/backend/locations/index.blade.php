@@ -39,7 +39,7 @@
                                 <div class="row">
                                     <!-- add locations -->
                                     <div class="col-md-4">
-                                        <div class="fw-bold fs-5">{{ isset($location) ? "Edit Location" : "Add New Location" }}</div>
+                                        <div class="fw-bold fs-5">{{ isset($location) ? "Edit Location" : "Create New Location" }}</div>
                                         <div class="input-group my-3">
                                         <form class="location_form" action="{{route('admin.locations.store')}}" method="post" enctype="multipart/form-data">
                                             @csrf

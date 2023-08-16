@@ -123,6 +123,7 @@ jQuery(document).ready(function($) {
             description: {
                 required: true
             },
+            "locations[]": "required",
             thumbnail: {
                 required: function(element){
                     return ($("input[name='thumbnailName']").length < 1 || $("input[name='thumbnailName']").val() == "");
@@ -149,6 +150,7 @@ jQuery(document).ready(function($) {
             description: {
                 required: "Please enter Description."
             },
+            "locations[]": "Please choose Locations.",
             thumbnail: {
                 required: "Please select an Image."
             },
@@ -191,6 +193,7 @@ jQuery(document).ready(function($) {
             description: {
                 required: true
             },
+            "locations[]": "required",
             thumbnail: {
                 required: function(element){
                     return ($("input[name='thumbnailName']").length < 1 || $("input[name='thumbnailName']").val() == "");
@@ -214,6 +217,9 @@ jQuery(document).ready(function($) {
             phone: {
                 required: true
             },
+            confirmation: {
+                required: true
+            },
             
         },
         messages: {
@@ -223,6 +229,7 @@ jQuery(document).ready(function($) {
             description: {
                 required: "Please enter Description."
             },
+            "locations[]": "Please choose Locations.",
             thumbnail: {
                 required: "Please select an Image."
             },
@@ -243,6 +250,9 @@ jQuery(document).ready(function($) {
             },
             phone: {
                 required: "Please enter the Phone Number."
+            },
+            confirmation: {
+                required: "Please choose the Confirmation."
             },
         }, 
         errorPlacement: function (error, element) {
