@@ -77,45 +77,35 @@
                                                 <label for="price" class="form-label">Price <span class="required">*</span></label>
                                                 <input type="number" class="form-control shadow-sm" name="price" id="price" min="0" value="{{$package->price}}" >
                                             </div>
+
+                                            <div class="mb-3">
+                                                <label for="numberofDays" class="form-label ">Number of days <span class="required">*</span></label>
+                                                <input type="number" class="form-control shadow-sm" name="numberofDays" id="days" min="0" value="{{$package->days}}" >
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div class="card-header bg-white py-3 border-top ">
-                                <h5 class="mb-0">Package Details</h5>
-                            </div>
+                                    
 
-                            <div class="card-body">
-                                <div class="container">
+                                    <!--  -->
+
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label for="days" class="form-label ">Number of days <span class="required">*</span></label>
-                                                <input type="number" class="form-control shadow-sm" name="days" id="days" min="0" value="{{old('days','')}}" >
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="email" class="form-label">Itineraries <span class="required">*</span></label>
-                                                
-                                                <!-- Accordion Start -->
-                                                <div class="accordion" id="accordionPanelsStayOpenExample">
-                                                    
-                                                </div>
-                                                <!-- Accordion End -->
-                                                
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="howtoReach" class="form-label">How to Reach <span class="required">*</span></label>
+                                            <label for="howtoReach" class="form-label">How to Reach <span class="required">*</span></label>
                                                 <textarea class="form-control shadow-sm post-description" name="howtoReach" id="howtoReach" rows="11">{{$package->howToReach}}</textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="extraDetails" class="form-label">Extra Details <span class="required">*</span></label>
+                                        <div class="mb-3">
+                                        <label for="extraDetails" class="form-label">Extra Details <span class="required">*</span></label>
                                                 <textarea class="form-control shadow-sm post-description" name="extraDetails" id="extraDetails" rows="11">{{$package->extraDetails}}</textarea>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!--  -->
+                            
                                 </div>
                             </div>
 
@@ -126,6 +116,44 @@
                             </div>                        
                         </form>
 					</div>
+
+                    <div class="card card-white rounded-0 mt-5">
+                        <div class="card-header bg-white py-3 border-top" id="packageDetails">
+                            <h5 class="mb-0">Package Details</h5>
+                        </div>
+
+                        <form class="package_form" action="{{route('admin.packages.storeitineraries')}}" method="post" enctype="multipart/form-data" >
+                           @csrf
+                            <div class="card-body">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label for="numberofDays" class="form-label ">Number of days <span class="required">*</span></label>
+                                                <input type="number" class="form-control shadow-sm" name="newDays" id="days" min="0" value="{{$package->days}}" >
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Itineraries <span class="required">*</span></label>
+                                                
+                                                <!-- Accordion Start -->
+                                                <div class="accordion" id="packageItinerariesItems">
+                                                    
+                                                </div>
+                                                <!-- Accordion End -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-success shadow-sm">Save</button>
+                                </div>                        
+                            </div> 
+                        </form> 
+                    </div> 
+
                 </div>
             </div>
         </div>

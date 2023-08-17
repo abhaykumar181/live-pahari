@@ -288,6 +288,9 @@ jQuery(document).ready(function($) {
             extraDetails: {
                 required: true
             },
+            numberofDays: {
+                required: true
+            },
             "locations[]": "required",
             thumbnail: {
                 required: function(element){
@@ -312,6 +315,9 @@ jQuery(document).ready(function($) {
             },
             extraDetails: {
                 required:  "Please enter Extra Details."
+            },
+            numberofDays: {
+                required: "Please enter Number of days."
             },
             "locations[]": "Please choose Locations.",
             thumbnail: {

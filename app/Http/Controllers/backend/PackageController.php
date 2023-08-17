@@ -61,39 +61,16 @@ class PackageController extends Controller
      * 
      *  return html 
      */
-    protected function getAccordion(Request $request){
+    protected function gerItineraries(Request $request){
+    
+        $data['addNewdays'] = $request->addNewdays;
+        $data['currentItems'] =  $request->currentItems +1;
         
-        $content = '';
-        for($i=1; $i<=$request->days; $i++ ){
-            $content = '
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="panelsStayOpen-heading'.$i.'">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse'.$i.'" aria-expanded="true" aria-controls="panelsStayOpen-collapse'.$i.'">
-                        Day '.$i.'
-                    </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapse'.$i.'" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-heading'.$i.'">
-                        <div class="accordion-body">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon1">Title</span>
-                                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-text">With textarea</span>
-                                <textarea class="form-control" aria-label="With textarea"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            ';
-        }
+        $data['content']= view('backend.partials.itinerariesItems',$data)->render();
 
-        $lastday = $request->days;
-      
-        
-
-        return response()->json([$content,$lastday]);
+        return response()->json($data);
     }
+                
 
     /**
      *  Store and create Package
@@ -110,6 +87,7 @@ class PackageController extends Controller
                 'price' => 'required',
                 'howtoReach' => 'required',
                 'extraDetails' => 'required',
+                'numberofDays' => 'required',
             ];
     
             $request->validate($validateInput);
@@ -134,11 +112,11 @@ class PackageController extends Controller
             $package->title = $request->title;
             $package->slug = getSlug($request->title);
             $package->description = $request->description;
-            $package->howToReach = $request->howtoReach;
-            $package->extraDetails = $request->extraDetails;
             $package->thumbnail = $imageName;
             $package->price = $request->price;
-            $package->days = "5";
+            $package->howToReach = $request->howtoReach;
+            $package->extraDetails = $request->extraDetails;
+            $package->days = $request->numberofDays;
     
             if($package->save()){
                 $updateLocations = false;
@@ -189,9 +167,9 @@ class PackageController extends Controller
                 }
     
                 if($request->post('id')){
-                    return redirect()->route('admin.packages.index')->with('message','Package updated successfully.');
+                    return redirect()->route('admin.packages.edit', ['packageId' => $package->id] )->with('message','Package updated successfully.');
                 }else{
-                    return redirect()->route('admin.packages.index')->with('message','Package added successfully.');
+                    return redirect()->route('admin.packages.edit', ['packageId' => $package->id,'section'=>'#packageDetails'])->with('message','Your Package has been created successfully. Now you can add Itineraries.');
                 }
             }
     
@@ -241,4 +219,11 @@ class PackageController extends Controller
             return redirect()->route('admin.properties.index')->with('error','Failed to delete Package.');
         }
     }
+
+    protected function storeItineraries(Request $request){
+        dd($request->all());
+    }
+
+
+
 }

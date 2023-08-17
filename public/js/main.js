@@ -1,3 +1,5 @@
+const domainURL = document.location.origin;
+
 jQuery(document).ready(function ($) {
 	$('.table').DataTable();
 
@@ -23,25 +25,37 @@ jQuery(document).ready(function ($) {
 
 	$(document).on("change", "#days", function(){
 		const numberofDays = $(this).val();
-		$.ajax({
-			url: "get-accordion",
-			method: "GET",
-			data: {days: numberofDays },
-			success : function(response){
-				console.log(response[1] + " " + numberofDays);
-				if(response[1] > numberofDays){
-					$('.accordion').last().remove();
-				}
-				else{
-					$('.accordion').append(response);
-				}
+		const currentItems = $("#packageItinerariesItems").find(".itinerary-item").length;
+		console.log("client side currentItems - "+currentItems);
+		if(numberofDays < currentItems){
+			removeExtraItineraries(numberofDays);
+		}else{
+			const addNewdays = (numberofDays - currentItems);
+			$.ajax({
+				url: domainURL+"/admin/packages/get-accordion",
+				method: "POST",
+				data: { addNewdays, currentItems },
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
 				
-			}
-		});
+				success : function(response){
+					console.log("Current Item"+response.currentItems, "newdays"+ response.addNewdays);
+					$('.accordion').append(response.content);
+				}
+			});	
+		}
 	});
-
 	
 });
+
+function removeExtraItineraries(numberofDays){
+	$("#packageItinerariesItems .itinerary-item").each(function(index,element){
+		if( (index+1) > numberofDays){
+			$(this).remove();
+		}
+	})
+}
 
 function showConfirmModal($title, $text, element){
 	swal({

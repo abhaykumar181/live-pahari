@@ -1,3 +1,4 @@
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 <link rel="stylesheet" href="{{ asset('datatables/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('fontawesome6/css/all.min.css') }}" rel="stylesheet">
 
