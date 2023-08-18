@@ -23,10 +23,14 @@ jQuery(document).ready(function ($) {
 
 	/**** Add or Remove Itineraries  */
 
-	$(document).on("change", "#days", function(){
+	/** Show itineraries on Load */
+	/*$(function () {
+		$("#days").change();
+	});*/
+
+	$(document).on("change", "#numberofDays", function(){
 		const numberofDays = $(this).val();
 		const currentItems = $("#packageItinerariesItems").find(".itinerary-item").length;
-		console.log("client side currentItems - "+currentItems);
 		if(numberofDays < currentItems){
 			removeExtraItineraries(numberofDays);
 		}else{
@@ -40,7 +44,6 @@ jQuery(document).ready(function ($) {
 				},
 				
 				success : function(response){
-					console.log("Current Item"+response.currentItems, "newdays"+ response.addNewdays);
 					$('.accordion').append(response.content);
 				}
 			});	
@@ -48,6 +51,8 @@ jQuery(document).ready(function ($) {
 	});
 	
 });
+
+
 
 function removeExtraItineraries(numberofDays){
 	$("#packageItinerariesItems .itinerary-item").each(function(index,element){

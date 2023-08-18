@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Locations;
 use App\Models\LocationRelationship;
 use App\Models\Packages;
+use App\Models\Itineraries;
+use carbon\carbon;
 use \Illuminate\Support\Facades\Auth;
 
 class PackageController extends Controller
@@ -47,6 +49,10 @@ class PackageController extends Controller
         $data['package'] = Packages::find($packageId);
         $data['allLocations'] = Locations::all();
         $data['propertyLocations'] = LocationRelationship::where(['objectType'=>'package', 'objectId'=> $packageId])->pluck('locationId')->toArray();
+        
+        $data['packageItineraries'] = Itineraries::where(['packageId' => $packageId])->get();
+        // dd($data['packageItineraries']);
+
         if($data['package']){
             return view('backend.packages.edit',$data);
         }else{
@@ -55,7 +61,7 @@ class PackageController extends Controller
     }
 
     /**
-     *  get Accordion
+     *  get Itineraries
      * 
      *  @since 1.0.0
      * 
@@ -63,7 +69,7 @@ class PackageController extends Controller
      */
     protected function gerItineraries(Request $request){
     
-        $data['addNewdays'] = $request->addNewdays;
+        $data['itenariesDays'] = $request->addNewdays;
         $data['currentItems'] =  $request->currentItems +1;
         
         $data['content']= view('backend.partials.itinerariesItems',$data)->render();
@@ -220,10 +226,56 @@ class PackageController extends Controller
         }
     }
 
+    /** 
+     * store itineraries
+     * 
+     * @since 1.0.0
+     *
+     * return redirection 
+     */
     protected function storeItineraries(Request $request){
-        dd($request->all());
+        try{
+
+            $existingItineraries = Itineraries::where(['packageId'=>$request->packageId])->pluck('day')->toArray();
+            if(!empty($existingItineraries)){
+                foreach($existingItineraries as $key => $itinerary){
+                    if(!in_array($itinerary,$request->itineraryDay) || count(array_diff($request->itineraryDay,$existingItineraries)) > 0){
+                        Itineraries::where(
+                            ['packageId' => $request->packageId,'day' => $itinerary]
+                        )->delete();
+                    }
+                }
+            }
+
+            foreach($request->itinaryTitle as $index=>$title){
+                $packageItinerary = Itineraries::where([
+                    'packageId' => $request->packageId, 
+                    'day' => $request->itineraryDay[$index], 
+                ])->first();
+                
+                if(is_null($packageItinerary)){
+                    $packageItinerary = new Itineraries;
+                    $packageItinerary->packageId = $request->packageId;
+                    $packageItinerary->day = $request->itineraryDay[$index];
+                }
+
+                $packageItinerary->title = $title;
+                $packageItinerary->description = $request->itineraryDescription[$index];
+                $packageItinerary->save();
+            }
+
+            
+
+            $package = Packages::find($request->packageId);
+            $package->days = $request->numberofDays;
+            if($package->save()){
+                return redirect()->route('admin.packages.edit', ['packageId' => $request->packageId])->with('message','Itineraries updated successfully.');
+            }else{
+                return redirect()->back()->with('error','Failed! Please try again.');
+            }
+
+        }catch(\Illuminate\DatabaseQueryException $e){
+            return redirect()->back()->with('error','Failed to store the Itineraries.');
+        }
     }
-
-
-
 }

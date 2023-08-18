@@ -16,4 +16,10 @@ class DashboardController extends Controller
         Auth::logout();
         return redirect()->route('admin.login')->with('message','logged out successful.');
     }
+
+    public function settings(){
+        $data["welcome"] = "Welcome to this page";
+        $data["content"] = "Please add your content";
+        return view('backend.settings', $data);
+    }
 }

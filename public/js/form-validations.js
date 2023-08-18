@@ -340,6 +340,34 @@ jQuery(document).ready(function($) {
     });
 
 
+
+     // Validate Itineraries Form
+     $(".itineraries_form").validate({
+        errorElement: 'span',
+        errorClass: 'error',
+        onkeyup: false,
+        ignore: ".ignore",
+        
+        rules: {
+            "itineraryDescription[]": "required",
+        },
+        messages: {
+            "itinaryTitle[]": "Please Enter Itinerary Title.",
+            "itineraryDescription[]": "Please Enter Itinerary Description.",
+        }, 
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.parent('div').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+
+
     
 });
 

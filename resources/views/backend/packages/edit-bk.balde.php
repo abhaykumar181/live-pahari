@@ -77,6 +77,11 @@
                                                 <label for="price" class="form-label">Price <span class="required">*</span></label>
                                                 <input type="number" class="form-control shadow-sm" name="price" id="price" min="0" value="{{$package->price}}" >
                                             </div>
+
+                                            <div class="mb-3">
+                                                <label for="numberofDays" class="form-label ">Number of days <span class="required">*</span></label>
+                                                <input type="number" class="form-control shadow-sm" name="numberofDays" id="days" min="0" value="{{$package->days}}" >
+                                            </div>
                                         </div>
                                     </div>
 
@@ -125,7 +130,7 @@
                                         <div class="col-md-12">
                                             <div class="mb-3">
                                                 <label for="numberofDays" class="form-label ">Number of days <span class="required">*</span></label>
-                                                <input type="number" class="form-control shadow-sm" name="numberofDays" id="numberofDays" min="0" value="{{$package->days}}" >
+                                                <input type="number" class="form-control shadow-sm" name="newDays" id="days" min="0" value="{{$package->days}}" >
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Itineraries <span class="required">*</span></label>
@@ -134,7 +139,7 @@
                                                     @if(!empty($packageItineraries))
                                                         @php 
                                                             $currentItems = 1; 
-                                                            $itenariesDays = $package->days;
+                                                            $itenariesDays = $package->numberofDays;
                                                         @endphp
 
                                                         @include('backend.partials.itinerariesItems')
