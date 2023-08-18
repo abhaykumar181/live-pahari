@@ -125,7 +125,7 @@
                                         <div class="col-md-12">
                                             <div class="mb-3">
                                                 <label for="numberofDays" class="form-label ">Number of days <span class="required">*</span></label>
-                                                <input type="number" class="form-control shadow-sm" name="numberofDays" id="numberofDays" min="0" value="{{$package->days}}" >
+                                                <input type="number" class="form-control shadow-sm" name="numberofDays" id="numberofDays" min="0" value="{{ old('numberofDays') ? old('numberofDays') : $package->days}}" >
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Itineraries <span class="required">*</span></label>
@@ -134,7 +134,7 @@
                                                     @if(!empty($packageItineraries))
                                                         @php 
                                                             $currentItems = 1; 
-                                                            $itenariesDays = $package->days;
+                                                            $itenariesDays = old('numberofDays') ? old('numberofDays') : $package->days;
                                                         @endphp
 
                                                         @include('backend.partials.itinerariesItems')
@@ -149,7 +149,7 @@
 
                             <div class="card-footer">
                                 <div class="text-end">
-                                    <button type="submit" class="btn btn-success shadow-sm">Update</button>
+                                    <button type="submit" class="btn btn-success shadow-sm" id="itineraryUpdate">Update</button>
                                     <input type="hidden" name="packageId" value="{{$package->id}}" >
                                 </div>                        
                             </div> 

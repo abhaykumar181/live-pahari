@@ -8,8 +8,8 @@
             endif;
         endif;
 
-        $title = old('itinaryTitle['.$itineraryItem.']', $title);
-        $description = old('itineraryDescription['.$itineraryItem.']', $description);
+        $title = isset(old('itinaryTitle')[$itineraryItem]) ? old('itinaryTitle')[$itineraryItem] : $title;
+        $description = isset(old('itineraryDescription')[$itineraryItem]) ? old('itineraryDescription')[$itineraryItem] : $description;
     @endphp
     <div class="itinerary-item">
         <h2 class="accordion-header" id="heading{{$currentItems}}">
@@ -23,6 +23,7 @@
                 <input type="hidden" name="itineraryDay[]" value="{{$currentItems}}" >
                 <input type="text" class="form-control shadow-sm" id="itinaryTitle" name="itinaryTitle[]"  placeholder="Enter itinerary Title" value="{{ $title }}">
                 <label for="itinaryTitle">Itinerary Title</label>
+                
             </div>
 
                 <div class="form-floating">

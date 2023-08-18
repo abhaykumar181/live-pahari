@@ -235,11 +235,26 @@ class PackageController extends Controller
      */
     protected function storeItineraries(Request $request){
         try{
+            // dd($request->numberofDays .'|'.count($request->itineraryDay));
+
+            $validateInput = [
+                'itinaryTitle[]' => 'required',
+                'itineraryDescription[]' => 'required',
+            ];
+            $validationMessages = [
+                'itinaryTitle[].required' => 'Please fill all Itinerary Titles.',
+                'itineraryDescription[].required' => 'Please fill all Itinerary Description.'
+            ];
+            $request->validate($validateInput,$validationMessages);
+
+            if($request->numberofDays != count($request->itineraryDay)){
+                return redirect()->back()->with('error','Itineraries can\'t be updated');
+            }
 
             $existingItineraries = Itineraries::where(['packageId'=>$request->packageId])->pluck('day')->toArray();
             if(!empty($existingItineraries)){
                 foreach($existingItineraries as $key => $itinerary){
-                    if(!in_array($itinerary,$request->itineraryDay) || count(array_diff($request->itineraryDay,$existingItineraries)) > 0){
+                    if(!in_array($itinerary,$request->itineraryDay)){
                         Itineraries::where(
                             ['packageId' => $request->packageId,'day' => $itinerary]
                         )->delete();
