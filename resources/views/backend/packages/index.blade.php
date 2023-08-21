@@ -58,8 +58,10 @@
                                         <td>{{$package->price}}</td>
                                         <td>{{$package->days}}</td>
                                         <td>
+                                             <a href="{{route('admin.packages.itineraries', ['packageId'=> $package->id ])}}" class="btn-sm btn-success text-decoration-none shadow-sm d-inline-block"> <i class="fa-solid fa-timeline"></i> </a>
                                              <a href="{{route('admin.packages.edit', ['packageId'=> $package->id ])}}" class="btn-sm btn-primary text-decoration-none shadow-sm d-inline-block"> <i class="fa-solid fa-pencil"></i> </a>
                                              <a href="javascript:void();" class="btn-sm btn-danger text-decoration-none shadow-sm d-inline-block delete-package " data-type="package" data-id="{{ $package->id }}"> <i class="fa-solid fa-trash"></i> </a>
+                                             <a href="{{route('admin.packages.gallery', ['packageId'=> $package->id ])}}" class="btn-sm btn-warning text-decoration-none shadow-sm d-inline-block"> <i class="fa-solid fa-image"></i> </a>
                                         </td>
                                     </tr>
                                     @endforeach

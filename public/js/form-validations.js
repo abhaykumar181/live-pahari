@@ -340,39 +340,42 @@ jQuery(document).ready(function($) {
     });
 
 
-
-    // Validate Itineraries Form
-    // jQuery.validator.addMethod("allRequired", function(value, elem){
-    //     // Use the name to get all the inputs and verify them
-    //     var name = elem.name;
-    //     return  $('input[name="'+name+'"]').map(function(i,obj){return $(obj).val();}).get().every(function(v){ return v; });
+     // Itinerary Form 
+    //  $(".itineraries_form").validate({
+    //     errorElement: 'span',
+    //     errorClass: 'error',
+    //     onkeyup: false,
+    //     ignore: ".ignore",
+    //     rules: {
+           
+    //     },
+    //     messages: {
+            
+    //     }, 
+    //     errorPlacement: function (error, element) {
+    //         error.addClass('invalid-feedback');
+    //         element.parent('div').append(error);
+    //     },
+    //     highlight: function (element, errorClass, validClass) {
+    //         $(element).addClass('is-invalid');
+    //     },
+    //     unhighlight: function (element, errorClass, validClass) {
+    //         $(element).removeClass('is-invalid');
+    //     }
     // });
 
-    // $('input[name="itineraryTitle[]"]').each(function(){
-    //     $(this).rules('add', {
-    //         required: true
-    //     });
-    // });
 
-    $('.itineraries_form input[name="itineraryTitle[]"]').each(function(e) {
-        $(this).rules('add', {
-           required: true,
-           messages: {
-                required: "Please enter title.",
-          }
-      })
-
-
-     $(".itineraries_form").validate({
+    // Image Gallery Form
+    $(".gallery_form").validate({
         errorElement: 'span',
         errorClass: 'error',
         onkeyup: false,
         ignore: ".ignore",
         rules: {
-           
+            "thumbnail[]": "required",
         },
         messages: {
-            
+            "thumbnail[]": "Please select the Images.", 
         }, 
         errorPlacement: function (error, element) {
             error.addClass('invalid-feedback');
@@ -386,27 +389,6 @@ jQuery(document).ready(function($) {
         }
     });
 
-    
-  
-
-    // $(document).on("click", "#itineraryUpdate", function(){
-    //     $("input[name*='itinaryTitle']").each(function(){
-    //         if($(this).val() == "" ){
-    //             $(".itineraries_form").submit(function(e){
-    //                 e.preventDefault();
-    //             });
-    //             if($(this).length < 2){
-    //                 $(this).after('<p>Plaese enter title.</p>');
-    //             }
-    //         }else{
-    //             $(this).remove('p');
-    //         }
-    //     })
-	// });
-
 
 });
 
-
-
-});

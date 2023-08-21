@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Thumbnails extends Model
 {
     use HasFactory;
+    protected $table="pahhos_thumbnails";
 }

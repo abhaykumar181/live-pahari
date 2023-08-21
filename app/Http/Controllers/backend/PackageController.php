@@ -8,6 +8,7 @@ use App\Models\Locations;
 use App\Models\LocationRelationship;
 use App\Models\Packages;
 use App\Models\Itineraries;
+use App\Models\Thumbnails;
 use carbon\carbon;
 use \Illuminate\Support\Facades\Auth;
 
@@ -45,7 +46,30 @@ class PackageController extends Controller
      * 
      *  return html 
      */
-    protected function edit($packageId){
+    protected function edit($packageId=''){
+        $data['package'] = Packages::find($packageId);
+        $data['allLocations'] = Locations::all();
+        $data['propertyLocations'] = LocationRelationship::where(['objectType'=>'package', 'objectId'=> $packageId])->pluck('locationId')->toArray();
+        
+        // $data['packageItineraries'] = Itineraries::where(['packageId' => $packageId])->get();
+        // dd($data['packageItineraries']);
+
+        if($data['package']){
+            return view('backend.packages.edit',$data);
+        }else{
+            return redirect()->route('admin.packages.index')->with('error','Package doesn\'t exist.');
+        }
+    }
+
+
+    /**
+     *  Update Itineraries
+     * 
+     *  @since 1.0.0
+     * 
+     *  return html 
+     */
+    protected function itineraries($packageId=''){
         $data['package'] = Packages::find($packageId);
         $data['allLocations'] = Locations::all();
         $data['propertyLocations'] = LocationRelationship::where(['objectType'=>'package', 'objectId'=> $packageId])->pluck('locationId')->toArray();
@@ -54,11 +78,14 @@ class PackageController extends Controller
         // dd($data['packageItineraries']);
 
         if($data['package']){
-            return view('backend.packages.edit',$data);
+            return view('backend.packages.itineraries',$data);
         }else{
-            return redirect()->back()->with('error','Package doesn\'t exist');
+            return redirect()->route('admin.packages.index')->with('error','Package doesn\'t exist.');
         }
     }
+
+
+    
 
     /**
      *  get Itineraries
@@ -93,13 +120,13 @@ class PackageController extends Controller
                 'price' => 'required',
                 'howtoReach' => 'required',
                 'extraDetails' => 'required',
-                'numberofDays' => 'required',
             ];
-    
+            
             $request->validate($validateInput);
-    
+            
             if($request->post('id') === false){
                 $validateInput['thumbnail'] = "required";
+                $validateInput['numberofDays'] = "required";
             }
     
             $imageName = $request->thumbnailName ? $request->thumbnailName : null;
@@ -175,7 +202,7 @@ class PackageController extends Controller
                 if($request->post('id')){
                     return redirect()->route('admin.packages.edit', ['packageId' => $package->id] )->with('message','Package updated successfully.');
                 }else{
-                    return redirect()->route('admin.packages.edit', ['packageId' => $package->id,'section'=>'#packageDetails'])->with('message','Your Package has been created successfully. Now you can add Itineraries.');
+                    return redirect()->route('admin.packages.itineraries', ['packageId' => $package->id])->with('message','Your Package has been created successfully. Now you can add Itineraries.');
                 }
             }
     
@@ -208,21 +235,27 @@ class PackageController extends Controller
      * @accept $packageId | Integer
      * return redirection
      */
-    protected function delete($packageId){
+    protected function delete($packageId=''){
         try{
             $package = Packages::find($packageId);
+            
             if(!$package){
                 return redirect()->back()->with('error','Package doesn\'t exist');
             }else{
-                if($package->delete()){
-                    return redirect()->back()->with('message','Package deleted successfully.');
+                $deleteItinerary = Itineraries::where(['packageId' => $packageId])->delete();
+                if($deleteItinerary){
+                    if($package->delete()){ 
+                        return redirect()->route('admin.packages.index')->with('message','Package deleted successfully.');
+                    }else{
+                        return redirect()->back()->with('error','Failed to delete Package.');
+                    }
                 }else{
                     return redirect()->back()->with('error','Failed to delete Package.');
                 }
             }
 
         }catch(\Illuminate\Database\QueryException $e){
-            return redirect()->route('admin.properties.index')->with('error','Failed to delete Package.');
+            return redirect()->route('admin.packages.index')->with('error','Failed to delete Package.');
         }
     }
 
@@ -235,20 +268,15 @@ class PackageController extends Controller
      */
     protected function storeItineraries(Request $request){
         try{
-            // dd($request->numberofDays .'|'.count($request->itineraryDay));
 
             $validateInput = [
-                'itinaryTitle[]' => 'required',
-                'itineraryDescription[]' => 'required',
+                "itinaryTitle.*"  => "required",
+                "itineraryDescription.*"  => "required",
             ];
-            $validationMessages = [
-                'itinaryTitle[].required' => 'Please fill all Itinerary Titles.',
-                'itineraryDescription[].required' => 'Please fill all Itinerary Description.'
-            ];
-            $request->validate($validateInput,$validationMessages);
+            $request->validate($validateInput);
 
             if($request->numberofDays != count($request->itineraryDay)){
-                return redirect()->back()->with('error','Itineraries can\'t be updated');
+                return redirect()->back()->with('error','Itineraries missing. Please try again.');
             }
 
             $existingItineraries = Itineraries::where(['packageId'=>$request->packageId])->pluck('day')->toArray();
@@ -264,7 +292,7 @@ class PackageController extends Controller
 
             foreach($request->itinaryTitle as $index=>$title){
                 $packageItinerary = Itineraries::where([
-                    'packageId' => $request->packageId, 
+                    'packageId' => $request->packageId,
                     'day' => $request->itineraryDay[$index], 
                 ])->first();
                 
@@ -284,7 +312,7 @@ class PackageController extends Controller
             $package = Packages::find($request->packageId);
             $package->days = $request->numberofDays;
             if($package->save()){
-                return redirect()->route('admin.packages.edit', ['packageId' => $request->packageId])->with('message','Itineraries updated successfully.');
+                return redirect()->route('admin.packages.itineraries', ['packageId' => $request->packageId])->with('message','Itineraries updated successfully.');
             }else{
                 return redirect()->back()->with('error','Failed! Please try again.');
             }
@@ -293,4 +321,95 @@ class PackageController extends Controller
             return redirect()->back()->with('error','Failed to store the Itineraries.');
         }
     }
+
+
+     /**
+     *  Create Package
+     * 
+     *  @since 1.0.0
+     * 
+     *  return html 
+     */
+    protected function gallery($packageId=''){
+        $data['package'] = Packages::find($packageId);
+        $data['allThumbnails'] = Thumbnails::where('packageId',$packageId)->get();
+        // dd($data['allThumbnails']);
+
+        if(!$data['package']){
+            return redirect()->route('admin.packages.index')->with('error','Package doesn\'t exist.');
+        }else{
+
+            return view('backend.packages.gallery',$data);
+        }
+    }
+
+    /**
+     *  Create Package
+     * 
+     *  @since 1.0.0
+     * 
+     *  return html 
+     */
+    protected function storeGalleryImages(Request $request){
+        try{
+            $validateInput = [
+                'thumbnail' => 'required|array'
+            ];
+            $request->validate($validateInput,['thumbnail' => 'Please select the Images.']);
+
+            $existingGalleryImages = Thumbnails::where(['packageId'=>$request->post('id')]);
+            if(!empty($existingGalleryImages)){
+                $existingGalleryImages->delete();
+            }
+            
+            if($request->hasFile('thumbnail')){
+                foreach($request->thumbnail as $thumbnail){
+                    $imageName = uniqid() . '.' . $thumbnail->extension();
+                    $thumbnail->move(public_path('storage/thumbnails/images'), $imageName);
+                    $thumbnail = new Thumbnails;
+                    $thumbnail->packageId = $request->post('id');
+                    $thumbnail->name = $imageName;
+                    $thumbnail->save();
+                }
+            }
+
+            return redirect()->route('admin.packages.gallery',['packageId' => $request->post('id')])->with('message','Images uploaded successfully.');
+
+        }catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->with('error','Failed to upload Images.');
+        }
+
+    }
+
+
+
+
+    /**
+     * Delete Package
+     * 
+     * @since 1.0.0
+     * 
+     * @accept $packageId | Integer
+     * return redirection
+     */
+    protected function deleteThumbnail($thumbnailId=''){
+        try{
+            $thumbnail = Thumbnails::find($thumbnailId);
+            
+            if(!$thumbnail){
+                return redirect()->back()->with('error','Thumbnail doesn\'t exist');
+            }else{
+                if($thumbnail->delete()){ 
+                    return redirect()->back()->with('message','Thumbnail deleted successfully.');
+                }else{
+                    return redirect()->back()->with('error','Failed to delete Thumbnail.');
+                }
+            }
+
+        }catch(\Illuminate\Database\QueryException $e){
+            return redirect()->route('admin.packages.index')->with('error','Failed to delete Thumbnail.');
+        }
+    }
+
+
 }

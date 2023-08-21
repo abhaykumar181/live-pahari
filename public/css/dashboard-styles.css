@@ -65,3 +65,5 @@ select.form-control { -webkit-appearance: menulist; }
 /********************2023-08-16 Start  *****************/
 .tox-notification { display: none !important }
 /********************2023-08-16 End  *****************/
+#preview img { max-height: 100px;max-width: 100px; }
+.package-thumbnails{height: 100px;width: 100%; }

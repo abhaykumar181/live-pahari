@@ -55,10 +55,14 @@ Route::group(['as'=>'admin.'], function(){
                 Route::get('/','index')->name('index');
                 Route::get('/create','create')->name('create');
                 Route::post('/create','store')->name('store');
-                Route::get('/edit/{packageId}/{section?}','edit')->name('edit');
+                Route::get('/edit/{packageId}','edit')->name('edit');
                 Route::get('/delete/{packageId}','delete')->name('delete');
+                Route::get('/itineraries/{packageId}','itineraries')->name('itineraries');
                 Route::post('/get-accordion','gerItineraries')->name('accordion');
                 Route::post('/store-itineraries','storeItineraries')->name('storeitineraries');
+                Route::get('/gallery/{packageId}','gallery')->name('gallery');
+                Route::post('/store-galleryimages','storeGalleryImages')->name('storegalleryImages');
+                Route::get('/delete-thumbnail/{thumbnailId}','deleteThumbnail')->name('deleteThumbnail');
             });
 
         });

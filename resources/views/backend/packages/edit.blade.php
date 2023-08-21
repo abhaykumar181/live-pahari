@@ -41,8 +41,9 @@
                                     <div class="row">
                                         <div class="col-md-9">
                                             @csrf
+                                            <input type="hidden" name="id" value="{{$package->id}}" >
+                                            <input type="hidden" name="numberofDays" value="{{$package->days}}" >
                                             <div class="mb-3">
-                                                <input type="hidden" class="form-control shadow-sm" name="id" value="{{$package->id}}" >
                                                 <label for="title" class="form-label">Title <span class="required">*</span></label>
                                                 <input type="text" class="form-control shadow-sm" name="title" id="title" value="{{$package->title}}" >
                                             </div>
@@ -111,51 +112,6 @@
                             </div>                        
                         </form>
 					</div>
-
-                    <div class="card card-white rounded-0 mt-5">
-                        <div class="card-header bg-white py-3 border-top" id="packageDetails">
-                            <h5 class="mb-0">Package Details</h5>
-                        </div>
-
-                        <form class="itineraries_form" action="{{route('admin.packages.storeitineraries')}}" method="post" enctype="multipart/form-data" >
-                           @csrf
-                            <div class="card-body">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="numberofDays" class="form-label ">Number of days <span class="required">*</span></label>
-                                                <input type="number" class="form-control shadow-sm" name="numberofDays" id="numberofDays" min="0" value="{{ old('numberofDays') ? old('numberofDays') : $package->days}}" >
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Itineraries <span class="required">*</span></label>
-                                                <!-- Accordion Start -->
-                                                <div class="accordion" id="packageItinerariesItems">
-                                                    @if(!empty($packageItineraries))
-                                                        @php 
-                                                            $currentItems = 1; 
-                                                            $itenariesDays = old('numberofDays') ? old('numberofDays') : $package->days;
-                                                        @endphp
-
-                                                        @include('backend.partials.itinerariesItems')
-                                                    @endif
-                                                </div>
-                                                <!-- Accordion End -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card-footer">
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-success shadow-sm" id="itineraryUpdate">Update</button>
-                                    <input type="hidden" name="packageId" value="{{$package->id}}" >
-                                </div>                        
-                            </div> 
-                        </form> 
-                    </div> 
-
                 </div>
             </div>
         </div>
