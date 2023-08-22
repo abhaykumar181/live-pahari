@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::resource('packages', App\Http\Controllers\Api\PackageController::class);
+Route::resource('locations', App\Http\Controllers\Api\LocationController::class);

@@ -352,6 +352,7 @@ class PackageController extends Controller
      */
     protected function storeGalleryImages(Request $request){
         try{
+            // dd($request->all());
             $validateInput = [
                 'thumbnail' => 'required|array'
             ];

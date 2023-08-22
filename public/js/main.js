@@ -123,56 +123,20 @@ tinymce.init({
 
 /** Multiple image Preview */
 
+// document.querySelector('#preview').find(img).remove();
 const preview = (file) => {
-	const fr = new FileReader();
-	fr.onload = () => {
-	  const img = document.createElement("img");
-	  img.src = fr.result; 
-	  img.alt = file.name;
-	  
-	  document.querySelector('#preview').append(img);
-	};
-	fr.readAsDataURL(file);
+	const img = document.createElement("img");
+	img.src = URL.createObjectURL(file);
+	img.alt = file.name;
+	document.querySelector('#preview').append(img);
 };
   
 document.querySelector("#thumbnail").addEventListener("change", (ev) => {
-	if (!ev.target.files) return; 
+	document.querySelector("#startUpload").classList.remove('d-none');
+	if (!ev.target.files) return;
+	jQuery('#preview').html('');
 	[...ev.target.files].forEach(preview);
+	
+	console.log([...ev.target.files]);
 });
 
-
-// $(function () {
-// 	$('[id*=fuUpload1]').change(function () {
-// 		if (typeof (FileReader) != "undefined") {
-// 			var dvPreview = $("[id*=dvPreview]");
-// 			var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
-// 			$($(this)[0].files).each(function () {
-// 				var file = $(this);
-// 				if (regex.test(file[0].name.toLowerCase())) {
-// 					var reader = new FileReader();
-// 					reader.onload = function (e) {
-// 						var img = $("<img />");
-// 						img.attr("style", "max-height:250px;width: 150px");
-// 						img.attr("src", e.target.result);
-// 						var div = $("<div style='float:left;' />");
-// 						$(div).html("<span style='float:right;' class='closeDiv'>X<span>");
-// 						div.append(img);
-
-// 						dvPreview.append(div);
-// 					}
-// 					reader.readAsDataURL(file[0]);
-// 				} else {
-// 					alert(file[0].name + " is not a valid image file.");
-// 					dvPreview.html("");
-// 					return false;
-// 				}
-// 			});
-// 		} else {
-// 			alert("This browser does not support HTML5 FileReader.");
-// 		}
-// 	});
-
-// 	$('body').on('click', '.closeDiv', function () {
-// 		$(this).closest('div').remove();
-// 	});
-// });

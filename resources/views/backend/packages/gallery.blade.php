@@ -43,17 +43,16 @@
                                     <div class="row">
                                         <div class="col-md-8">
                                             <div class="mb-3">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        @php $allThumbnails @endphp
+                                                <div class="container ">
+                                                    <div class="row align-content-center">
                                                         @if(isset($allThumbnails))
                                                             @forelse($allThumbnails as $thumbnail)
                                                                 <div class="col-md-4 p-1 text-center">
-                                                                    <img class="package-thumbnails img-fluid p-1" src="{{asset('/storage/thumbnails/images/'.$thumbnail->name.'')}}" />
+                                                                    <img class="package-thumbnails img-fluid p-1" src="{{asset('/storage/thumbnails/images/'.$thumbnail->name.'')}}" accept="image/*" />
                                                                     <a href="javascript:void();" class="btn-sm btn-danger text-decoration-none shadow-sm d-inline-block delete-thumbnail" data-type="thumbnail" data-id="{{ $thumbnail->id }}">Remove</a>
                                                                 </div>
                                                                 @empty
-                                                                    <div class="fs-6 text-center ">No images have been uploaded yet.</div>
+                                                                    <div class="fs-6 text-center ">Package gallery images has not been uploaded yet.</div>
                                                             @endforelse
                                                         @endif
                                                     </div>
@@ -76,9 +75,9 @@
                                 </div>
                             </div>
 
-                            <div class="card-footer">
+                            <div class="card-footer d-none" id="startUpload" >
                                 <div class="text-end">
-                                    <button type="submit" class="btn btn-success shadow-sm">Start Upload</button>
+                                    <button type="submit"  class="btn btn-success shadow-sm">Start Upload</button>
                                 </div>                        
                             </div>
                                               
