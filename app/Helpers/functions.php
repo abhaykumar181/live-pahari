@@ -39,3 +39,16 @@ if (!function_exists('pr')) {
         echo '<pre>'; print_r($array); echo '</pre>';
     }
 }
+
+if(!function_exists('render_thumbnail_url')){
+    function render_thumbnail_url($object = []){
+        if(empty($object))
+            return false;
+
+        if(file_exists(public_path().'/storage/images/'.$object['thumbnail'])){
+            $object['thumbnail'] = asset('/storage/images/'.$object['thumbnail']);
+        }
+
+        return $object;
+    }
+}

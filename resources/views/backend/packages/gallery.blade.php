@@ -48,7 +48,7 @@
                                                         @if(isset($allThumbnails))
                                                             @forelse($allThumbnails as $thumbnail)
                                                                 <div class="col-md-4 p-1 text-center">
-                                                                    <img class="package-thumbnails img-fluid p-1" src="{{asset('/storage/thumbnails/images/'.$thumbnail->name.'')}}" accept="image/*" />
+                                                                    <img class="package-thumbnails img-fluid p-1" src="{{asset('/storage/gallery/images/'.$thumbnail->name.'')}}" accept="image/*" />
                                                                     <a href="javascript:void();" class="btn-sm btn-danger text-decoration-none shadow-sm d-inline-block delete-thumbnail" data-type="thumbnail" data-id="{{ $thumbnail->id }}">Remove</a>
                                                                 </div>
                                                                 @empty
@@ -64,9 +64,10 @@
                                         <div class="col-md-4">
                                             <div class="mb-3">
                                                 <!-- <label for="formFile" class="form-label">Upload Images <span class="required">*</span></label> -->
+                                                <button type="button" class="btn btn-success shadow-none" onclick="document.getElementById('thumbnail').click()">Upload Images</button>
+                                                <button type="submit"  class="btn btn-primary shadow-sm d-none" id="startUpload">Start Upload</button>
                                                 <div id="preview" class="mb-2"></div>
                                                 <input class="form-control shadow-sm file-placeholder d-none " name="thumbnail[]" type="file"  id="thumbnail" value="{{old('thumbnail','')}}" multiple >
-                                                <button type="button" class="btn btn-success shadow-none" onclick="document.getElementById('thumbnail').click()">Upload Images</button>
                                                
                                             </div>
                                         </div>
@@ -75,11 +76,7 @@
                                 </div>
                             </div>
 
-                            <div class="card-footer d-none" id="startUpload" >
-                                <div class="text-end">
-                                    <button type="submit"  class="btn btn-success shadow-sm">Start Upload</button>
-                                </div>                        
-                            </div>
+                           
                                               
                         </form>
 					</div>

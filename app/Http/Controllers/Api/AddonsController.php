@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Locations;
+use App\Models\Addons;
 
-class LocationController extends Controller
+class AddonsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,43 +14,49 @@ class LocationController extends Controller
     public function index(Request $request)
     {
         try{
-            $limit = $request->limit ? $request->limit : 10;
-            $page = $request->page ? $request->page : 1;
+            $limit = $request->limit ? $request->limit : '10'; 
+            $page = $request->page ? $request->page : '1';
             $offset = (($page - 1) * $limit);
             $orderBy = $request->orderBy ? $request->orderBy : 'id';
-            $order = $request->order ? $request->order : 'ASC';
+            $order = $request->order ? $request->order : 'ASC';         
+            
+            $addonsQuery = Addons::where('userId', '!=', '')->where('status','1');
 
-            $locationQuery = Locations::where('id','!=','');
             if($request->search){
-                $locationQuery->where(strtolower('name'),'LIKE','%'.strtolower($request->search).'%');
+                $addonsQuery->where(strtolower('title'), 'LIKE', '%'.strtolower($request->search).'%');
             }
 
-            $total = $locationQuery->count();
+            $totalRows = $addonsQuery->count();
 
-            if($orderBy){
-                $locationQuery->orderBy($orderBy, $order);
+            if($order){
+                $addonsQuery->orderBy($orderBy, $order);
             }
 
             if($limit && $limit > 0){
-                $locationQuery->skip($offset)->take($limit);
+                $addonsQuery->skip($offset)->take($limit);
             }
-            
-            $locations = $locationQuery->get();
-            
+
+            $addons = $addonsQuery->get()->toArray();
+
+            if(!empty($addons)){
+                $addons = array_map("render_thumbnail_url", $addons);
+            }
+
             $data = [
                 'success' => true,
                 'limit' => $limit,
                 'page' => $page,
-                'total' => $total,
-                'data' => $locations
+                'total' => $totalRows,
+                'data' => $addons
             ];
-            
-            return response()->json($data,200);
+
+            return response()->json($data, 200);
             
         }catch(\Illuminate\Database\QueryException $e){
-            return response()->json('Internal Server Error.', 500);
+            return response()->json('internal Server Error', 500);
         }
     }
+    
 
     /**
      * Show the form for creating a new resource.

@@ -56,7 +56,7 @@ class PropertiesController extends Controller
         $imageName = $request->thumbnailName ? $request->thumbnailName : null;
         if($request->hasFile('thumbnail')){
             $imageName = time() . '.' . $request->thumbnail->extension();
-            $request->thumbnail->move(public_path('storage/properties/images'), $imageName);
+            $request->thumbnail->move(public_path('storage/images'), $imageName);
         }
 
         if($request->post('id')){

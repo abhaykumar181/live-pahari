@@ -62,7 +62,7 @@
                                                 <img id="uploadPreview" class="img-thumbnail d-none" alt="image" >
                                                 <p class="imgMessage">No image selected</p>
                                                 @else
-                                                <img src="{{ asset('storage/testimonials/images/'.$testimonial->thumbnail.'') }}" id="uploadPreview" class="img-thumbnail" style="height:130px;width:100%" alt="image">
+                                                <img src="{{ asset('storage/images/'.$testimonial->thumbnail.'') }}" id="uploadPreview" class="img-thumbnail" style="height:130px;width:100%" alt="image">
                                                 @endif
                                                 <input class="form-control shadow-sm file-placeholder" name="thumbnail" type="file" id="thumbnail"  onchange="PreviewImage();" value="{{old('thumbnail','')}}">
                                                 <input name="thumbnailName" type="hidden" value="{{$testimonial->thumbnail}}">

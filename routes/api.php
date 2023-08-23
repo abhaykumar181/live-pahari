@@ -21,3 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::resource('packages', App\Http\Controllers\Api\PackageController::class);
 Route::resource('locations', App\Http\Controllers\Api\LocationController::class);
+Route::resource('addons', App\Http\Controllers\Api\AddonsController::class);
+Route::resource('properties', App\Http\Controllers\Api\PropertiesController::class);
+Route::resource('bookings', App\Http\Controllers\Api\BookingsController::class);

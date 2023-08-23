@@ -68,7 +68,7 @@
                                         <div class="col-md-3">
                                             <div class="mb-3 ">
                                                 <label for="formFile" class="form-label">Choose Image <span class="required">*</span></label>
-                                                <img src="{{ asset('storage/addons/images/'.$addons->thumbnail.'') }}" id="uploadPreview" class="img-thumbnail" style="height:130px;width:100%" alt="image">
+                                                <img src="{{ asset('storage/images/'.$addons->thumbnail.'') }}" id="uploadPreview" class="img-thumbnail" style="height:130px;width:100%" alt="image">
                                                 <input class="form-control shadow-sm file-placeholder" name="thumbnail" type="file" id="thumbnail"  onchange="PreviewImage();" >
                                                 <input name="thumbnailName" type="hidden" value="{{$addons->thumbnail}}">
                                             </div>

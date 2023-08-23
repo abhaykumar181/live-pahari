@@ -132,7 +132,7 @@ class PackageController extends Controller
             $imageName = $request->thumbnailName ? $request->thumbnailName : null;
             if($request->hasFile('thumbnail')){
                 $imageName = time() . '.' . $request->thumbnail->extension();
-                $request->thumbnail->move(public_path('storage/packages/images'), $imageName);
+                $request->thumbnail->move(public_path('storage/images'), $imageName);
             }
     
             if($request->post('id')){
@@ -242,8 +242,18 @@ class PackageController extends Controller
             if(!$package){
                 return redirect()->back()->with('error','Package doesn\'t exist');
             }else{
-                $deleteItinerary = Itineraries::where(['packageId' => $packageId])->delete();
-                if($deleteItinerary){
+                $deletePackageItineraries = Itineraries::where(['packageId' => $packageId]);
+                $deletePackageGallery = Thumbnails::where(['packageId' => $packageId]);
+
+                if(!empty($deletePackageItineraries)){
+                    $deletePackageItineraries->delete();
+                }
+
+                if(!empty($deletePackageGallery)){
+                    $deletePackageGallery->delete();
+                }
+
+                if($deletePackageItineraries && $deletePackageGallery){
                     if($package->delete()){ 
                         return redirect()->route('admin.packages.index')->with('message','Package deleted successfully.');
                     }else{
@@ -366,7 +376,7 @@ class PackageController extends Controller
             if($request->hasFile('thumbnail')){
                 foreach($request->thumbnail as $thumbnail){
                     $imageName = uniqid() . '.' . $thumbnail->extension();
-                    $thumbnail->move(public_path('storage/thumbnails/images'), $imageName);
+                    $thumbnail->move(public_path('storage/gallery/images'), $imageName);
                     $thumbnail = new Thumbnails;
                     $thumbnail->packageId = $request->post('id');
                     $thumbnail->name = $imageName;

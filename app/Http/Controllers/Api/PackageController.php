@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Packages;
+use App\Models\LocationRelationship;
+use App\Models\Locations;
 
 class PackageController extends Controller
 {
@@ -14,34 +16,37 @@ class PackageController extends Controller
     public function index(Request $request)
     {
         try{
-             $data['packageLocation'] = $packageQuery->join('pahhos_location_relationship','pahhos_packages.id','=','pahhos_location_relationship.objectId')->pluck('locationId');
             $limit = $request->limit ? $request->limit : 20;
             $page = $request->page ? $request->page : 1;
             $offset = (($page - 1) * $limit);
             $orderBy = $request->orderBy ? $request->orderBy : 'id';
-            $order = $request->order ? $request->order : 'DESC';
-            
-
+            $order = $request->order ? $request->order : 'ASC'; 
+        
             $packageQuery = Packages::where('userId', '!=' , '');
             if($request->days){
                 $packageQuery->where('days', $request->days);
             }
+
+            if($request->search){    
+                $packageQuery->where(strtolower('title'),'LIKE','%'.strtolower($request->search).'%');
+            }
             
             $totalRows = $packageQuery->count();
-           
-            if($request->location){
-                $packageQuery->join('pahhos_location_relationship','pahhos_packages.id','=','pahhos_location_relationship.objectId')->pluck('locationId');
-            }
 
             if($orderBy){
                 $packageQuery->orderBy($orderBy, $order);
             }
-
+            
             if($limit && $limit> 0){
                 $packageQuery->skip($offset)->take($limit);
             }
+            
+            $packages = $packageQuery->get()->toArray();
+            
+            if(!empty($packages)){
+                $packages = array_map("render_thumbnail_url", $packages);
+            }
 
-            $packages = $packageQuery->get();
             $data = [
                 'success'   =>  true,
                 'limit' => $limit,
@@ -53,7 +58,7 @@ class PackageController extends Controller
             return response()->json($data, 200);
             
         }catch(\Illuminate\Database\QueryException $e){
-            return response()->json('Internal Server Error.', 500);
+            return response()->json('Internal Server Error\$e.', 500);
         }
         
     }
@@ -100,8 +105,20 @@ class PackageController extends Controller
     public function show(string $slug)
     {
         try{
-            $data['package'] = Packages::where('slug','=',$slug)->get();
-            if(count($data['package']) === 0){
+            $package = Packages::where('slug','=',$slug)->get();
+
+            $thumbnails = \App\Models\Thumbnails::where('packageId', '=', Packages::where('slug','=',$slug)->pluck('id'))->pluck('name')->toArray();
+            
+            // $package = Packages::join('pahhos_thumbnails', Packages::where('slug','=',$slug)->get('id'), '=', 'pahhos_thumbnails.packageId')->get();
+            
+            // dd($thumbnails);
+            $data = [
+                'success' => true,
+                'data' => $package,
+                'thumbnails' => $thumbnails
+            ];
+
+            if(count($package) === 0){
                 return response(['error' => 'Package not Found.'], 404);
             }else{
                 return response()->json($data, 200);

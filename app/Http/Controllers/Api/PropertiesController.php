@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Locations;
+use App\Models\Properties;
 
-class LocationController extends Controller
+class PropertiesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,41 +14,45 @@ class LocationController extends Controller
     public function index(Request $request)
     {
         try{
-            $limit = $request->limit ? $request->limit : 10;
+            $limit = $request->limit ? $request->limit : 20;
             $page = $request->page ? $request->page : 1;
             $offset = (($page - 1) * $limit);
             $orderBy = $request->orderBy ? $request->orderBy : 'id';
             $order = $request->order ? $request->order : 'ASC';
 
-            $locationQuery = Locations::where('id','!=','');
+            $propertiesQuery = Properties::where('userId','!=','')->where('status','1');
             if($request->search){
-                $locationQuery->where(strtolower('name'),'LIKE','%'.strtolower($request->search).'%');
+                $propertiesQuery->where(strtolower('title'), 'LIKE', '%'.strtolower($request->search).'%');
             }
 
-            $total = $locationQuery->count();
-
-            if($orderBy){
-                $locationQuery->orderBy($orderBy, $order);
+            $totalRows = $propertiesQuery->count();
+           
+            if($order){
+                $propertiesQuery->orderBy($orderBy, $order);
             }
 
             if($limit && $limit > 0){
-                $locationQuery->skip($offset)->take($limit);
+                $propertiesQuery->skip($offset)->take($limit);
             }
-            
-            $locations = $locationQuery->get();
-            
-            $data = [
+
+            $properties = $propertiesQuery->get()->toArray();
+
+            if(!empty($properties)){
+                $properties = array_map("render_thumbnail_url", $properties);
+            }
+
+           $data = [
                 'success' => true,
                 'limit' => $limit,
                 'page' => $page,
-                'total' => $total,
-                'data' => $locations
-            ];
-            
-            return response()->json($data,200);
-            
+                'total' => $totalRows,
+                'data' => $properties
+           ];
+
+           return response()->json($data ,200);
+                        
         }catch(\Illuminate\Database\QueryException $e){
-            return response()->json('Internal Server Error.', 500);
+            return response()->json('internal Server Error', 500);
         }
     }
 
