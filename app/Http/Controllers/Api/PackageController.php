@@ -105,17 +105,10 @@ class PackageController extends Controller
     public function show(string $slug)
     {
         try{
-            $package = Packages::where('slug','=',$slug)->get();
-
-            $thumbnails = \App\Models\Thumbnails::where('packageId', '=', Packages::where('slug','=',$slug)->pluck('id'))->pluck('name')->toArray();
-            
-            // $package = Packages::join('pahhos_thumbnails', Packages::where('slug','=',$slug)->get('id'), '=', 'pahhos_thumbnails.packageId')->get();
-            
-            // dd($thumbnails);
+            $package = Packages::where('slug','=',$slug)->with('gallery','itineraries')->get();
             $data = [
                 'success' => true,
-                'data' => $package,
-                'thumbnails' => $thumbnails
+                'data' => $package
             ];
 
             if(count($package) === 0){
