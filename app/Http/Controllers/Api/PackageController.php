@@ -58,7 +58,7 @@ class PackageController extends Controller
             return response()->json($data, 200);
             
         }catch(\Illuminate\Database\QueryException $e){
-            return response()->json('Internal Server Error\$e.', 500);
+            return response()->json('Internal Server Error.', 500);
         }
         
     }

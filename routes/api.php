@@ -23,4 +23,6 @@ Route::resource('packages', App\Http\Controllers\Api\PackageController::class);
 Route::resource('locations', App\Http\Controllers\Api\LocationController::class);
 Route::resource('addons', App\Http\Controllers\Api\AddonsController::class);
 Route::resource('properties', App\Http\Controllers\Api\PropertiesController::class);
+Route::resource('testimonials', App\Http\Controllers\Api\TestimonialController::class);
 Route::resource('bookings', App\Http\Controllers\Api\BookingsController::class);
+Route::post('/make-order', [App\Http\Controllers\Api\BookingsController::class,'makeOrder']);

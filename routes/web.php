@@ -65,6 +65,16 @@ Route::group(['as'=>'admin.'], function(){
                 Route::get('/delete-thumbnail/{thumbnailId}','deleteThumbnail')->name('deleteThumbnail');
             });
 
+            // Web Routes for Pages
+            Route::group(['as'=>'pages.', 'prefix'=>'pages','controller'=>App\Http\Controllers\Backend\PageController::class], function(){
+                Route::get('/','index')->name('index');
+                Route::get('/create','create')->name('create');
+                Route::post('/create','store')->name('store');
+                Route::get('/edit/{pageId}','edit')->name('edit');
+                Route::get('/delete/{pageId}','delete')->name('delete');
+            });
+
+
         });
 
     });

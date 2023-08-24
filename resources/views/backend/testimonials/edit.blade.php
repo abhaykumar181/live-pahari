@@ -54,8 +54,13 @@
                                                 <label for="testimonial" class="form-label">Testimonial <span class="required">*</span></label>
                                                 <textarea class="form-control shadow-sm" name="testimonial" id="testimonial" rows="4">{{$testimonial->testimonial}}</textarea>
                                             </div>
+                                            <div class="mb-3">
+                                                <label for="excerpt" class="form-label">Excerpt <span class="required">*</span></label>
+                                                <textarea class="form-control shadow-sm " name="excerpt" id="excerpt" rows="5">{{$testimonial->excerpt}}</textarea>
+                                            </div>
                                         </div>
                                         <div class="col-md-3">
+                                        
                                             <div class="mb-3 ">
                                                 <label for="formFile" class="form-label">Choose Image</label>
                                                 @if($testimonial->thumbnail === NULL)

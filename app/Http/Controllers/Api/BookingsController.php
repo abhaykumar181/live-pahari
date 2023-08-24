@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Bookings;
+use App\Models\Packages;
 
 class BookingsController extends Controller
 {
@@ -13,19 +14,6 @@ class BookingsController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->limit ? $request->limit : '20';
-        $page = $request->page ? $request->page : '1';
-        $offset = (($page - 1) * $limit);
-        $order = $request->order ? $request->order : 'ASC';
-        $orderBy = $request->orderBy ? $request->order : 'id';
-
-        $bookingsQuery = Bookings::where('bookingCode', '!=', '')->where('status','active');
-
-        if($request->guests){
-            $bookingsQuery->where('guests', 'LIKE', '%'.$request->guests.'%');
-        }
-
-
 
     }
 
@@ -42,7 +30,7 @@ class BookingsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -76,4 +64,63 @@ class BookingsController extends Controller
     {
         //
     }
+
+    /**
+     * Booking Order
+     * 
+     * @accept Integer|String|Date
+     * @since 1.0.0
+     * 
+     * return response 
+     */
+    public function makeOrder(Request $request){
+        try{
+            $validateInput = [
+                'packageId' => 'required',
+                'name' => 'required|string',
+                'email' => 'required',
+                'phonenumber' => 'required',
+                'guests' => 'required',
+                'checkinDate' => 'required',
+            ];
+            
+            $request->validate($validateInput);
+            
+            if($request->packageId){
+                $packageDays = Packages::where(['id'=>$request->packageId])->pluck('days')->first();
+                $packageId = ($request->packageId < 10 && $request->packageId > 0 )? '0'.$request->packageId : $request->packageId;
+            }
+            $trimcheckinDate = str_replace('-','',$request->checkinDate);   
+            $bookingCode = "PHID".$packageId.$trimcheckinDate;
+            $checkOutdate = date('Y-m-d', strtotime($request->checkinDate. ' + '.$packageDays.' days'));
+
+            $booking = new Bookings;
+            $booking->bookingCode = $bookingCode;
+            $booking->packageId = $request->packageId;
+            $booking->name = $request->name;
+            $booking->email = $request->email;
+            $booking->phone = $request->phonenumber;
+            $booking->guests = $request->guests;
+            $booking->checkInDate = $request->checkinDate;
+            $booking->checkOutDate = $checkOutdate;
+            $booking->status = "active";
+
+            $data = [
+                'success' => true,
+                'message' => "Your Package has been Booked successfully."
+            ];
+
+            if($booking->save()){
+                return response()->json($data, 200);
+            }else{
+                return response()->json(['error'=>true, 'message'=>'Order Booking Failed.'], 500);
+            }
+
+
+        }catch(\Illuminate\Database\QueryException $e){
+            return response()->json('Internal Server Error.', 500);
+        }
+        
+    }
+
 }

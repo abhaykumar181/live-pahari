@@ -32,7 +32,8 @@ class TestimonialController extends Controller
                 'name' => 'required',
                 'title' => 'required',
                 'testimonial' => 'required',
-                'testimonial_status' => 'required'
+                'testimonial_status' => 'required',
+                'excerpt' => 'required'
             ];
             $request->validate($validateInput);
     
@@ -51,6 +52,7 @@ class TestimonialController extends Controller
             $testmonial->name = $request->name;
             $testmonial->title = $request->title;
             $testmonial->testimonial = $request->testimonial;
+            $testmonial->excerpt = $request->excerpt;
             $testmonial->thumbnail = $imageName;
             $testmonial->status = $request->testimonial_status;
             

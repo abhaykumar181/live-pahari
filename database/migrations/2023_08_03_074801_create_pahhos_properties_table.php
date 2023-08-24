@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title',255);
             $table->string('slug',255);
             $table->longtext('description');
+            $table->text('excerpt');
             $table->string('thumbnail',55);
             $table->enum('priceType',['fixed','unit']);
             $table->decimal('price');

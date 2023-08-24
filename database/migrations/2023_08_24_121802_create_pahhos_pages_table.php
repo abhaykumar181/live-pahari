@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pahhos_testimonials', function (Blueprint $table) {
+        Schema::create('pahhos_pages', function (Blueprint $table) {
             $table->id();
-            $table->string('name',55);
-            $table->string('title',255);
-            $table->text('testimonial');
+            $table->string('title', 255);
+            $table->integer('userId');
             $table->text('excerpt');
-            $table->integer('status');
-            $table->string('thumbnail',55)->nullable();
+            $table->longtext('description');
+            $table->emun('status',['draft','publish','trash']);
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pahhos_testimonials');
+        Schema::dropIfExists('pahhos_pages');
     }
 };

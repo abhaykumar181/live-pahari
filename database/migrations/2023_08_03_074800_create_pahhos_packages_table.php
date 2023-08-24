@@ -19,6 +19,7 @@ return new class extends Migration
             $table->longtext('description');
             $table->longtext('howToReach');
             $table->longtext('extraDetails');
+            $table->text('excerpt');
             $table->string('thumbnail',55);
             $table->decimal('price');
             $table->integer('days');

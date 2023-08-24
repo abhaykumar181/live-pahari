@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Packages;
 
-class Bookings extends Model
+class Pages extends Model
 {
     use HasFactory;
-    protected $table = "pahhos_bookings";
+    protected $table = "pahhos_pages";
 }
