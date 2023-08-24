@@ -105,17 +105,26 @@ class PackageController extends Controller
     public function show(string $slug)
     {
         try{
-            $package = Packages::where('slug','=',$slug)->with('gallery','itineraries')->get();
+            $packageQuery = Packages::where('slug','=',$slug)->with('gallery','itineraries');
+            
+            $package = $packageQuery->first();
+
+            if(is_null($package)){
+                return response(['error' => true,'message' => 'Package not Found.'], 404);
+            }
+
+            $package  = $package->toArray();
+            $package = render_thumbnail_url($package);
+            if(isset($package['gallery'])){
+                $package['gallery'] = array_map("render_thumbnail_url", $package['gallery']);
+            }
+
             $data = [
                 'success' => true,
                 'data' => $package
             ];
+            return response()->json($data, 200);
 
-            if(count($package) === 0){
-                return response(['error' => 'Package not Found.'], 404);
-            }else{
-                return response()->json($data, 200);
-            }
        }catch(\Illuminate\Database\QueryException $e){
             return response()->json(['error'=>'Internal server error.'], 500);
        }

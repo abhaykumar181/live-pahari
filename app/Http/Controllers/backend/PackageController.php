@@ -344,7 +344,7 @@ class PackageController extends Controller
         $data['package'] = Packages::find($packageId);
         $data['allThumbnails'] = Thumbnails::where('packageId',$packageId)->get();
         // dd($data['allThumbnails']);
-
+        // dd((public_path().'/storage/gallery/images/'));
         if(!$data['package']){
             return redirect()->route('admin.packages.index')->with('error','Package doesn\'t exist.');
         }else{

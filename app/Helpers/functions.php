@@ -42,11 +42,20 @@ if (!function_exists('pr')) {
 
 if(!function_exists('render_thumbnail_url')){
     function render_thumbnail_url($object = []){
+
         if(empty($object))
             return false;
 
-        if(file_exists(public_path().'/storage/images/'.$object['thumbnail'])){
-            $object['thumbnail'] = asset('/storage/images/'.$object['thumbnail']);
+        if(isset($object['thumbnail'])){
+            if(file_exists(public_path().'/storage/images/'.$object['thumbnail'])){
+                $object['thumbnail'] = asset('/storage/images/'.$object['thumbnail']);
+            }
+        }
+
+        if(isset($object['name'])){
+            if(file_exists(public_path().'/storage/gallery/images/'.$object['name'])){
+                $object['name'] = asset('/storage/gallery/images/'.$object['name']);
+            }
         }
 
         return $object;
