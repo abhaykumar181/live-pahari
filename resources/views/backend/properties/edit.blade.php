@@ -63,6 +63,11 @@
                                                 </select>
                                             </div>
 
+                                            <div class="mb-3">
+                                                <label for="excerpt" class="form-label">Excerpt <span class="required">*</span></label>
+                                                <textarea class="form-control shadow-sm " name="excerpt" id="excerpt" rows="5">{{$property->excerpt}}</textarea>
+                                            </div>
+
                                            
                                         </div>
                                         <div class="col-md-3">

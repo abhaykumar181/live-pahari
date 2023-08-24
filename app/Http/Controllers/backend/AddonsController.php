@@ -71,6 +71,7 @@ class AddonsController extends Controller
                 'price' => 'required',
                 'priceType' => 'required',
                 'addon_status' => 'required',
+                'excerpt' => 'required',
             ];
 
             if($request->post('id') === false){
@@ -95,6 +96,7 @@ class AddonsController extends Controller
             $addon->title = $request->title;
             $addon->slug = getSlug($request->title);
             $addon->description = $request->description;
+            $addon->excerpt = $request->excerpt;
             $addon->thumbnail = $imageName;
             $addon->priceType = $request->priceType;
             $addon->price = $request->price;

@@ -45,6 +45,7 @@ class PropertiesController extends Controller
             'email' => 'required',
             'phone' => 'required',
             'confirmation' => 'required',
+            'excerpt' => 'required',
         ];
 
         $request->validate($validateInput);
@@ -69,6 +70,7 @@ class PropertiesController extends Controller
         $property->title = $request->title;
         $property->slug = getSlug($request->title);
         $property->description = $request->description;
+        $property->excerpt = $request->excerpt;
         $property->thumbnail = $imageName;
         $property->priceType = $request->priceType;
         $property->price = $request->price;

@@ -120,6 +120,7 @@ class PackageController extends Controller
                 'price' => 'required',
                 'howtoReach' => 'required',
                 'extraDetails' => 'required',
+                'excerpt' => 'required',
             ];
             
             $request->validate($validateInput);
@@ -145,6 +146,7 @@ class PackageController extends Controller
             $package->title = $request->title;
             $package->slug = getSlug($request->title);
             $package->description = $request->description;
+            $package->excerpt = $request->excerpt;
             $package->thumbnail = $imageName;
             $package->price = $request->price;
             $package->howToReach = $request->howtoReach;
