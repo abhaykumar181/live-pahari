@@ -43,16 +43,36 @@
                                     <tr>
                                     <th>S.No</th>
                                     <th>Title</th>
-                                    <th>Price</th>
-                                    <th>Price Type</th>
-                                    <th>Confirmation</th>
+                                    <th>Excerpt</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                  
+                                    @php $serialno= 1;  @endphp
+                                    @foreach($allpages as $key => $page)
+                                    <tr>
+                                        <th>{{$serialno++}}</th>
+                                        <td>{{$page->title}}</td>
+                                        <td>{{$page->excerpt}}</td>
+                                        <td>
+                                            @if($page->status == 'publish')
+                                                Published
+                                            @elseif($page->status == 'draft')
+                                                Draft
+                                            @else
+                                                Trashed
+                                            @endif  
+                                        </td>
+                                        <td>
+                                             
+                                             <a href="{{route('admin.pages.edit', ['pageId'=> $page->id ])}}" class="btn-sm btn-primary text-decoration-none shadow-sm d-inline-block"> <i class="fa-solid fa-pencil"></i> </a>
+                                             <a href="javascript:void();" class="btn-sm btn-danger text-decoration-none shadow-sm d-inline-block delete-page " data-type="page" data-id="{{ $page->id }}"> <i class="fa-solid fa-trash"></i> </a>
+                                            
+                                        </td>
+                                    </tr>
+                                    @endforeach
                                 </tbody>
                                 
                             </table>

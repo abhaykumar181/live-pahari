@@ -50,6 +50,10 @@
                                                 <textarea class="form-control shadow-sm post-description" name="description" id="description" rows="11">{{old('description','')}}</textarea>
                                             </div>
                                             <div class="mb-3">
+                                                <label for="excerpt" class="form-label">Excerpt <span class="required">*</span></label>
+                                                <textarea class="form-control shadow-sm " name="excerpt" id="excerpt" rows="5">{{old('excerpt','')}}</textarea>
+                                            </div>
+                                            <div class="mb-3">
                                                 <label for="id_label_multiple">
                                                     Add-on Locations <span class="required">*</span>
                                                 </label>

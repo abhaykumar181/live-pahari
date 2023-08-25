@@ -79,6 +79,9 @@ jQuery(document).ready(function($) {
             testimonial: {
                 required: true
             },
+            excerpt: {
+                required: true
+            },
             testimonial_status: {
                 required: true
             }
@@ -92,6 +95,9 @@ jQuery(document).ready(function($) {
             },
             testimonial: {
                 required: "Please enter Testimonial."
+            },
+            excerpt: {
+                required: "Please enter Excerpt."
             },
             testimonial_status: {
                 required: "Please select the Status."
@@ -129,6 +135,9 @@ jQuery(document).ready(function($) {
                     return ($("input[name='thumbnailName']").length < 1 || $("input[name='thumbnailName']").val() == "");
                 }
             },
+            excerpt: {
+                required: true
+            },
             price: {
                 required: true
             },
@@ -153,6 +162,9 @@ jQuery(document).ready(function($) {
             "locations[]": "Please choose Locations.",
             thumbnail: {
                 required: "Please select an Image."
+            },
+            excerpt: {
+                required: "Please enter Excerpt."
             },
             price: {
                 required: "Please enter Price."
@@ -199,6 +211,9 @@ jQuery(document).ready(function($) {
                     return ($("input[name='thumbnailName']").length < 1 || $("input[name='thumbnailName']").val() == "");
                 }
             },
+            excerpt: {
+                required: true
+            },
             price: {
                 required: true
             },
@@ -232,6 +247,9 @@ jQuery(document).ready(function($) {
             "locations[]": "Please choose Locations.",
             thumbnail: {
                 required: "Please select an Image."
+            },
+            excerpt: {
+                required: "Please enter Excerpt."
             },
             price: {
                 required: "Please enter Price."
@@ -282,6 +300,9 @@ jQuery(document).ready(function($) {
             description: {
                 required: true
             },
+            excerpt: {
+                required: true
+            },
             howtoReach: {
                 required: true
             },
@@ -309,6 +330,9 @@ jQuery(document).ready(function($) {
             },
             description: {
                 required: "Please enter Description."
+            },
+            excerpt: {
+                required: "Please enter Excerpt."
             },
             howtoReach: {
                 required:  "Please enter How to reach."
@@ -338,32 +362,6 @@ jQuery(document).ready(function($) {
             $(element).removeClass('is-invalid');
         }
     });
-
-
-     // Itinerary Form 
-    //  $(".itineraries_form").validate({
-    //     errorElement: 'span',
-    //     errorClass: 'error',
-    //     onkeyup: false,
-    //     ignore: ".ignore",
-    //     rules: {
-           
-    //     },
-    //     messages: {
-            
-    //     }, 
-    //     errorPlacement: function (error, element) {
-    //         error.addClass('invalid-feedback');
-    //         element.parent('div').append(error);
-    //     },
-    //     highlight: function (element, errorClass, validClass) {
-    //         $(element).addClass('is-invalid');
-    //     },
-    //     unhighlight: function (element, errorClass, validClass) {
-    //         $(element).removeClass('is-invalid');
-    //     }
-    // });
-
 
     // Image Gallery Form
     $(".gallery_form").validate({

@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pahhos_locations', function (Blueprint $table) {
+        Schema::create('pahhos_location_relationship', function (Blueprint $table) {
             $table->id();
-            $table->string('name',55);
-            $table->string('slug',55);
+            $table->enum('objectType',['testimonial','addon','property','package']);
+            $table->bigInteger('objectId');
+            $table->bigInteger('locationId');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pahhos_locations');
+        Schema::dropIfExists('pahhos_location_relationship');
     }
 };

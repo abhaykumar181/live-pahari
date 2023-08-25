@@ -11,15 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pahhos_testimonials', function (Blueprint $table) {
+        Schema::create('pahhos_addons', function (Blueprint $table) {
             $table->id();
-            $table->string('name',55);
+            $table->bigInteger('userId')->unsigned();
             $table->string('title',255);
-            $table->text('testimonial');
+            $table->string('slug',255);
+            $table->longtext('description');
             $table->text('excerpt');
+            $table->string('thumbnail',55);
+            $table->enum('priceType',['fixed','unit']);
+            $table->decimal('price');
             $table->integer('status');
-            $table->string('thumbnail',55)->nullable();
             $table->timestamps();
+            $table->foreign('userId')->references('id')->on('users');
         });
     }
 
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pahhos_testimonials');
+        Schema::dropIfExists('pahhos_addons');
     }
 };

@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pahhos_thumbnails', function (Blueprint $table) {
+        Schema::create('pahhos_pages', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('packageId')->unsigned();
-            $table->string('name',255);
+            $table->integer('userId');
+            $table->string('title', 255);
+            $table->string('slug',255);
+            $table->text('excerpt');
+            $table->longtext('description');
+            $table->enum('status',['draft','publish','trash']);
             $table->timestamps();
-            $table->foreign('packageId')->references('id')->on('pahhos_packages');
+
         });
     }
 
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pahhos_thumbnails');
+        Schema::dropIfExists('pahhos_pages');
     }
 };

@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pahhos_bookings_confirmations', function (Blueprint $table) {
+        Schema::create('pahhos_booking_orders', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('bookingId')->unsigned();
-            $table->bigInteger('propertyId')->unsigned();
-            $table->enum('confirmation',['pending','confirmed']);
-            $table->enum('payment',['pending','paid']);
+            $table->decimal('unitPrice');
+            $table->integer('quantity');
+            $table->decimal('price');
+            $table->enum('status',['paid','unpaid']);
             $table->timestamps();
             $table->foreign('bookingId')->references('id')->on('pahhos_bookings');
-            $table->foreign('propertyId')->references('id')->on('pahhos_properties');
         });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pahhos_bookings_confirmations');
+        Schema::dropIfExists('pahhos_booking_orders');
     }
 };

@@ -137,7 +137,7 @@
                                                 <!-- Accordion Start -->
                                                 <div class="accordion" id="packageItinerariesItems">
                                                     @if(!empty($packageItineraries))
-                                                        @php 
+                                                        @php
                                                             $currentItems = 1; 
                                                             $itenariesDays = $package->numberofDays;
                                                         @endphp

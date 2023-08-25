@@ -25,6 +25,10 @@ jQuery(document).ready(function ($) {
 		showConfirmModalforThumbnail("Are you sure?", "This action will delete you selected Thumbnail. Confirm to proceed!", $(this));
 	});
 
+	$(document).on("click", ".delete-page", function(){
+		showConfirmModal("Are you sure?", "This action will delete you selected Page. Confirm to proceed!", $(this));
+	});
+
 
 	function showConfirmModal($title, $text, element){
 		swal({

@@ -11,19 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pahhos_addons', function (Blueprint $table) {
+        Schema::create('pahhos_itineraries', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('userId')->unsigned();
+            $table->bigInteger('packageId')->unsigned();
+            $table->integer('day');
             $table->string('title',255);
-            $table->string('slug',255);
             $table->longtext('description');
-            $table->text('excerpt');
-            $table->string('thumbnail',55);
-            $table->enum('priceType',['fixed','unit']);
-            $table->decimal('price');
-            $table->integer('status');
             $table->timestamps();
-            $table->foreign('userId')->references('id')->on('users');
+            $table->foreign('packageId')->references('id')->on('pahhos_packages');
         });
     }
 
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pahhos_addons');
+        Schema::dropIfExists('pahhos_itineraries');
     }
 };
