@@ -18,6 +18,8 @@
             <li class="nav-item mb-1 {{ (getControllerName() == 'PackageController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.packages.index') }}"> <i class="fa-solid fa-box"></i> Packages</a></li>
             
             <li class="nav-item mb-1 {{ (getControllerName() == 'PageController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.pages.index') }}"> <i class="fa-solid fa-file"></i> Pages</a></li>
+
+            <li class="nav-item mb-1 {{ (getControllerName() == 'SettingsController') ? 'active' : '' }}"><a class="nav-link px-3" href="{{ route('admin.settings.index') }}"> <i class="fa-solid fa-gear"></i> Settings</a></li>
             
         </ul>
     </div>

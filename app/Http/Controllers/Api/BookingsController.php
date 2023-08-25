@@ -85,7 +85,7 @@ class BookingsController extends Controller
             ];
             
             $request->validate($validateInput);
-            
+
             if($request->packageId){
                 $packageDays = Packages::where(['id'=>$request->packageId])->pluck('days')->first();
                 $packageId = ($request->packageId < 10 && $request->packageId > 0 )? '0'.$request->packageId : $request->packageId;
@@ -93,7 +93,7 @@ class BookingsController extends Controller
             $trimcheckinDate = str_replace('-','',$request->checkinDate);   
             $bookingCode = "PHID".$packageId.$trimcheckinDate;
             $checkOutdate = date('Y-m-d', strtotime($request->checkinDate. ' + '.$packageDays.' days'));
-
+            
             $booking = new Bookings;
             $booking->bookingCode = $bookingCode;
             $booking->packageId = $request->packageId;
@@ -113,7 +113,7 @@ class BookingsController extends Controller
             if($booking->save()){
                 return response()->json($data, 200);
             }else{
-                return response()->json(['error'=>true, 'message'=>'Order Booking Failed.'], 500);
+                return response()->json(['error'=>true, 'message'=>'Order Booking Failed.']);
             }
 
 

@@ -37,6 +37,8 @@ class PageController extends Controller
      /**
      * Edit Page
      * 
+     * @accept $pageId|Integer
+     * 
      * @since 1.0.0
      * 
      * return redirection
@@ -107,7 +109,7 @@ class PageController extends Controller
     /**
      * Delete Page
      * 
-     * @accept Integer
+     * @accept $pageId|Integer
      * 
      * @since 1.0.0
      * 

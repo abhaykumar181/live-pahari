@@ -74,6 +74,12 @@ Route::group(['as'=>'admin.'], function(){
                 Route::get('/delete/{pageId}','delete')->name('delete');
             });
 
+            //Web Routes for Settings
+            Route::group(['as'=>'settings.', 'prefix'=>'settings', 'controller'=>App\Http\Controllers\Backend\SettingsController::class], function(){
+                Route::get('/','index')->name('index');
+                Route::post('/create','store')->name('store');
+            });
+
 
         });
 

@@ -387,6 +387,53 @@ jQuery(document).ready(function($) {
         }
     });
 
+    // Validate Settings Form
+    $(".settings_form").validate({
+        errorElement: 'span',
+        errorClass: 'error',
+        onkeyup: false,
+        rules: {
+            title: {
+                required: true
+            },
+            logo: {
+                required: function(element){
+                    return ($("input[name='thumbnailName']").length < 1 || $("input[name='thumbnailName']").val() == "");
+                }
+            },
+            numberofGuests: {
+                required: true
+            },
+            numberofcuratedGuests: {
+                required: true
+            },         
+        },
+        messages: {
+            title: {
+                required: "Please enter Title."
+            },
+            logo: {
+                required: "Please select the website Logo."
+            },
+            numberofGuests: {
+                required: "Please enter the number of guests."
+            },
+            numberofcuratedGuests: {
+                required: "Please enter the number of guests."
+            },
+        }, 
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.parent('div').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+
 
 });
 

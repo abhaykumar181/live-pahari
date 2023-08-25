@@ -49,7 +49,6 @@
                                                 <label for="description" class="form-label">Description <span class="required">*</span></label>
                                                 <textarea class="form-control shadow-sm post-description" name="description" id="description" >{{old('description','')}}</textarea>
                                             </div>
-                                            
                                         </div>
                                         <div class="col-md-5">
                                             <div class="mb-3">

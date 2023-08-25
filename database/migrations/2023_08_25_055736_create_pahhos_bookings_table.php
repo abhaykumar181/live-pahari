@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigInteger('packageId');
             $table->string('name',55);
             $table->string('email',55);
-            $table->integer('phone');
+            $table->bigInteger('phone');
             $table->integer('guests');
             $table->date('checkInDate');
             $table->date('checkOutDate');

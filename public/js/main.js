@@ -118,8 +118,10 @@ function PreviewImage() {
 	};
 };
 
-/******* Tiny MCE textarea */
+/******* Tiny MCE Textarea */
 tinymce.init({
+	height : "380",
+	branding: false,
 	selector: '.post-description', 
 	plugins: 'code table lists',
 	toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table',
