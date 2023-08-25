@@ -37,12 +37,13 @@ class SettingsController extends Controller
             $settings->CurateifGuests = $request->numberofcuratedGuests;
             $settings->headerscripts = $request->headerscripts;
             $settings->footerscripts = $request->footerscripts;
+            
             if($settings->save()){
                 return redirect()->route('admin.settings.index')->with('message','Settings updated successfully.');
             }else{
                 return redirect()->route('admin.settings.index')->with('error','Failed to update Settings.');
             }
-                        
+
         }catch(\Illuminate\Database\QueryException $e){
             return redirect()->route('admin.settings.index')->with('error','Failed to update Settings.');
         }

@@ -90,8 +90,9 @@ class BookingsController extends Controller
                 $packageDays = Packages::where(['id'=>$request->packageId])->pluck('days')->first();
                 $packageId = ($request->packageId < 10 && $request->packageId > 0 )? '0'.$request->packageId : $request->packageId;
             }
-            $trimcheckinDate = str_replace('-','',$request->checkinDate);   
-            $bookingCode = "PHID".$packageId.$trimcheckinDate;
+            $trimcheckinDate = str_replace('-','',$request->checkinDate);
+            $checkBookingDateCount = Bookings::where(['checkInDate'=>$request->checkinDate])->count();
+            $bookingCode = ($checkBookingDateCount < 1) ? "PHID".$packageId.$trimcheckinDate : "PHID".$packageId.$trimcheckinDate.'-'.$checkBookingDateCount+1; 
             $checkOutdate = date('Y-m-d', strtotime($request->checkinDate. ' + '.$packageDays.' days'));
             
             $booking = new Bookings;
