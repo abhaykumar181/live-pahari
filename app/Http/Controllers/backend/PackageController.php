@@ -14,25 +14,24 @@ use \Illuminate\Support\Facades\Auth;
 
 class PackageController extends Controller
 {
-    /**
-     *  Packages Listing
+   /**
+     * Packages listing.
      * 
-     *  @since 1.0.0
+     * @since 1.0.0
      * 
-     *  return html 
+     * @return html
      */
-
     protected function index(){
         $packages = Packages::all();
         return view('backend.packages.index',compact('packages'));
     }
 
     /**
-     *  Create Package
+     * Show the create package page.
      * 
-     *  @since 1.0.0
+     * @since 1.0.0
      * 
-     *  return html 
+     * @return html 
      */
     protected function create(){
         $data['allLocations'] = Locations::all();
@@ -40,20 +39,18 @@ class PackageController extends Controller
     }
 
     /**
-     *  Create Package
+     * Show the edit package page.
      * 
-     *  @since 1.0.0
+     * @accept packageId|Integer
      * 
-     *  return html 
+     * @since 1.0.0
+     * 
+     * @return html
      */
     protected function edit($packageId=''){
         $data['package'] = Packages::find($packageId);
         $data['allLocations'] = Locations::all();
         $data['propertyLocations'] = LocationRelationship::where(['objectType'=>'package', 'objectId'=> $packageId])->pluck('locationId')->toArray();
-        
-        // $data['packageItineraries'] = Itineraries::where(['packageId' => $packageId])->get();
-        // dd($data['packageItineraries']);
-
         if($data['package']){
             return view('backend.packages.edit',$data);
         }else{
@@ -63,50 +60,42 @@ class PackageController extends Controller
 
 
     /**
-     *  Update Itineraries
+     * Update Itineraries
      * 
-     *  @since 1.0.0
+     * @accept packageId|Integer
      * 
-     *  return html 
+     * @since 1.0.0
+     * 
+     * @return html 
      */
     protected function itineraries($packageId=''){
         $data['package'] = Packages::find($packageId);
         $data['allLocations'] = Locations::all();
         $data['propertyLocations'] = LocationRelationship::where(['objectType'=>'package', 'objectId'=> $packageId])->pluck('locationId')->toArray();
-        
         $data['packageItineraries'] = Itineraries::where(['packageId' => $packageId])->get();
-        // dd($data['packageItineraries']);
-
         if($data['package']){
             return view('backend.packages.itineraries',$data);
         }else{
             return redirect()->route('admin.packages.index')->with('error','Package doesn\'t exist.');
         }
-    }
-
-
-    
+    }    
 
     /**
-     *  get Itineraries
+     *  Get itineraries
      * 
      *  @since 1.0.0
      * 
      *  return html 
      */
     protected function gerItineraries(Request $request){
-    
         $data['itenariesDays'] = $request->addNewdays;
-        $data['currentItems'] =  $request->currentItems +1;
-        
+        $data['currentItems'] =  $request->currentItems +1;        
         $data['content']= view('backend.partials.itinerariesItems',$data)->render();
-
         return response()->json($data);
-    }
-                
+    }                
 
     /**
-     *  Store and create Package
+     *  Create and update
      * 
      *  @since 1.0.0
      * 
@@ -235,6 +224,7 @@ class PackageController extends Controller
      * @since 1.0.0
      * 
      * @accept $packageId | Integer
+     * 
      * return redirection
      */
     protected function delete($packageId=''){
@@ -344,14 +334,11 @@ class PackageController extends Controller
      */
     protected function gallery($packageId=''){
         $data['package'] = Packages::find($packageId);
-        $data['allThumbnails'] = Thumbnails::where('packageId',$packageId)->get();
-        // dd($data['allThumbnails']);
-        // dd((public_path().'/storage/gallery/images/'));
+        $data['allThumbnails'] = Thumbnails::where('packageId', $packageId)->get();
         if(!$data['package']){
             return redirect()->route('admin.packages.index')->with('error','Package doesn\'t exist.');
         }else{
-
-            return view('backend.packages.gallery',$data);
+            return view('backend.packages.gallery', $data);
         }
     }
 
@@ -364,7 +351,6 @@ class PackageController extends Controller
      */
     protected function storeGalleryImages(Request $request){
         try{
-            // dd($request->all());
             $validateInput = [
                 'thumbnail' => 'required|array'
             ];

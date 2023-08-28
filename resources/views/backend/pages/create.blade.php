@@ -39,7 +39,7 @@
                             <div class="card-body">
                                 <div class="container">
                                     <div class="row">
-                                        <div class="col-md-7">
+                                        <div class="col-md-9">
                                             @csrf
                                             <div class="mb-3">
                                                 <label for="title" class="form-label">Title <span class="required">*</span></label>
@@ -49,12 +49,12 @@
                                                 <label for="description" class="form-label">Description <span class="required">*</span></label>
                                                 <textarea class="form-control shadow-sm post-description" name="description" id="description" >{{old('description','')}}</textarea>
                                             </div>
-                                        </div>
-                                        <div class="col-md-5">
                                             <div class="mb-3">
                                                 <label for="excerpt" class="form-label">Excerpt <span class="required">*</span></label>
                                                 <textarea class="form-control shadow-sm " name="excerpt" id="excerpt" rows="5">{{old('excerpt','')}}</textarea>
                                             </div>
+                                        </div>
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label for="pageStatus" class="form-label">Status <span class="required">*</span></label>
                                                 <select class="form-select shadow-sm" name="pageStatus" id="pageStatus">

@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('pahhos_booking_orders', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('bookingId')->unsigned();
-            $table->decimal('unitPrice');
             $table->integer('quantity');
             $table->decimal('price');
             $table->enum('status',['paid','unpaid']);

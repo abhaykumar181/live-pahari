@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class AddonsController extends Controller
 {
     /**
-     * add-on listing
+     * Add-ons listing.
      * 
      * @since 1.0.0
      * 
@@ -24,7 +24,7 @@ class AddonsController extends Controller
     }
 
     /**
-     * create add-on
+     * Create an add-on.
      * 
      * @since 1.0.0
      * 
@@ -36,11 +36,12 @@ class AddonsController extends Controller
     }
 
     /**
-     * edit add-on
+     * Edit an add-on.
      * 
      * @since 1.0.0
      * 
      * @accept addonId | Integer
+     * 
      * @return html | redirection
      */
     protected function edit($addonId=''){
@@ -56,11 +57,12 @@ class AddonsController extends Controller
 
 
     /**
-     * store add-on
+     * Store an add-on.
      * 
      * @since 1.0.0
      * 
-     * @accept request
+     * @accept Decimal|String
+     * 
      * @return redirection
      */
     protected function store(Request $request){
@@ -173,11 +175,12 @@ class AddonsController extends Controller
 
 
     /**
-     * Delete add-on
+     * Delete an add-on.
      * 
      * @since 1.0.0
      * 
-     * @accept $addonId |  Integer
+     * @accept addonId|Integer
+     * 
      * @return redirection
      */
     protected function delete($addonId){

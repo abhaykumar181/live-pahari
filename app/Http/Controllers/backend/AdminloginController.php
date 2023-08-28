@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminloginController extends Controller
 {
+    /**
+     * Show the login page.
+     * 
+     * @since 1.0.0
+     * 
+     * @return html
+     */
     protected function login(){
         if(Auth::check() === true){
             return redirect(route('admin.dashboard'));
@@ -15,6 +22,15 @@ class AdminloginController extends Controller
         return view('backend.auth.login');
     }
 
+    /**
+     * Authenticate User
+     * 
+     * @accept Email|Password
+     * 
+     * @since 1.0.0
+     * 
+     * @return redirection
+     */
     protected function checklogin(Request $request){
         try{
             $validateInput = [

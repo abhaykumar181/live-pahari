@@ -10,7 +10,11 @@ class SettingsController extends Controller
 {
     protected function index(){
         $settings = Settings::first();
+        if(!$settings){
+            return redirect()->back()->with('error','Failed to open settings.');
+        }
         return view('backend.settings.index',compact('settings'));
+       
     }
 
     protected function store(Request $request){
@@ -29,7 +33,7 @@ class SettingsController extends Controller
                 $request->logo->move(public_path('storage/images'), $imageName);
             }
 
-            $settings = Settings::where('id',1)->first();
+            $settings = Settings::first();
             $settings->title = $request->title;
             $settings->slug = getSlug($request->title);
             $settings->thumbnail = $imageName;

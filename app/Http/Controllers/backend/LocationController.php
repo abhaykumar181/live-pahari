@@ -8,12 +8,27 @@ use App\Models\Locations;
 
 class LocationController extends Controller
 {
-
+    /**
+     * Locations Listing.
+     * 
+     * @since 1.0.0
+     * 
+     * @return html
+     */
     protected function index(){
         $locations = Locations::all();
         return view("backend.locations.index",compact('locations'));       
     }
 
+    /**
+     * Show the edit page.
+     * 
+     * @accept loactionId|Integer
+     * 
+     * @since 1.0.0
+     * 
+     * @return html
+     */
     protected function edit($loactionId=''){ 
        $data['locations'] = Locations::all();  
        $data['location'] = Locations::find($loactionId);
@@ -21,6 +36,15 @@ class LocationController extends Controller
 
     }
 
+    /**
+     * Create and update locations.
+     * 
+     * @accept loactionId|Integer
+     * 
+     * @since 1.0.0
+     * 
+     * @return html
+     */
     protected function store(Request $request){
         try{
             $validateInput = [

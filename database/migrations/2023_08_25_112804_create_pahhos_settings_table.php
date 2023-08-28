@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title', 255);
             $table->string('slug', 255);
-            $table->string('thumbnail', 255);
+            $table->string('thumbnail', 255)->nullable();
             $table->integer('maxGuests');
             $table->integer('CurateifGuests');
             $table->text('headerscripts')->nullable();

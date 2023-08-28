@@ -46,7 +46,14 @@
                                             </div>
                                             <div class="mb-3 ">
                                                 <label for="formFile" class="form-label">Website Logo <span class="required">*</span></label>
-                                                <div><img src="{{ asset('storage/images/'.$settings->thumbnail.'') }}" id="uploadPreview" class="img-thumbnail" style="height:130px;width:40%" alt="image"></div>
+                                                <div>
+                                                    @if($settings->thumbnail != NULL)
+                                                    <img src="{{ asset('storage/images/'.$settings->thumbnail.'') }}" id="uploadPreview" class="img-thumbnail" style="height:130px;width:40%" alt="image">
+                                                    @else
+                                                    <img id="uploadPreview" class="img-thumbnail d-none" style="height:130px;width:40%" alt="image">
+                                                    @endif
+                                                </div>
+                                                
                                                 <input class="form-control shadow-sm file-placeholder" name="logo" type="file" id="thumbnail" onchange="PreviewImage();" value="{{old('thumbnail','')}}">
                                                 <input name="thumbnailName" type="hidden" value="{{$settings->thumbnail}}">
                                             </div>

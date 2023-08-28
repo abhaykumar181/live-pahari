@@ -47,7 +47,7 @@
                                                     <div class="row align-content-center">
                                                         @if(isset($allThumbnails))
                                                             @forelse($allThumbnails as $thumbnail)
-                                                                <div class="col-md-4 p-1 text-center">
+                                                                <div class="col-md-3 p-1 text-center">
                                                                     <img class="package-thumbnails img-fluid p-1" src="{{asset('/storage/gallery/images/'.$thumbnail->name.'')}}" accept="image/*" />
                                                                     <a href="javascript:void();" class="btn-sm btn-danger text-decoration-none shadow-sm d-inline-block delete-thumbnail" data-type="thumbnail" data-id="{{ $thumbnail->id }}">Remove</a>
                                                                 </div>
