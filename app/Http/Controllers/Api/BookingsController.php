@@ -11,6 +11,7 @@ use App\Models\BookingsMeta;
 use App\Models\Addons;
 use App\Models\Properties;
 use App\Models\Settings;
+use App\Models\BookingsConfirmations;
 use Illuminate\Support\Facades\DB;
 
 
@@ -21,7 +22,7 @@ class BookingsController extends Controller
      */
     public function index(Request $request)
     {
-
+        
     }
 
     /**
@@ -37,7 +38,7 @@ class BookingsController extends Controller
      */
     public function store(Request $request)
     {
-        
+        //
     }
 
     /**
@@ -51,9 +52,9 @@ class BookingsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
-        //
+      //
     }
 
     /**
@@ -61,7 +62,45 @@ class BookingsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Update booking confirmation when confirmation request will be accepted by property owner.
+        $pendingBookings = BookingsConfirmations::where('bookingId', $id)->where('confirmation','pending')->get();
+        if(!is_null($pendingBookings)){
+            foreach($pendingBookings as $index => $bookings){
+                $bookings->confirmation = "confirmed";
+                $bookings->save();
+            }
+        }else{
+            return response()->json(['error' => true , 'message' => 'No Booking confirmations are available.']);
+        }
+        // If payment is made successful, then we will add a new order in Orders Table.
+        $findbookingOrder = BookingOrder::where('bookingId',$id)->get();
+        $confirmedBookings = BookingsConfirmations::where('bookingId', $id)->where('confirmation','confirmed')->get();
+        // dd($confirmedBookings);
+        foreach($confirmedBookings as $index => $confirmedBooking){
+            $property = Properties::find($confirmedBooking->propertyId);
+            $bookingOrder = new BookingOrder;
+            $bookingOrder->bookingId = $findbookingOrder[$index]->bookingId;
+            $bookingOrder->quantity = Bookings::find($id)->guests;
+            $bookingOrder->price = $property->price;
+            $bookingOrder->status = "paid";
+            if($bookingOrder->save()){
+                $BookingsMeta = new BookingsMeta;
+                $BookingsMeta->bookingId = $bookingOrder->bookingId;
+                $BookingsMeta->orderId = $bookingOrder->id;
+                $BookingsMeta->objectType = "property";
+                $BookingsMeta->objectId = $property->id;
+                $BookingsMeta->basePrice = $property->price;
+                $BookingsMeta->priceType = $property->priceType;
+                if($BookingsMeta->priceType == 'unit'){
+                    $BookingsMeta->totalPrice = $BookingsMeta->basePrice * Bookings::find($id)->guests;
+                }else{
+                    $BookingsMeta->totalPrice = $BookingsMeta->basePrice;
+                }
+                $BookingsMeta->save();
+            }
+        }
+        return response()->json(['success' => true , 'message' => 'Booking Successful!.']);
+
     }
 
     /**
@@ -89,10 +128,11 @@ class BookingsController extends Controller
                 'phonenumber' => 'required',
                 'guests' => 'required',
                 'checkinDate' => 'required',
+                'totalPrice' => 'required',
             ];
             
             $request->validate($validateInput);
-            if($request->guests > Settings::first()->pluck('maxGuests')->first()){
+            if($request->guests > Settings::pluck('maxGuests')->first()){
                 return response()->json(['error'=>true, 'message'=>'Guests limit exceeded. Can\'t book order.'], 404);
             }
 
@@ -108,7 +148,7 @@ class BookingsController extends Controller
                 $checkBookingDateCount = Bookings::where(['checkInDate'=>$request->checkinDate])->count();
                 $bookingCode = ($checkBookingDateCount < 1) ? "PHID".$packageId.$trimcheckinDate : "PHID".$packageId.$trimcheckinDate.'-'.$checkBookingDateCount; 
                 $checkOutdate = date('Y-m-d', strtotime($request->checkinDate. ' + '.$package->days.' days'));
-
+                // Saving booking details.
                 $booking = new Bookings;
                 $booking->bookingCode = $bookingCode;
                 $booking->packageId = $request->packageId;
@@ -121,50 +161,67 @@ class BookingsController extends Controller
                 $booking->status = "active";
                 
                 if($booking->save()){
-                    // Booking_Orders
-                    $packagePrice = $package->price;
+                    // Saving booking orders.
                     $bookingOrder = new BookingOrder;
                     $bookingOrder->bookingId = $booking->id;
                     $bookingOrder->quantity = $request->guests;
-                    $bookingOrder->price = $package->price * $request->guests;
-                    $bookingOrder->status = "paid";
+                    $bookingOrder->price = $request->totalPrice;
+                    $bookingOrder->status = "unpaid";
 
                     if($bookingOrder->save()){
-                        // Bookings Meta/Items
+                        // Saving bookings items
                         $orderItems = [
+                            ["type" => 'package', "id" => 1],
+                            ["type" => 'property', "id" => 1],
+                            ["type" => 'property', "id" => 2],
                             ["type" => 'addon', "id" => 1],
-                            ["type" => 'property', "id" => 1]
                         ];
                         
                         foreach($orderItems as $key => $item){
+                            if($item['type'] == "property"){
+                                $property = Properties::find($item['id']);
+                                if($property->confirmationRequired == 1){
+                                    $bookingConfirmation = new BookingsConfirmations;
+                                    $bookingConfirmation->bookingId = $booking->id;
+                                    $bookingConfirmation->propertyId = $item['id'];
+                                    $bookingConfirmation->confirmation = 'pending';
+                                    $bookingConfirmation->payment = 'pending';
+                                    $bookingConfirmation->save();
+                                    continue;
+                                }
+                            }
+
                             $BookingsMeta = new BookingsMeta;
                             $BookingsMeta->bookingId = $booking->id;
                             $BookingsMeta->orderId = $bookingOrder->id;
                             $BookingsMeta->objectType = $item['type'];
                             $BookingsMeta->objectId = $item['id'];
+                            $BookingsMeta->basePrice = $package->price;
+                            $BookingsMeta->priceType = "unit";
+                        
                             if($item['type'] == 'addon'){
                                 $addon = Addons::find($item['id']);
                                 $BookingsMeta->basePrice = $addon->price;
                                 $BookingsMeta->priceType = $addon->priceType;
-                                if($addon->priceType == 'unit'){
-                                    $BookingsMeta->totalPrice = $addon->price * $request->guests;                                    
-                                }else{
-                                    $BookingsMeta->totalPrice = $addon->price;
-                                }
-                            }
-                            if($item['type'] == 'property'){
+                            }else if($item['type'] == 'property'){
                                 $property = Properties::find($item['id']);
                                 $BookingsMeta->basePrice = $property->price;
                                 $BookingsMeta->priceType = $property->priceType;
-                                if($property->priceType == 'unit'){
-                                    $BookingsMeta->totalPrice = $property->price * $request->guests;                                    
-                                }else{
-                                    $BookingsMeta->totalPrice = $property->price;
-                                }
+                            }
+
+                            if($BookingsMeta->priceType == 'unit'){
+                                $BookingsMeta->totalPrice = $BookingsMeta->basePrice * $request->guests;
+                            }else{
+                                $BookingsMeta->totalPrice = $BookingsMeta->basePrice;
                             }
                             $BookingsMeta->save();
                         }
-                        return ['success' => true, 'message' => "Order created!", 'status_code' => 200];
+                        $data['data'] = [
+                            "bookingId" => $booking->id,
+                            "orderId" => $bookingOrder->id,
+                            "orderStatus" =>  $bookingOrder->status
+                        ];
+                        return ['success' => true, 'message' => "Order created!", 'status_code' => 200 , $data];
                     }else{
                         return ['error'=>true, 'message'=>'Order Booking Failed.', 'status_code' => 404];
                     }
@@ -182,5 +239,43 @@ class BookingsController extends Controller
         }
         
     }
+
+    /**
+     * Update order
+     * 
+     * @accept Integer|Enum
+     * @since 1.0.0
+     * 
+     * return response
+     */
+
+     protected function updateOrder(Request $request){
+        try{
+            $validateInput = [
+                'bookingId' => 'required',
+                'orderId' => 'required',
+                'orderStatus' => 'required',
+            ];
+            
+            $request->validate($validateInput);
+
+            $order = BookingOrder::find($request->orderId);
+            // dd($order);
+            $order->status = "paid";
+            if($order->save()){
+                $pendingConfirmations = BookingsConfirmations::where('bookingId', $request->bookingId)->where('confirmation','pending')->get();
+                if(!is_null($pendingConfirmations)){
+                    foreach($pendingConfirmations as $index => $pendingConfirmation){
+                        echo ($pendingConfirmation->propertyId) . '</br>';
+                        $propertyOwnerDetails = Properties::find($pendingConfirmation->propertyId);
+                        echo $propertyOwnerDetails->ownerName;
+                    }
+                }
+            }
+            
+        }catch(\Illuminate\Database\QueryException $e){
+            return response()->json('Internal Server Error.', 500);
+        }
+     }
 
 }

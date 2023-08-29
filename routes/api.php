@@ -26,3 +26,4 @@ Route::resource('properties', App\Http\Controllers\Api\PropertiesController::cla
 Route::resource('testimonials', App\Http\Controllers\Api\TestimonialController::class);
 Route::resource('bookings', App\Http\Controllers\Api\BookingsController::class);
 Route::post('/make-order', [App\Http\Controllers\Api\BookingsController::class,'makeOrder']);
+Route::post('/update-order', [App\Http\Controllers\Api\BookingsController::class,'updateOrder']);
