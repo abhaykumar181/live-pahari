@@ -13,6 +13,8 @@ use App\Models\Properties;
 use App\Models\Settings;
 use App\Models\BookingsConfirmations;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ConfirmationRequired;
 
 
 class BookingsController extends Controller
@@ -256,21 +258,31 @@ class BookingsController extends Controller
                 'orderId' => 'required',
                 'orderStatus' => 'required',
             ];
-            
+        
             $request->validate($validateInput);
 
             $order = BookingOrder::find($request->orderId);
-            // dd($order);
             $order->status = "paid";
             if($order->save()){
                 $pendingConfirmations = BookingsConfirmations::where('bookingId', $request->bookingId)->where('confirmation','pending')->get();
                 if(!is_null($pendingConfirmations)){
-                    foreach($pendingConfirmations as $index => $pendingConfirmation){
-                        echo ($pendingConfirmation->propertyId) . '</br>';
-                        $propertyOwnerDetails = Properties::find($pendingConfirmation->propertyId);
-                        echo $propertyOwnerDetails->ownerName;
+                    foreach($pendingConfirmations as $index => $confirmationItem){
+                        // Send Confirmation email to owners
+                        $property = Properties::find($confirmationItem->propertyId);
+                        Mail::to($property->email)->send(new ConfirmationRequired($confirmationItem));
                     }
                 }
+                
+                // TODO: Add booking Notification email with booking details
+                $bookingOrderStatus = $order->pluck('status')->first();
+                $booking = Bookings::find($request->bookingId);
+                if($bookingOrderStatus == 'paid'){
+                    Mail::to($booking->email)->send(new BookingNotification($booking));
+                }
+                
+
+
+                return response()->json(['success' => true , 'message' => 'Order Created Successfully!'], 200); 
             }
             
         }catch(\Illuminate\Database\QueryException $e){
