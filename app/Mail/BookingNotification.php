@@ -12,6 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Packages;
 use App\Models\BookingOrder;
 use App\Models\BookingsMeta;
+use App\Models\BookingsConfirmations;
 
 class BookingNotification extends Mailable
 {
@@ -71,7 +72,10 @@ class BookingNotification extends Mailable
         $data['bookingStatus'] = $this->booking->status;
         // Order Summary Details
         $data['bookingItems'] = BookingsMeta::where(['bookingId' => $this->booking->id , 'objectType' => 'addon'])->get();
-        
+        $data['totalPrice']=BookingsMeta::where(['bookingId' => $this->booking->id ])->selectRaw('sum(totalPrice)')->pluck('sum(totalPrice)')->first();
+        // Booking Confirmation Details
+        $data['pendingConfirmations'] = BookingsConfirmations::where('bookingId', $this->booking->id)->where('confirmation','pending')->get();
+       
         return $this
         ->subject("Booking Confirmation for Your .'$tourName'. Tour")
         ->markdown('emails.bookings.bookingNotification', $data);

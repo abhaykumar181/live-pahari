@@ -124,6 +124,7 @@ class BookingsController extends Controller
      */
     public function makeOrder(Request $request){
         try{
+            // dd($request->all());
             $validateInput = [
                 'packageId' => 'required',
                 'name' => 'required|string',
@@ -269,7 +270,7 @@ class BookingsController extends Controller
             }
             if($order->save()){
                 $pendingConfirmations = BookingsConfirmations::where('bookingId', $request->bookingId)->where('confirmation','pending')->get();
-                // dd(BookingsMeta::where(['bookingId' => $request->bookingId, 'objectType' => 'addon'])->get()->toArray());
+                // dd(BookingsConfirmations::where('bookingId',$request->bookingId)->where('confirmation','pending')->get());
                 if(is_null($pendingConfirmations)){
                     foreach($pendingConfirmations as $index => $confirmationItem){
                         // Send Confirmation email to owners
