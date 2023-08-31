@@ -271,7 +271,7 @@ class BookingsController extends Controller
             if($order->save()){
                 $pendingConfirmations = BookingsConfirmations::where('bookingId', $request->bookingId)->where('confirmation','pending')->get();
                 // dd(BookingsConfirmations::where('bookingId',$request->bookingId)->where('confirmation','pending')->get());
-                if(is_null($pendingConfirmations)){
+                if(!is_null($pendingConfirmations)){
                     foreach($pendingConfirmations as $index => $confirmationItem){
                         // Send Confirmation email to owners
                         $property = Properties::find($confirmationItem->propertyId);

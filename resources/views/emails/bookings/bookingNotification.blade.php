@@ -27,16 +27,12 @@ We are happy to inform you that your booking for {{$tourName->title}} is confirm
 |              |              |                |           |
 |:-------------|:-------------|:---------------|:----------|
 |{{ $tourName->title }}|{{ $guests }}|{{ $packagePerUnitRate }}|{{ $packagePerUnitRate * $guests }}|
-@endcomponent
 
-@component('mail::table')
     @foreach($bookingItems as $item)
         @php
             $addonId = $item->objectId;
             $addon = App\Models\Addons::find($addonId);
         @endphp
-        |              |              |                |           |
-        |:-------------|:-------------|:---------------|:----------|
         |{{ $addon->title }}|{{ $guests }}|{{ $item->baseprice }}|{{ $item->totalPrice }}|
     @endforeach
 
