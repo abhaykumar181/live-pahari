@@ -63,7 +63,7 @@ class ConfirmationRequired extends Mailable
         $data['confirmationItem'] = $this->confirmationItem;
 
         return $this
-            ->subject('Thank you for subscribing to our newsletter')
+            ->subject('Confirmation Request')
             ->markdown('emails.bookings.confirmationRequest', $data);
     }
 

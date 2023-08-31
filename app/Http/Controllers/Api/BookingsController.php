@@ -15,6 +15,7 @@ use App\Models\BookingsConfirmations;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmationRequired;
+use App\Mail\BookingNotification;
 
 
 class BookingsController extends Controller
@@ -177,6 +178,7 @@ class BookingsController extends Controller
                             ["type" => 'property', "id" => 1],
                             ["type" => 'property', "id" => 2],
                             ["type" => 'addon', "id" => 1],
+                            ["type" => 'addon', "id" => 2],
                         ];
                         
                         foreach($orderItems as $key => $item){
@@ -262,10 +264,13 @@ class BookingsController extends Controller
             $request->validate($validateInput);
 
             $order = BookingOrder::find($request->orderId);
-            $order->status = "paid";
+            if($request->orderStatus == 'unpaid'){
+                $order->status = "paid";
+            }
             if($order->save()){
                 $pendingConfirmations = BookingsConfirmations::where('bookingId', $request->bookingId)->where('confirmation','pending')->get();
-                if(!is_null($pendingConfirmations)){
+                // dd(BookingsMeta::where(['bookingId' => $request->bookingId, 'objectType' => 'addon'])->get()->toArray());
+                if(is_null($pendingConfirmations)){
                     foreach($pendingConfirmations as $index => $confirmationItem){
                         // Send Confirmation email to owners
                         $property = Properties::find($confirmationItem->propertyId);
@@ -274,13 +279,11 @@ class BookingsController extends Controller
                 }
                 
                 // TODO: Add booking Notification email with booking details
-                $bookingOrderStatus = $order->pluck('status')->first();
-                $booking = Bookings::find($request->bookingId);
+                $bookingOrderStatus = BookingOrder::find($request->orderId)->status;
                 if($bookingOrderStatus == 'paid'){
+                    $booking = Bookings::find($request->bookingId);
                     Mail::to($booking->email)->send(new BookingNotification($booking));
                 }
-                
-
 
                 return response()->json(['success' => true , 'message' => 'Order Created Successfully!'], 200); 
             }
