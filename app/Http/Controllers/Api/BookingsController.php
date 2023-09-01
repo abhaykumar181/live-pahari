@@ -124,7 +124,14 @@ class BookingsController extends Controller
      */
     public function makeOrder(Request $request){
         try{
-            // dd($request->all());
+            $orderItems = [
+                ["type" => 'package', "id" => 1],
+                ["type" => 'property', "id" => 1],
+                ["type" => 'property', "id" => 2],
+                ["type" => 'addon', "id" => 1],
+                ["type" => 'addon', "id" => 2],
+            ];            
+            
             $validateInput = [
                 'packageId' => 'required',
                 'name' => 'required|string',
@@ -136,6 +143,32 @@ class BookingsController extends Controller
             ];
             
             $request->validate($validateInput);
+            $sum= [];
+            foreach($orderItems as $key => $item){
+                if($item['type'] == 'package'){
+                    $package = Packages::find($item['id']);
+                    $total = $package->price * $request->guests;
+                    array_push($sum, $total);
+                }
+                
+                if($item['type'] == 'addon'){
+                    $addon = Addons::find($item['id']);                     
+                    // dd($addon);
+                    if($addon->priceType == "unit"){
+
+                        $total = $addon->price * $request->guests;
+                        array_push($sum, $total);
+                    }
+                    if($addon->priceType == "fixed"){
+                        $total = $addon->price;
+                        array_push($sum, $total);
+                    }
+                }                
+            }
+            print_r(array_sum($sum));
+
+
+
             if($request->guests > Settings::pluck('maxGuests')->first()){
                 return response()->json(['error'=>true, 'message'=>'Guests limit exceeded. Can\'t book order.'], 404);
             }
@@ -173,14 +206,7 @@ class BookingsController extends Controller
                     $bookingOrder->status = "unpaid";
 
                     if($bookingOrder->save()){
-                        // Saving bookings items
-                        $orderItems = [
-                            ["type" => 'package', "id" => 1],
-                            ["type" => 'property', "id" => 1],
-                            ["type" => 'property', "id" => 2],
-                            ["type" => 'addon', "id" => 1],
-                            ["type" => 'addon', "id" => 2],
-                        ];
+                        // Saving bookings items                     
                         
                         foreach($orderItems as $key => $item){
                             if($item['type'] == "property"){

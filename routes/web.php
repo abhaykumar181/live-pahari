@@ -78,17 +78,14 @@ Route::group(['as'=>'admin.'], function(){
             Route::group(['as'=>'settings.', 'prefix'=>'settings', 'controller'=>App\Http\Controllers\Backend\SettingsController::class], function(){
                 Route::get('/','index')->name('index');
                 Route::post('/create','store')->name('store');
-            });
-
-
+            });          
         });
-
-    });
-
-    
+    });    
 });
 
 // Web Routes for email.
-Route::group(['prefix' => 'bookings', 'controller' => App\Http\Controllers\BookingController::class], function(){
+Route::group(['as'=>'bookings.', 'prefix' => 'bookings', 'controller' => App\Http\Controllers\BookingController::class], function(){
     Route::get('/confirmation/{id}', 'viewDetails')->name('viewDetails');
+    Route::post('/confirmation', 'confirmProperty')->name('confirmProperty');
+    // Route::post('/confirmation/{id}', 'rejectProperty')->name('rejectProperty');
 }); 

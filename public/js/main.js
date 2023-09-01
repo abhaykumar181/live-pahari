@@ -29,6 +29,8 @@ jQuery(document).ready(function ($) {
 		showConfirmModal("Are you sure?", "This action will delete you selected Page. Confirm to proceed!", $(this));
 	});
 
+	
+
 
 	function showConfirmModal($title, $text, element){
 		swal({

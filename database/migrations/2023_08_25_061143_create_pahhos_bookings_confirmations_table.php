@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('bookingId')->unsigned();
             $table->bigInteger('propertyId')->unsigned();
-            $table->enum('confirmation',['pending','confirmed']);
+            $table->enum('confirmation',['pending','confirmed','rejected']);
             $table->enum('payment',['pending','paid']);
             $table->timestamps();
             $table->foreign('bookingId')->references('id')->on('pahhos_bookings');

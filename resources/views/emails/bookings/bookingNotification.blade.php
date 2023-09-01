@@ -53,7 +53,7 @@ Total: {{ $totalPrice }}
         |{{ $property->title }}|{{ $pendingConfirmation->confirmation }}|{{ $pendingConfirmation->payment }}|
     @endforeach
 @endcomponent
-@php } @endphp
+@php } @endphp 
 
 
 

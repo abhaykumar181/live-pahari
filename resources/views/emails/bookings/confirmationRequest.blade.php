@@ -17,9 +17,7 @@
 <span>Dear {{ $property->ownerName }}, </span></br>
 You have a booking confirmation request from {{ $booking->name }} </br>
 
-@component('mail::button', ['url' => 'http://127.0.0.1:8000/bookings/confirmation/{{md5($confirmationItem->id)}}', 'color' => 'green'])
-    View Details
-@endcomponent
+<a href="http://127.0.0.1:8000/bookings/confirmation/{{md5($confirmationItem->id)}}"> View Details </a>
 
 
 {{-- Footer --}}
