@@ -12,16 +12,17 @@
         @include('backend.layouts.includes.head')
     </head>
     <body>
-       
+    
+        
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8 mx-auto mt-5">
                     <div class="card card-white rounded-0">
-                        
+                        @include('backend.layouts.includes.notices')
                         <div class="card-header bg-white py-3 ">
-                            <h5 class="mb-0">Confirmtaion Pending Details</h5>
+                            <h5 class="mb-0">Confirmation Pending Details</h5>
                         </div>
                         <div class="card-body">
                             <div class="container">
@@ -108,15 +109,28 @@
                         </div>
                         <div class="card-footer">
                             <div class="text-end">
-                                <form class="confirm-property" action="{{route('bookings.confirmProperty')}}" method="post" enctype="multipart/form-data" >
-                                    @csrf
-                                    <input type="hidden" name="id" value="{{ $confirmationItem->id }}" />
-                                    <button type="submit" class="btn btn-primary shadow-sm" id="btn-confirm">Confirm</button>
-                                </form>
-                                <a href="javascript:void();" class="btn btn-danger text-decoration-none shadow-sm d-inline-block reject-property" data-type="rejectProperty" data-id=""> Reject </a>
-                            </div>                        
-                        </div>        
-					</div>
+                                <div class="container">
+                                    <div class="row">
+                                            <div class="col">
+                                                <form class="confirm-property" action="{{route('bookings.confirmProperty')}}" method="post" enctype="multipart/form-data" >
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $confirmationItem->id }}" />
+                                                    <button type="submit" class="btn btn-primary shadow-sm" id="btn-confirm">Confirm</button>
+                                                </form>
+                                            </div>
+                                            <div class="col">
+                                                <form class="reject-property" action="{{route('bookings.rejectProperty')}}" method="post" enctype="multipart/form-data" >
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $confirmationItem->id }}" />
+                                                    <button type="submit" class="btn btn-danger shadow-sm" id="btn-reject">Reject</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>        
+					    </div>
+                    </div>
                 </div>
             </div>
         </div>

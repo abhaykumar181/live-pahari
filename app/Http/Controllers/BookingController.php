@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Models\BookingsConfirmations;
 use App\Models\Properties;
 use App\Models\Bookings;
 use App\Models\BookingOrder;
+use App\Mail\ConfirmationAccepted;
+use App\Mail\ConfirmationRejected;
 
 class BookingController extends Controller
-{    
+{
     protected function viewDetails($confirmationId){
         $data['confirmationId'] = $confirmationId;
         $data['confirmationItem'] = BookingsConfirmations::whereRaw(" md5(id)='".$confirmationId."' ")->first();
@@ -19,34 +22,31 @@ class BookingController extends Controller
     }
 
     protected function confirmProperty(Request $request){
-        $bookingConfirmation = BookingsConfirmations::find($request->post('id'));
-        $bookingConfirmation->confirmation = "confirmed";
-        if($bookingConfirmation){
-
+        try{
+            $bookingConfirmation = BookingsConfirmations::find($request->post('id'));
+            $bookingConfirmation->confirmation = "confirmed";
+            if($bookingConfirmation->save()){
+                $booking = Bookings::find($bookingConfirmation->bookingId);
+                Mail::to($booking->email)->send(new ConfirmationAccepted($bookingConfirmation));
+                return redirect()->back()->with('message','Customer confirmation request has been accepted.');
+            }
+        }catch(\Illuminate\database\QueryException $e){
+            return redirect()->back()->with('error','Server Error. Please try again.');
         }
-        // if($bookingConfirmation->save()){
-        //     $query = BookingOrder::find($bookingConfirmation->bookingId);
-        //     $property = Properties::find($bookingConfirmation->propertyId);
-        //     $guests = Bookings::find($bookingConfirmation->bookingId)->guests;
+    }
 
-        //     $order = new BookingOrder;
-        //     $order->bookingId = $bookingConfirmation->bookingId;
-        //     $order->quantity = $query->quantity;
-        //     if($property->priceType == "unit"){
-        //         $order->price = $property->price * $guests;
-        //     }elseif($property->priceType == "fixed"){
-        //         $order->price = $property->price;
-        //     }
-        //     $order->status = "unpaid";
-        //     if($order->save()){
-        //         $bookingsMeta = new BookingsMeta;
-        //         $bookingsMeta->bookingId = $bookingConfirmation->bookingId;
-        //         $bookingsMeta->orderId = $order->id;
-        //         $bookingsMeta->objectType = "property";
-        //         $bookingsMeta->objectId = $bookingConfirmation->propertyId;
-        //     }
-        // }
-
+    protected function rejectProperty(Request $request){
+        try{
+            $bookingConfirmation = BookingsConfirmations::find($request->post('id'));
+            $bookingConfirmation->confirmation = "rejected";
+            if($bookingConfirmation->save()){
+                $booking = Bookings::find($bookingConfirmation->bookingId);
+                Mail::to($booking->email)->send(new ConfirmationRejected($bookingConfirmation));
+                return redirect()->back()->with('message','Customer confirmation request has been rejected.');
+            }
+        }catch(\Illuminate\database\QueryException $e){
+            return redirect()->back()->with('error','Server Error. Please try again.');
+        }
     }
 
 }

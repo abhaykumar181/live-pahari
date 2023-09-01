@@ -86,6 +86,6 @@ Route::group(['as'=>'admin.'], function(){
 // Web Routes for email.
 Route::group(['as'=>'bookings.', 'prefix' => 'bookings', 'controller' => App\Http\Controllers\BookingController::class], function(){
     Route::get('/confirmation/{id}', 'viewDetails')->name('viewDetails');
-    Route::post('/confirmation', 'confirmProperty')->name('confirmProperty');
-    // Route::post('/confirmation/{id}', 'rejectProperty')->name('rejectProperty');
+    Route::post('/accept-confirmation', 'confirmProperty')->name('confirmProperty');
+    Route::post('/reject-confirmation', 'rejectProperty')->name('rejectProperty');
 }); 

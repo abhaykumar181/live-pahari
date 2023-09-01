@@ -143,32 +143,7 @@ class BookingsController extends Controller
             ];
             
             $request->validate($validateInput);
-            $sum= [];
-            foreach($orderItems as $key => $item){
-                if($item['type'] == 'package'){
-                    $package = Packages::find($item['id']);
-                    $total = $package->price * $request->guests;
-                    array_push($sum, $total);
-                }
-                
-                if($item['type'] == 'addon'){
-                    $addon = Addons::find($item['id']);                     
-                    // dd($addon);
-                    if($addon->priceType == "unit"){
-
-                        $total = $addon->price * $request->guests;
-                        array_push($sum, $total);
-                    }
-                    if($addon->priceType == "fixed"){
-                        $total = $addon->price;
-                        array_push($sum, $total);
-                    }
-                }                
-            }
-            print_r(array_sum($sum));
-
-
-
+            
             if($request->guests > Settings::pluck('maxGuests')->first()){
                 return response()->json(['error'=>true, 'message'=>'Guests limit exceeded. Can\'t book order.'], 404);
             }
@@ -180,7 +155,6 @@ class BookingsController extends Controller
 
             $response = DB::transaction(function() use ($request, $package) {
                 $packageId = ( $request->packageId < 10 && $request->packageId > 0 )? '0'.$request->packageId : $request->packageId;
-
                 $trimcheckinDate = str_replace('-','',$request->checkinDate);
                 $checkBookingDateCount = Bookings::where(['checkInDate'=>$request->checkinDate])->count();
                 $bookingCode = ($checkBookingDateCount < 1) ? "PHID".$packageId.$trimcheckinDate : "PHID".$packageId.$trimcheckinDate.'-'.$checkBookingDateCount; 
@@ -206,8 +180,7 @@ class BookingsController extends Controller
                     $bookingOrder->status = "unpaid";
 
                     if($bookingOrder->save()){
-                        // Saving bookings items                     
-                        
+                        // Saving bookings items                        
                         foreach($orderItems as $key => $item){
                             if($item['type'] == "property"){
                                 $property = Properties::find($item['id']);
