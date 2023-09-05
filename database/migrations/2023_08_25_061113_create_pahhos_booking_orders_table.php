@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('bookingId')->unsigned();
             $table->integer('quantity');
             $table->decimal('price');
-            $table->enum('status',['paid','unpaid']);
+            $table->enum('status',['paid','unpaid','failed']);
             $table->timestamps();
             $table->foreign('bookingId')->references('id')->on('pahhos_bookings');
         });

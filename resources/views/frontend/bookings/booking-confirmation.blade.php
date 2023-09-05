@@ -111,20 +111,14 @@
                             <div class="text-end">
                                 <div class="container">
                                     <div class="row">
-                                            <div class="col">
-                                                <form class="confirm-property" action="{{route('bookings.confirmProperty')}}" method="post" enctype="multipart/form-data" >
-                                                    @csrf
+                                            <form class="property-actions" action="{{route('bookings.propertyActions')}}" method="post" enctype="multipart/form-data" >
+                                                @csrf
+                                                <div class="col">
                                                     <input type="hidden" name="id" value="{{ $confirmationItem->id }}" />
-                                                    <button type="submit" class="btn btn-primary shadow-sm" id="btn-confirm">Confirm</button>
-                                                </form>
-                                            </div>
-                                            <div class="col">
-                                                <form class="reject-property" action="{{route('bookings.rejectProperty')}}" method="post" enctype="multipart/form-data" >
-                                                    @csrf
-                                                    <input type="hidden" name="id" value="{{ $confirmationItem->id }}" />
-                                                    <button type="submit" class="btn btn-danger shadow-sm" id="btn-reject">Reject</button>
-                                                </form>
-                                            </div>
+                                                    <input type="submit" class="btn btn-primary shadow-sm" name="confirm" value="Confirm" id="btn-confirm">
+                                                    <input type="submit" class="btn btn-danger shadow-sm" name="reject" value="Reject" id="btn-reject">
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

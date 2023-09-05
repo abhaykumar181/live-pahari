@@ -58,8 +58,8 @@ class ConfirmationAccepted extends Mailable
 
     public function build(){
 
-        $data['booking'] =  Bookings::find($this->bookingConfirmation->bookingId);
-        $data['property'] =  Properties::find($this->bookingConfirmation->propertyId);
+        $data['booking']= Bookings::find($this->bookingConfirmation->bookingId);
+        $data['property']= Properties::find($this->bookingConfirmation->propertyId);
 
         return $this
         ->subject("Confirmation Accepted")

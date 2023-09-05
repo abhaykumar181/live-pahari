@@ -124,14 +124,6 @@ class BookingsController extends Controller
      */
     public function makeOrder(Request $request){
         try{
-            $orderItems = [
-                ["type" => 'package', "id" => 1],
-                ["type" => 'property', "id" => 1],
-                ["type" => 'property', "id" => 2],
-                ["type" => 'addon', "id" => 1],
-                ["type" => 'addon', "id" => 2],
-            ];            
-            
             $validateInput = [
                 'packageId' => 'required',
                 'name' => 'required|string',
@@ -140,6 +132,7 @@ class BookingsController extends Controller
                 'guests' => 'required',
                 'checkinDate' => 'required',
                 'totalPrice' => 'required',
+                // 'orderItems' => 'required',
             ];
             
             $request->validate($validateInput);
@@ -180,6 +173,13 @@ class BookingsController extends Controller
                     $bookingOrder->status = "unpaid";
 
                     if($bookingOrder->save()){
+                        $orderItems = [
+                            ["type" => 'package', "id" => 1],
+                            ["type" => 'property', "id" => 1],
+                            ["type" => 'property', "id" => 2],
+                            ["type" => 'addon', "id" => 1],
+                            ["type" => 'addon', "id" => 2],
+                        ];
                         // Saving bookings items                        
                         foreach($orderItems as $key => $item){
                             if($item['type'] == "property"){
@@ -264,10 +264,14 @@ class BookingsController extends Controller
             $request->validate($validateInput);
 
             $order = BookingOrder::find($request->orderId);
-            if($request->orderStatus == 'unpaid'){
-                $order->status = "paid";
+            if(is_null($order)){
+                return response()->json(['error'=>true, 'message'=>'Invalid Order Request.'], 404);
             }
-            if($order->save()){
+            $order->status = $request->orderStatus;
+            $order->save();
+            $bookingCount= BookingOrder::where('bookingId', $request->bookingId)->count();
+            // get order count
+            if($bookingCount == 1 && $request->orderStatus == "paid"){
                 $pendingConfirmations = BookingsConfirmations::where('bookingId', $request->bookingId)->where('confirmation','pending')->get();
                 // dd(BookingsConfirmations::where('bookingId',$request->bookingId)->where('confirmation','pending')->get());
                 if(!is_null($pendingConfirmations)){
@@ -285,12 +289,145 @@ class BookingsController extends Controller
                     Mail::to($booking->email)->send(new BookingNotification($booking));
                 }
 
-                return response()->json(['success' => true , 'message' => 'Order Created Successfully!'], 200); 
             }
-            
+            return response()->json(['success' => true , 'message' => 'Order Updated Successfully!'], 200);            
+
         }catch(\Illuminate\Database\QueryException $e){
             return response()->json('Internal Server Error.', 500);
         }
-     }
+    }
 
+
+    /**
+     * Update order on the payment of property confirmation.
+     * 
+     * @since 1.0.0
+     * 
+     * @return redirection 
+     */
+
+    protected function updatePropertyOrder(Request $request){
+        try{
+            $orderItems = [
+                ["type" => 'property', "id" => 1],
+                ["type" => 'property', "id" => 2],
+            ];
+
+            $validateInput = [
+                'bookingId' => 'required',
+                'totalPrice' => 'required',
+                // 'orderItems' => 'required',
+            ];
+
+            // dd($request->json());
+        
+            $request->validate($validateInput);
+
+            $response = DB::transaction(function() use ($request) {
+                $booking = Bookings::find($request->bookingId);
+                if(is_null($booking)){
+                    return ['success'=> false, 'message'=>'Invalid Booking request.', 'status_code' => 404];
+                }
+                // Saving booking orders.
+                $bookingOrder = new BookingOrder;
+                $bookingOrder->bookingId = $booking->id;
+                $bookingOrder->quantity = $booking->guests;
+                $bookingOrder->price = $request->totalPrice;
+                $bookingOrder->status = "unpaid";
+                if($bookingOrder->save()){
+                    // Saving bookings items                        
+                    foreach($orderItems as $key => $item){
+                        $property = Properties::find($item['id']);
+                        if(is_null($property)){
+                            return ['success'=> false, 'message'=>'Invalid Property ID.', 'status_code' => 404];
+                        }
+
+                        $propertyConfirmed = BookingsConfirmations::where(["propertyId" => $property->id, "bookingId" => $booking->id])->first();
+                        if(is_null($propertyConfirmed)){
+                            return ['success'=> false, 'message'=>'Invalid Property ID.', 'status_code' => 404];
+                        }
+
+                        if($propertyConfirmed->confirmation != "confirmed"){
+                            return ['success'=> false, 'message'=>'Request forbidden!.', 'status_code' => 403];
+                        }
+
+                        $BookingsMeta = BookingsMeta::where(['bookingId' => $booking->id, "objectType" => "property", "objectId" => $property->id])->first();
+
+                        if(is_null($BookingsMeta)){
+                            $BookingsMeta = new BookingsMeta;
+                            $BookingsMeta->bookingId = $booking->id;
+                        }
+                        $BookingsMeta->orderId = $bookingOrder->id;
+                        $BookingsMeta->objectType = $item['type'];
+                        $BookingsMeta->objectId = $item['id'];
+                        $BookingsMeta->basePrice = $property->price;
+                        $BookingsMeta->priceType = $property->priceType;
+                        if($BookingsMeta->priceType == 'unit'){
+                            $BookingsMeta->totalPrice = $BookingsMeta->basePrice * $booking->guests;
+                        }else{
+                            $BookingsMeta->totalPrice = $BookingsMeta->basePrice;
+                        }
+                        $BookingsMeta->save();
+                    }
+                    $data['data'] = [
+                        "bookingId" => $booking->id,
+                        "orderId" => $bookingOrder->id,
+                        "orderStatus" =>  $bookingOrder->status
+                    ];
+                    return ['success' => true, 'message' => "Order Created successfully.", 'status_code' => 200 , $data];
+                }else{
+                    return ['success'=> false, 'message'=>'Order Booking Failed.', 'status_code' => 404];
+                }
+            });
+
+            $statusCode = $response['status_code'];
+            unset($response['status_code']);
+            return response()->json($response, $statusCode);
+
+            /*
+            foreach($orderItems as $key => $item){
+
+                $property = Properties::find($item['id']);
+                if($item['type'] == "property"){
+                    $property = Properties::find($item['id']);
+                    if($property->confirmationRequired == 1){
+                        // Creating new order of properties
+                        $bookingOrder = new BookingOrder;
+                        $bookingOrder->bookingId = $request->bookingId; 
+                        $bookingOrder->quantity = $booking->guests;
+                        $bookingOrder->price = $property->price;
+                        if($property->priceType == "fixed"){
+                            $bookingOrder->price = $property->price;
+                        }elseif($property->priceType == "unit"){
+                            $bookingOrder->price = $property->price * $booking->guests;
+                        }
+                        $bookingOrder->status = "paid";
+                        if($bookingOrder->save()){
+                            // Saving property in bookings meta
+                            $bookingmeta = new BookingsMeta;
+                            $bookingmeta->bookingId = $request->bookingId;
+                            $bookingmeta->orderId = $bookingOrder->id;
+                            $bookingmeta->objectType = "property";
+                            $bookingmeta->objectId = $item['id'];
+                            $bookingmeta->basePrice = $property->price;
+                            $bookingmeta->priceType = $property->priceType;
+                            $bookingmeta->totalPrice = $request->totalPrice;
+                            $bookingmeta->save();
+                        }
+                    }
+                }
+
+            }
+            */
+            $data['data'] = [
+                "success" => true,
+                "message" => "Order created successfully!"
+            ];
+
+            return response()->json($data, 200);
+
+        }catch(\illuminate\database\QueryException $e){
+            return redirect()->json(['error' => true, 'message' => 'Internal Server Error.'], 500);
+        }
+    }
 }
