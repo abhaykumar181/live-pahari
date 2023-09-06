@@ -85,7 +85,7 @@ class PackageController extends Controller
      * 
      *  @since 1.0.0
      * 
-     *  return html 
+     *  @return html 
      */
     protected function gerItineraries(Request $request){
         $data['itenariesDays'] = $request->addNewdays;
@@ -99,7 +99,7 @@ class PackageController extends Controller
      * 
      *  @since 1.0.0
      * 
-     *  return redirection 
+     *  @return redirection 
      */
     protected function store(Request $request){
         try{
@@ -225,7 +225,7 @@ class PackageController extends Controller
      * 
      * @accept $packageId | Integer
      * 
-     * return redirection
+     * @return redirection
      */
     protected function delete($packageId=''){
         try{
@@ -262,11 +262,11 @@ class PackageController extends Controller
     }
 
     /** 
-     * store itineraries
+     * Store itineraries
      * 
      * @since 1.0.0
      *
-     * return redirection 
+     * @return redirection 
      */
     protected function storeItineraries(Request $request){
         try{
@@ -326,11 +326,11 @@ class PackageController extends Controller
 
 
      /**
-     *  Create Package
+     *  Shows Gallery images
      * 
      *  @since 1.0.0
      * 
-     *  return html 
+     *  @return html 
      */
     protected function gallery($packageId=''){
         $data['package'] = Packages::find($packageId);
@@ -343,11 +343,11 @@ class PackageController extends Controller
     }
 
     /**
-     *  Create Package
+     *  Store Gallery Images
      * 
      *  @since 1.0.0
      * 
-     *  return html 
+     *  @return redirection 
      */
     protected function storeGalleryImages(Request $request){
         try{
@@ -384,12 +384,12 @@ class PackageController extends Controller
 
 
     /**
-     * Delete Package
+     * Delete Gallery Image
      * 
      * @since 1.0.0
+     * @accept $thumbnailId | Integer
      * 
-     * @accept $packageId | Integer
-     * return redirection
+     * @return redirection
      */
     protected function deleteThumbnail($thumbnailId=''){
         try{

@@ -1,5 +1,8 @@
 <?php
 use Illuminate\Support\str;
+use App\Models\Packages;
+use App\Models\Addons;
+use App\Models\Properties;
 /**
  * Define Custom Functions
  * 
@@ -59,5 +62,49 @@ if(!function_exists('render_thumbnail_url')){
         }
 
         return $object;
+    }
+}
+
+/**
+ * Find Package Name
+ * 
+ * @since 1.0.0
+ * 
+ * @return packageName
+ */
+
+if(!function_exists('getPackageName')){
+    function getPackageName($packageId){
+        return Packages::find($packageId)->title;
+    }
+}
+
+
+/**
+ * Find Addon Name
+ * 
+ * @since 1.0.0
+ * 
+ * @return AddonName
+ */
+
+ if(!function_exists('getAddonName')){
+    function getAddonName($addonId){
+        return Addons::find($addonId)->title;
+    }
+}
+
+
+/**
+ * Find Property Name
+ * 
+ * @since 1.0.0
+ * 
+ * @return propertyName
+ */
+
+ if(!function_exists('getPropertyName')){
+    function getPropertyName($propertyId){
+        return Properties::find($propertyId)->title;
     }
 }

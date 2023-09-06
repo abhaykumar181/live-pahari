@@ -73,12 +73,18 @@ Route::group(['as'=>'admin.'], function(){
                 Route::get('/edit/{pageId}','edit')->name('edit');
                 Route::get('/delete/{pageId}','delete')->name('delete');
             });
-
+            
             //Web Routes for Settings
             Route::group(['as'=>'settings.', 'prefix'=>'settings', 'controller'=>App\Http\Controllers\Backend\SettingsController::class], function(){
-                Route::get('/','index')->name('index');
+                Route::get('/','settings')->name('settings');
                 Route::post('/create','store')->name('store');
             });          
+            
+            // Web Routes for Boookings
+            Route::group(['as'=>'bookings.', 'prefix'=>'bookings','controller'=>App\Http\Controllers\Backend\BookingsController::class], function(){
+                Route::get('/','index')->name('index');
+                Route::get('/view-details/{bookingId}','viewDetails')->name('view-details');
+            });
         });
     });    
 });

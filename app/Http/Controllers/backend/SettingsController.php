@@ -8,15 +8,18 @@ use App\Models\Settings;
 
 class SettingsController extends Controller
 {
-    protected function index(){
+    /**
+     * 
+     */
+    protected function settings(){
         $settings = Settings::first();
         if(!$settings){
             return redirect()->back()->with('error','Failed to open settings.');
         }
-        return view('backend.settings.index',compact('settings'));
+        return view('backend.settings',compact('settings'));
        
     }
-
+    
     protected function store(Request $request){
         try{
             $validateInput = [
@@ -43,13 +46,13 @@ class SettingsController extends Controller
             $settings->footerscripts = $request->footerscripts;
             
             if($settings->save()){
-                return redirect()->route('admin.settings.index')->with('message','Settings updated successfully.');
+                return redirect()->route('admin.settings.settings')->with('message','Settings updated successfully.');
             }else{
-                return redirect()->route('admin.settings.index')->with('error','Failed to update Settings.');
+                return redirect()->back()->with('error','Failed to update Settings.');
             }
 
         }catch(\Illuminate\Database\QueryException $e){
-            return redirect()->route('admin.settings.index')->with('error','Failed to update Settings.');
+            return redirect()->back()->with('error','Failed to update Settings.');
         }
     }
 

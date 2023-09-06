@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('checkInDate');
             $table->date('checkOutDate');
             $table->enum('status',['active','cancelled','archived']);
+            $table->json('details');
             $table->timestamps();
         });
     }
