@@ -38,7 +38,6 @@ class BookingController extends Controller
      */
     protected function propertyActions(Request $request){
         try{
-            // dd($request->all());
             $bookingConfirmation = BookingsConfirmations::find($request->post('id'));
             if($request->confirm){
                 $bookingConfirmation->confirmation = "confirmed";

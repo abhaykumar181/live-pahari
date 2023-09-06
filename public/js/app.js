@@ -55,3 +55,4 @@ $(document).on('click', '#btn-reject', function(e) {
 //     $(this).unbind( event );
     
 //   });
+// pr([$checkoutDate, $calculatedCheckoutdate]);

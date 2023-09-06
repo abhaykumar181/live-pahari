@@ -28,3 +28,4 @@ Route::resource('bookings', App\Http\Controllers\Api\BookingsController::class);
 Route::post('/make-order', [App\Http\Controllers\Api\BookingsController::class,'makeOrder']);
 Route::post('/update-order', [App\Http\Controllers\Api\BookingsController::class,'updateOrder']);
 Route::post('/update-property-order', [App\Http\Controllers\Api\BookingsController::class,'updatePropertyOrder']);
+Route::post('/is-available', [App\Http\Controllers\Api\BookingsController::class,'checkAvailabilty']);

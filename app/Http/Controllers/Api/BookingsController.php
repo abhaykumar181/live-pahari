@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmationRequired;
 use App\Mail\BookingNotification;
+use carbon\carbon;
 
 
 class BookingsController extends Controller
@@ -148,10 +149,13 @@ class BookingsController extends Controller
 
             $response = DB::transaction(function() use ($request, $package) {
                 $packageId = ( $request->packageId < 10 && $request->packageId > 0 )? '0'.$request->packageId : $request->packageId;
-                $trimcheckinDate = str_replace('-','',$request->checkinDate);
-                $checkBookingDateCount = Bookings::where(['checkInDate'=>$request->checkinDate])->count();
+                $request->checkinDate = Carbon::parse($request->checkinDate)->format('Y-m-d');
+                $trimcheckinDate = str_replace('-','', $request->checkinDate);
+                $checkBookingDateCount = Bookings::where(['checkInDate'=>$request->checkinDate,"packageId" => $request->packageId])->count();
                 $bookingCode = ($checkBookingDateCount < 1) ? "PHID".$packageId.$trimcheckinDate : "PHID".$packageId.$trimcheckinDate.'-'.$checkBookingDateCount; 
-                $checkOutdate = date('Y-m-d', strtotime($request->checkinDate. ' + '.$package->days.' days'));
+                $checkOutdate = date('Y-m-d', strtotime($request->checkinDate. ' + '.($package->days-1).' days'));
+
+
                 // Saving booking details.
                 $booking = new Bookings;
                 $booking->bookingCode = $bookingCode;
@@ -180,7 +184,7 @@ class BookingsController extends Controller
                             ["type" => 'addon', "id" => 1],
                             ["type" => 'addon', "id" => 2],
                         ];
-                        // Saving bookings items                        
+                        // Saving bookings items
                         foreach($orderItems as $key => $item){
                             if($item['type'] == "property"){
                                 $property = Properties::find($item['id']);
@@ -308,10 +312,6 @@ class BookingsController extends Controller
 
     protected function updatePropertyOrder(Request $request){
         try{
-            $orderItems = [
-                ["type" => 'property', "id" => 1],
-                ["type" => 'property', "id" => 2],
-            ];
 
             $validateInput = [
                 'bookingId' => 'required',
@@ -335,7 +335,12 @@ class BookingsController extends Controller
                 $bookingOrder->price = $request->totalPrice;
                 $bookingOrder->status = "unpaid";
                 if($bookingOrder->save()){
-                    // Saving bookings items                        
+                    $orderItems = [
+                        ["type" => 'property', "id" => 1],
+                        ["type" => 'property', "id" => 2],
+                        // ["type" => 'property', "id" => 3], rejected let's say
+                    ];
+                    // Saving bookings items
                     foreach($orderItems as $key => $item){
                         $property = Properties::find($item['id']);
                         if(is_null($property)){
@@ -369,11 +374,13 @@ class BookingsController extends Controller
                         }
                         $BookingsMeta->save();
                     }
+
                     $data['data'] = [
                         "bookingId" => $booking->id,
                         "orderId" => $bookingOrder->id,
                         "orderStatus" =>  $bookingOrder->status
                     ];
+
                     return ['success' => true, 'message' => "Order Created successfully.", 'status_code' => 200 , $data];
                 }else{
                     return ['success'=> false, 'message'=>'Order Booking Failed.', 'status_code' => 404];
@@ -384,50 +391,52 @@ class BookingsController extends Controller
             unset($response['status_code']);
             return response()->json($response, $statusCode);
 
-            /*
-            foreach($orderItems as $key => $item){
+        }catch(\illuminate\database\QueryException $e){
+            return redirect()->json(['message' => 'Internal Server Error.'], 500);
+        }
+    }
 
-                $property = Properties::find($item['id']);
-                if($item['type'] == "property"){
-                    $property = Properties::find($item['id']);
-                    if($property->confirmationRequired == 1){
-                        // Creating new order of properties
-                        $bookingOrder = new BookingOrder;
-                        $bookingOrder->bookingId = $request->bookingId; 
-                        $bookingOrder->quantity = $booking->guests;
-                        $bookingOrder->price = $property->price;
-                        if($property->priceType == "fixed"){
-                            $bookingOrder->price = $property->price;
-                        }elseif($property->priceType == "unit"){
-                            $bookingOrder->price = $property->price * $booking->guests;
-                        }
-                        $bookingOrder->status = "paid";
-                        if($bookingOrder->save()){
-                            // Saving property in bookings meta
-                            $bookingmeta = new BookingsMeta;
-                            $bookingmeta->bookingId = $request->bookingId;
-                            $bookingmeta->orderId = $bookingOrder->id;
-                            $bookingmeta->objectType = "property";
-                            $bookingmeta->objectId = $item['id'];
-                            $bookingmeta->basePrice = $property->price;
-                            $bookingmeta->priceType = $property->priceType;
-                            $bookingmeta->totalPrice = $request->totalPrice;
-                            $bookingmeta->save();
-                        }
-                    }
-                }
-
-            }
-            */
-            $data['data'] = [
-                "success" => true,
-                "message" => "Order created successfully!"
+    /**
+     * guests validations
+     * 
+     * @since 1.0.0
+     * 
+     * @return response
+     */
+    protected function checkAvailabilty(request $request){
+        try{
+            $validateInput = [
+                'packageId' => 'required',
+                'checkinDate' => 'required',
+                'guests' => 'required',
             ];
 
-            return response()->json($data, 200);
+            $request->validate($validateInput);
 
-        }catch(\illuminate\database\QueryException $e){
-            return redirect()->json(['error' => true, 'message' => 'Internal Server Error.'], 500);
+            $settings = Settings::first();
+            $package = Packages::find($request->packageId);
+            $booking = Bookings::where(['packageid' => $request->packageId])->get();
+            $bookings = Bookings::where(['packageid' => $request->packageId , 'checkinDate' => $request->checkinDate])->get();
+            $maxGuests = $settings->maxGuests;
+            $packageDays = $package->days;
+            $bookedPackagespace = $bookings->sum('guests');
+            
+            if( $request->guests > $maxGuests ){
+                return response()->json(['success'=>false, 'message'=>'Guests limit exceeded.'], 404);
+            }
+            if( $bookedPackagespace + $request->guests > $maxGuests ){
+                return response()->json(['success'=>false, 'message'=>'Package not available for this date.'], 404);
+            }
+            
+            $checkoutDate = date('Y-m-d', strtotime(Carbon::parse($booking->first()->checkInDate)->format('Y-m-d'). ' + '.( $packageDays-1 ).' days'));
+            if( $booking->count() > 0 ){
+                $calculatedCheckoutdate = date('Y-m-d', strtotime($request->checkinDate. ' + '.( $packageDays-1 ).' days'));
+                if($checkoutDate != $calculatedCheckoutdate){
+                    return response()->json(['success'=>false, 'message'=>'Package not available for this date (on days calculation).'], 404);
+                }
+            }
+        }catch(\Illuminate\Database\QueryException $e){
+            return redirect()->json('Internal Server Error.', 500);
         }
     }
 }

@@ -87,4 +87,4 @@ Route::group(['as'=>'admin.'], function(){
 Route::group(['as'=>'bookings.', 'prefix' => 'bookings', 'controller' => App\Http\Controllers\BookingController::class], function(){
     Route::get('/confirmation/{id}', 'viewDetails')->name('viewDetails');
     Route::post('/property-action', 'propertyActions')->name('propertyActions');
-}); 
+});
