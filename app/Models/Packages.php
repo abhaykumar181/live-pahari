@@ -15,7 +15,6 @@ class Packages extends Model
     /**
      * Package Relation with Gallery
      */
-
     public function gallery(){
         return $this->hasMany(Thumbnails::class, 'packageId', 'id');
     }
@@ -23,7 +22,6 @@ class Packages extends Model
     /**
      * Package Relation with Itineraries
      */
-
      public function itineraries(){
         return $this->hasMany(Itineraries::class, 'packageId', 'id');
     }

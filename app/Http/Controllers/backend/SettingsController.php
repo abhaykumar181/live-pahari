@@ -9,17 +9,27 @@ use App\Models\Settings;
 class SettingsController extends Controller
 {
     /**
+     * Display Settings
      * 
+     * @since 1.0.0
+     * 
+     * @return html
      */
     protected function settings(){
         $settings = Settings::first();
         if(!$settings){
             return redirect()->back()->with('error','Failed to open settings.');
         }
-        return view('backend.settings',compact('settings'));
-       
+        return view('backend.settings',compact('settings'));       
     }
     
+    /**
+     * Update Settings
+     * 
+     * @since 1.0.0
+     * 
+     * @return redirection
+     */
     protected function store(Request $request){
         try{
             $validateInput = [

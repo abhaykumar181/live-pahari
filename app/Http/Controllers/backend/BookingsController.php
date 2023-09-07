@@ -38,9 +38,13 @@ class BookingsController extends Controller
             $data['booking'] = Bookings::find($bookingId);
             $data['orderItems'] = BookingsMeta::where(['bookingId' => $bookingId])->get();
             $data['propertyDetails'] = BookingsConfirmations::where('bookingId' ,'=', $bookingId)->where('confirmation' ,'!=', 'confirmed')->get();
-            return view('backend.bookings.view-details', $data);
+            if($data['booking']){
+                return view('backend.bookings.view-details', $data);
+            }else{
+                return redirect()->back()->with('error', 'Failed to view bookings details.');
+            }
         }catch(\Illuminate\Database\QueryException $e){
-            return redirect()->back()->with('error', 'Failed to view bookings.');
+            return redirect()->back()->with('error', 'Failed to view bookings details.');
         }
     }
 

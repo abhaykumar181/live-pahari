@@ -8,15 +8,37 @@ use App\Models\Testimonials;
 
 class TestimonialController extends Controller
 {
+    /**
+     * Shows Testimonial Listing.
+     * 
+     * @since 1.0.0
+     * 
+     * @return html
+     */
     protected function index(){
         $testimonials = Testimonials::all();
         return view('backend.testimonials.index', compact('testimonials'));
     }
 
+    /**
+     * Display testimonial page.
+     * 
+     * @since 1.0.0
+     * 
+     * @return html
+     */
     protected function create(){
         return view('backend.testimonials.create');
     }
 
+    /**
+     * Display edit testimonial page.
+     * 
+     * @since 1.0.0
+     * @accept $testimonialId|Integer
+     * 
+     * @return html|redirection 
+     */
     protected function edit($testimonialId){
         $testimonial = Testimonials::find($testimonialId);
         if($testimonial){
@@ -26,6 +48,13 @@ class TestimonialController extends Controller
         }
     }
 
+    /**
+     * Create and store 
+     * 
+     * @since 1.0.0
+     * 
+     * @return redirection
+     */
     protected function store(Request $request){
         try{
             $validateInput = [
@@ -74,6 +103,14 @@ class TestimonialController extends Controller
 
     }
 
+    /**
+     * Delete Testimonial
+     * 
+     * @accept $testimonialId|integer
+     * @since 1.0.0
+     * 
+     * @return redirection
+     */
     protected function delete($testimonialId){
         try{
             $testimonial = Testimonials::find($testimonialId);

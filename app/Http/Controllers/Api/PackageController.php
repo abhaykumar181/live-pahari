@@ -76,7 +76,8 @@ class PackageController extends Controller
      */
     public function store(Request $request)
     {
-       try{
+       // It may remove later.
+       /*try{
             $packages = new Packages;
             $packages->userId = '2';
             $packages->title = $request->title;
@@ -94,7 +95,7 @@ class PackageController extends Controller
             }
        }catch(\Illuminate\Database\QueryException $e){
         return response()->json(['error'=>'Failed to create.'], 404);
-       }
+       }*/
 
 
     }

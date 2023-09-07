@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class AddonsController extends Controller
 {
     /**
-     * Add-ons listing.
+     * Shows add-ons listing.
      * 
      * @since 1.0.0
      * 

@@ -11,16 +11,37 @@ use \Illuminate\Support\Facades\Auth;
 
 class PropertiesController extends Controller
 {
+    /**
+     * Shows the property listing.
+     * 
+     * @since 1.0.0
+     * 
+     * @return html
+     */
     protected function index(){
         $properties = Properties::all();
         return view('backend.properties.index',compact('properties'));
     }
 
+    /**
+     * Display create property page.
+     * 
+     * @since 1.0.0
+     * 
+     * @return html
+     */
     protected function create(){
         $data['allLocations'] = Locations::all();
         return view('backend.properties.create',$data);
     }
 
+    /**
+     * Edit property.
+     * 
+     * @since 1.0.0
+     * 
+     * @return html|redirection
+     */
     protected function edit($propertyId=''){
         $data['property'] = Properties::find($propertyId);
         $data['allLocations'] = Locations::all();
@@ -32,8 +53,14 @@ class PropertiesController extends Controller
         }
     }
 
-    protected function store(Request $request){
-        
+    /**
+     * Create and store property.
+     * 
+     * @since 1.0.0
+     * 
+     * @return redirection  
+     */
+    protected function store(Request $request){        
        try{
         $validateInput = [
             'title' => 'required',
@@ -160,10 +187,10 @@ class PropertiesController extends Controller
     /**
      * Delete Property
      * 
-     * @since 1.0.0
-     * 
+     * @since 1.0.0 
      * @accept $propertyId | Integer
-     * return redirection
+     * 
+     * @return redirection
      */
     protected function delete($propertyId){
         try{

@@ -20,12 +20,18 @@ if (!function_exists('getControllerName')) {
     }
 }
 
+/**
+ * Get slug
+ */
 if(!function_exists('getSlug')){
     function getSlug($value=''){
         return str::slug($value);
     }
 }
 
+/**
+ * Set text limit
+ */
 if(!function_exists('setTextlimit')){
     function setTextlimit($text=''){
         return str::limit($text,130);
@@ -35,7 +41,7 @@ if(!function_exists('setTextlimit')){
 
 
 /**
- * Get current controller name
+ * Print and test data in anywhere 
  */
 if (!function_exists('pr')) {
     function pr($array = []) {
@@ -43,6 +49,9 @@ if (!function_exists('pr')) {
     }
 }
 
+/**
+ * Get thumbnail url
+ */
 if(!function_exists('render_thumbnail_url')){
     function render_thumbnail_url($object = []){
 
@@ -66,11 +75,7 @@ if(!function_exists('render_thumbnail_url')){
 }
 
 /**
- * Find Package Name
- * 
- * @since 1.0.0
- * 
- * @return packageName
+ * Get package Name
  */
 
 if(!function_exists('getPackageDetails')){
@@ -81,13 +86,8 @@ if(!function_exists('getPackageDetails')){
 
 
 /**
- * Find Addon Name
- * 
- * @since 1.0.0
- * 
- * @return AddonName
+ * Get addon details
  */
-
  if(!function_exists('getAddonDetails')){
     function getAddonDetails($addonId=''){
         return Addons::find($addonId);
@@ -96,13 +96,8 @@ if(!function_exists('getPackageDetails')){
 
 
 /**
- * Find Property Name
- * 
- * @since 1.0.0
- * 
- * @return propertyName
+ * Get property details.
  */
-
  if(!function_exists('getPropertyDetails')){
     function getPropertyDetails($propertyId=''){
         return Properties::find($propertyId);

@@ -67,45 +67,7 @@ class BookingsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Update booking confirmation when confirmation request will be accepted by property owner.
-        // $pendingBookings = BookingsConfirmations::where('bookingId', $id)->where('confirmation','pending')->get();
-        // if(!is_null($pendingBookings)){
-        //     foreach($pendingBookings as $index => $bookings){
-        //         $bookings->confirmation = "confirmed";
-        //         $bookings->save();
-        //     }
-        // }else{
-        //     return response()->json(['error' => true , 'message' => 'No Booking confirmations are available.']);
-        // }
-        // // If payment is made successful, then we will add a new order in Orders Table.
-        // $findbookingOrder = BookingOrder::where('bookingId',$id)->get();
-        // $confirmedBookings = BookingsConfirmations::where('bookingId', $id)->where('confirmation','confirmed')->get();
-        // // dd($confirmedBookings);
-        // foreach($confirmedBookings as $index => $confirmedBooking){
-        //     $property = Properties::find($confirmedBooking->propertyId);
-        //     $bookingOrder = new BookingOrder;
-        //     $bookingOrder->bookingId = $findbookingOrder[$index]->bookingId;
-        //     $bookingOrder->quantity = Bookings::find($id)->guests;
-        //     $bookingOrder->price = $property->price;
-        //     $bookingOrder->status = "paid";
-        //     if($bookingOrder->save()){
-        //         $BookingsMeta = new BookingsMeta;
-        //         $BookingsMeta->bookingId = $bookingOrder->bookingId;
-        //         $BookingsMeta->orderId = $bookingOrder->id;
-        //         $BookingsMeta->objectType = "property";
-        //         $BookingsMeta->objectId = $property->id;
-        //         $BookingsMeta->basePrice = $property->price;
-        //         $BookingsMeta->priceType = $property->priceType;
-        //         if($BookingsMeta->priceType == 'unit'){
-        //             $BookingsMeta->totalPrice = $BookingsMeta->basePrice * Bookings::find($id)->guests;
-        //         }else{
-        //             $BookingsMeta->totalPrice = $BookingsMeta->basePrice;
-        //         }
-        //         $BookingsMeta->save();
-        //     }
-        // }
-        // return response()->json(['success' => true , 'message' => 'Booking Successful!.']);
-
+        //
     }
 
     /**
@@ -134,7 +96,7 @@ class BookingsController extends Controller
                 'guests' => 'required',
                 'checkinDate' => 'required',
                 'totalPrice' => 'required',
-                // 'orderItems' => 'required',
+                'orderItems' => 'required',
             ];
             
             $request->validate($validateInput);
@@ -179,15 +141,8 @@ class BookingsController extends Controller
                     $bookingOrder->status = "unpaid";
 
                     if($bookingOrder->save()){
-                        $orderItems = [
-                            ["type" => 'package', "id" => 1],
-                            ["type" => 'property', "id" => 1],
-                            ["type" => 'property', "id" => 2],
-                            ["type" => 'addon', "id" => 1],
-                            ["type" => 'addon', "id" => 2],
-                        ];
                         // Saving bookings items
-                        foreach($orderItems as $key => $item){
+                        foreach($request->orderItems as $key => $item){
                             if($item['type'] == "property"){
                                 $property = Properties::find($item['id']);
                                 if($property->confirmationRequired == 1){
@@ -325,14 +280,11 @@ class BookingsController extends Controller
 
     protected function updatePropertyOrder(Request $request){
         try{
-
             $validateInput = [
                 'bookingId' => 'required',
                 'totalPrice' => 'required',
-                // 'orderItems' => 'required',
+                'orderItems' => 'required',
             ];
-
-            // dd($request->json());
         
             $request->validate($validateInput);
 
@@ -348,13 +300,8 @@ class BookingsController extends Controller
                 $bookingOrder->price = $request->totalPrice;
                 $bookingOrder->status = "unpaid";
                 if($bookingOrder->save()){
-                    $orderItems = [
-                        ["type" => 'property', "id" => 1],
-                        ["type" => 'property', "id" => 2],
-                        // ["type" => 'property', "id" => 3], rejected let's say
-                    ];
                     // Saving bookings items
-                    foreach($orderItems as $key => $item){
+                    foreach($request->orderItems as $key => $item){
                         $property = Properties::find($item['id']);
                         if(is_null($property)){
                             return ['success'=> false, 'message'=>'Invalid Property ID.', 'status_code' => 404];
