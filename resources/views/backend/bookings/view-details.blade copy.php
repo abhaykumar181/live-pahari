@@ -139,28 +139,26 @@
                             </div>
                         </div>
 
-                        <div class="card-body">                            
-                            <div class="container">
+                        <div class="card-body">
+                            <table class="table border">
+                                <thead>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>Item type</th>
+                                        <th>Item Name</th>
+                                        <th>Price</th>
+                                        <th>Price Type</th>
+                                        <th>Total Price</th>
+                                    </tr>
+                                </thead>
 
-                                <div class="row">
-                                    <div class="col-md-2 fs-5 fw-bold mb-2">
-                                    Item type
-                                    </div>
-                                    <div class="col-md-4 fs-5 fw-bold mb-2">
-                                    Item Name
-                                    </div>
-                                    <div class="col-md-3 fs-5 fw-bold mb-2">
-                                    Price
-                                    </div>
-                                    <div class="col-md-3 fs-5 fw-bold mb-2">
-                                    Total Price
-                                    </div>
-
+                                <tbody>
+                                    @php $serialno= 1;  @endphp
                                     @foreach($orderItems as $key => $item)
-                                        <div class="col-md-2">
-                                            {{ ucfirst($item->objectType) }}
-                                        </div>
-                                        <div class="col-md-4">
+                                    <tr>
+                                        <th>{{ $serialno++ }}</th>
+                                        <td>{{ $item->objectType }}</td>
+                                        <td>
                                             @if( $item->objectType == "package" )
                                                 {{ getPackageDetails($item->objectId)->title }}
                                             @elseif($item->objectType == "property")
@@ -168,24 +166,32 @@
                                             @elseif($item->objectType == "addon")
                                                 {{ getAddonDetails($item->objectId)->title }}
                                             @endif
-                                        </div>
-                                        <div class="col-md-3">
-                                            {{ $item->baseprice }} ({{$item->priceType}})
-                                        </div>
-                                        <div class="col-md-3">
+                                        </td>
+                                        <td>
+                                            {{ $item->baseprice }}
+                                        </td>
+                                        <td>
+                                            {{ $item->priceType }}
+                                        </td>
+                                        <td>
                                             {{ $item->totalPrice }}
-                                        </div>
+                                        </td>
+                                    </tr>
                                     @endforeach
-                                        <div class="col-md-9"></div>
-                                        <div class="col-md-3 fs-6 fw-bold"> Sub Total : {{ $orderItems->sum('totalPrice') }} </div>
-                                </div>
-                            </div>
+                                </tbody>
+                                
+                                <tr>
+                                    <td colspan="5"></td>
+                                    <td class="table-active text-start">
+                                        <span> Sub Total : {{ $orderItems->sum('totalPrice') }} </span>
+                                    </td>
+                                </tr>
+
+                            </table>
                         </div>
-                        
 					</div>
                 </div>
             </div>
-
 
             <div class="row">
                 <div class="col-md-12">
@@ -197,59 +203,41 @@
                             </div>
                         </div>
 
-                        <div class="card-body">                            
-                            <div class="container">
+                        <div class="card-body">
+                            <table class="table border ">
+                                <thead>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>Property Name</th>
+                                        <th>Property Owner</th>
+                                        <th>Owner Email</th>
+                                        <th>Phone Number</th>
+                                        <th>Confirmation</th>
+                                        <th>Payment Status</th>
+                                    </tr>
+                                </thead>
 
-                                <div class="row">
-                                    <div class="col-md-2 fs-5 fw-bold mb-2">
-                                    Property Name
-                                    </div>
-                                    <div class="col-md-2 fs-5 fw-bold mb-2">
-                                    Property Owner
-                                    </div>
-                                    <div class="col-md-2 fs-5 fw-bold mb-2">
-                                    Owner Email
-                                    </div>
-                                    <div class="col-md-2 fs-5 fw-bold mb-2">
-                                    Phone Number
-                                    </div>
-                                    <div class="col-md-2 fs-5 fw-bold mb-2">
-                                    Confirmation
-                                    </div>
-                                    <div class="col-md-2 fs-5 fw-bold mb-2">
-                                    Payment Status
-                                    </div>
-
-                                   
-                                    @forelse($propertyDetails as $key => $property)
-                                        <div class="col-md-2 ">
-                                            {{ getPropertyDetails($property->propertyId)->title }}
-                                        </div>
-                                        <div class="col-md-2">
-                                            {{ getPropertyDetails($property->propertyId)->ownerName }}
-                                        </div>
-                                        <div class="col-md-2">
-                                            {{ getPropertyDetails($property->propertyId)->email }}
-                                        </div>
-                                        <div class="col-md-2">
-                                            {{ getPropertyDetails($property->propertyId)->phone }}
-                                        </div>
-                                        <div class="col-md-2">
-                                            {{ ucfirst($property->confirmation) }}
-                                        </div>
-                                        <div class="col-md-2">
-                                            {{ ucfirst($property->payment) }}
-                                        </div>
-                                        @empty
-                                        <div class="col-md-12 text-center mt-2"> No property found </div>
-                                    @endforelse
-                                </div>
-                            </div>
+                                <tbody>
+                                    @php $serialno= 1;  @endphp
+                                    @foreach($propertyDetails as $key => $property)
+                                    <tr>
+                                        <th>{{ $serialno++ }}</th>
+                                        <td>{{ getPropertyDetails($property->propertyId)->title }}</td>
+                                        <td>{{ getPropertyDetails($property->propertyId)->ownerName }}</td>
+                                        <td>{{ getPropertyDetails($property->propertyId)->email }}</td>
+                                        <td>{{ getPropertyDetails($property->propertyId)->phone }}</td>
+                                        <td>{{ ucfirst($property->confirmation) }}</td>
+                                        <td>{{ ucfirst($property->payment) }}</td>
+                                    </tr>
+                                    @endforeach
+                                    
+                                </tbody>
+                            </table>
                         </div>
-                        
 					</div>
                 </div>
             </div>
+
 
         </div>
     </section>

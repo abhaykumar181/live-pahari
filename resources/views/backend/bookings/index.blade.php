@@ -55,13 +55,13 @@
                                     @php $serialno= 1;  @endphp
                                     @foreach($bookings as $key => $booking)
                                     <tr>
-                                        <th>{{$serialno++}}</th>
-                                        <td>{{$booking->bookingCode}}</td>
-                                        <td>{{$booking->name}}</td>
-                                        <td>{{getPackageName($booking->packageId)}}</td>
-                                        <td>{{$booking->checkInDate}}</td>
-                                        <td>{{$booking->guests}}</td>
-                                        <td>{{ucfirst($booking->status)}}</td>
+                                        <th>{{ $serialno++ }}</th>
+                                        <td>{{ $booking->bookingCode }}</td>
+                                        <td>{{ $booking->name }}</td>
+                                        <td>{{ getPackageDetails($booking->packageId)->title }}</td>
+                                        <td>{{ $booking->checkInDate }}</td>
+                                        <td>{{ $booking->guests }}</td>
+                                        <td>{{ ucfirst($booking->status) }}</td>
                                         <td>
                                             <a href="{{ route('admin.bookings.view-details', ['bookingId' => $booking->id]) }}" class="btn-sm btn-primary text-decoration-none shadow-sm d-inline-block" > <i class="fa-solid fa-eye"></i> </a>
                                         </td>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Bookings;
 use App\Models\BookingsMeta;
+use App\Models\BookingsConfirmations;
 
 class BookingsController extends Controller
 {
@@ -36,7 +37,7 @@ class BookingsController extends Controller
         try{
             $data['booking'] = Bookings::find($bookingId);
             $data['orderItems'] = BookingsMeta::where(['bookingId' => $bookingId])->get();
-            // dd($data['orderItems']);
+            $data['propertyDetails'] = BookingsConfirmations::where('bookingId' ,'=', $bookingId)->where('confirmation' ,'!=', 'confirmed')->get();
             return view('backend.bookings.view-details', $data);
         }catch(\Illuminate\Database\QueryException $e){
             return redirect()->back()->with('error', 'Failed to view bookings.');

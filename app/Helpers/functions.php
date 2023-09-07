@@ -21,13 +21,13 @@ if (!function_exists('getControllerName')) {
 }
 
 if(!function_exists('getSlug')){
-    function getSlug($value){
+    function getSlug($value=''){
         return str::slug($value);
     }
 }
 
 if(!function_exists('setTextlimit')){
-    function setTextlimit($text){
+    function setTextlimit($text=''){
         return str::limit($text,130);
     }
 }
@@ -73,9 +73,9 @@ if(!function_exists('render_thumbnail_url')){
  * @return packageName
  */
 
-if(!function_exists('getPackageName')){
-    function getPackageName($packageId){
-        return Packages::find($packageId)->title;
+if(!function_exists('getPackageDetails')){
+    function getPackageDetails($packageId=''){
+        return Packages::find($packageId);
     }
 }
 
@@ -88,9 +88,9 @@ if(!function_exists('getPackageName')){
  * @return AddonName
  */
 
- if(!function_exists('getAddonName')){
-    function getAddonName($addonId){
-        return Addons::find($addonId)->title;
+ if(!function_exists('getAddonDetails')){
+    function getAddonDetails($addonId=''){
+        return Addons::find($addonId);
     }
 }
 
@@ -103,8 +103,8 @@ if(!function_exists('getPackageName')){
  * @return propertyName
  */
 
- if(!function_exists('getPropertyName')){
-    function getPropertyName($propertyId){
-        return Properties::find($propertyId)->title;
+ if(!function_exists('getPropertyDetails')){
+    function getPropertyDetails($propertyId=''){
+        return Properties::find($propertyId);
     }
 }

@@ -295,7 +295,18 @@ class BookingsController extends Controller
                     Mail::to($booking->email)->send(new BookingNotification($booking));
                 }
 
+            }else{
+                if($request->orderStatus == "paid"){
+                    $orederItems = BookingsMeta::where(['bookingId' => $booking->id, "orderId" => $request->orderId])->get();
+
+                    foreach($orederItems as $item){
+                        if($item->objectType == "property"){
+                            $confirmationExist = BookingsConfirmations::where(["propertyId" => $item->objectId, "bookingId" => $request->bookingId])->update(["payment" => "paid"]);
+                        }
+                    }
+                }
             }
+
             return response()->json(['success' => true , 'message' => 'Order Updated Successfully!'], 200);            
 
         }catch(\Illuminate\Database\QueryException $e){
@@ -434,7 +445,7 @@ class BookingsController extends Controller
             if( $booking->count() > 0 ){
                 $calculatedCheckoutdate = date('Y-m-d', strtotime($request->checkinDate. ' + '.( $packageDays-1 ).' days'));
                 if($checkoutDate != $calculatedCheckoutdate){
-                    return response()->json(['success'=>false, 'message'=>'Package not available for this date (on days calculation).'], 404);
+                    return response()->json(['success'=>false, 'message'=>'Package not available for this date.'], 404);
                 }
             }
         }catch(\Illuminate\Database\QueryException $e){
