@@ -100,10 +100,6 @@ class BookingsController extends Controller
             ];
             
             $request->validate($validateInput);
-            
-            if($request->guests > Settings::pluck('maxGuests')->first()){
-                return response()->json(['error'=>true, 'message'=>'Guests limit exceeded. Can\'t book order.'], 404);
-            }
 
             $package = Packages::find($request->packageId);
             if(is_null($package)){
@@ -308,6 +304,7 @@ class BookingsController extends Controller
                         }
 
                         $propertyConfirmed = BookingsConfirmations::where(["propertyId" => $property->id, "bookingId" => $booking->id])->first();
+                        // dd($propertyConfirmed);
                         if(is_null($propertyConfirmed)){
                             return ['success'=> false, 'message'=>'Invalid Property ID.', 'status_code' => 404];
                         }
@@ -380,21 +377,25 @@ class BookingsController extends Controller
             $maxGuests = $settings->maxGuests;
             $packageDays = $package->days;
             $bookedPackagespace = $bookings->sum('guests');
-            
-            if( $request->guests > $maxGuests ){
-                return response()->json(['success'=>false, 'message'=>'Guests limit exceeded.'], 404);
-            }
-            if( $bookedPackagespace + $request->guests > $maxGuests ){
-                return response()->json(['success'=>false, 'message'=>'Package not available for this date.'], 404);
-            }
-            
+
             $checkoutDate = date('Y-m-d', strtotime(Carbon::parse($booking->first()->checkInDate)->format('Y-m-d'). ' + '.( $packageDays-1 ).' days'));
             if( $booking->count() > 0 ){
-                $calculatedCheckoutdate = date('Y-m-d', strtotime($request->checkinDate. ' + '.( $packageDays-1 ).' days'));
-                if($checkoutDate != $calculatedCheckoutdate){
-                    return response()->json(['success'=>false, 'message'=>'Package not available for this date.'], 404);
+                if( $request->guests > $maxGuests ){
+                    return response()->json(['success'=>false, 'message'=>'Guests limit exceeded.'], 404);
                 }
-            }
+                if( $bookedPackagespace + $request->guests > $maxGuests ){
+                    return response()->json(['success'=>false, 'message'=>'Package not available for this date.(on space basis)'], 404);
+                }
+
+                $calculatedCheckoutdate = date('Y-m-d', strtotime($request->checkinDate. ' + '.( $packageDays-1 ).' days'));
+                if($checkoutDate != $calculatedCheckoutdate || $checkoutDate < $calculatedCheckoutdate){
+                    return response()->json(['success'=>false, 'message'=>'Package not available for this date.(on calculated checkout and date is less than first booking)'], 404);
+                }
+                /*if($request->checkinDate < $booking->first()->checkInDate){
+                    return response()->json(['success'=>false, 'message'=>'Package not available for this date.'], 404);
+                }*/
+            }           
+
         }catch(\Illuminate\Database\QueryException $e){
             return redirect()->json('Internal Server Error.', 500);
         }
