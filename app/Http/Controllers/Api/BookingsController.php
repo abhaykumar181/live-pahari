@@ -103,7 +103,7 @@ class BookingsController extends Controller
 
             $package = Packages::find($request->packageId);
             if(is_null($package)){
-                return response()->json(['error'=>true, 'message'=>'Invalid Package Request.'], 404);
+                return response()->json(['success'=>false, 'message'=>'Invalid Package Request.'], 404);
             }            
 
             $response = DB::transaction(function() use ($request, $package) {
@@ -184,10 +184,10 @@ class BookingsController extends Controller
                         ];
                         return ['success' => true, 'message' => "Order created!", 'status_code' => 200 , $data];
                     }else{
-                        return ['error'=>true, 'message'=>'Order Booking Failed.', 'status_code' => 404];
+                        return ['success'=>false, 'message'=>'Order Booking Failed.', 'status_code' => 404];
                     }
                 }else{
-                    return ['error'=>true, 'message'=>'Order Booking Failed.', 'status_code' => 404];
+                    return ['success'=>false, 'message'=>'Order Booking Failed.', 'status_code' => 404];
                 }
             });
 
@@ -222,7 +222,7 @@ class BookingsController extends Controller
 
             $order = BookingOrder::find($request->orderId);
             if(is_null($order)){
-                return response()->json(['error'=>true, 'message'=>'Invalid Order Request.'], 404);
+                return response()->json(['success'=>false, 'message'=>'Invalid Order Request.'], 404);
             }
             $order->status = $request->orderStatus;
             $order->save();
@@ -349,7 +349,7 @@ class BookingsController extends Controller
             return response()->json($response, $statusCode);
 
         }catch(\illuminate\database\QueryException $e){
-            return redirect()->json(['message' => 'Internal Server Error.'], 500);
+            return redirect()->json('Internal Server Error.', 500);
         }
     }
 
