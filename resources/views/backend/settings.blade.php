@@ -20,6 +20,14 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
+    <style>
+        .nav-pills {
+            border: 1px solid #ddd; 
+            .nav-link{
+                color:black
+            }
+        }
+    </style>
 
     @include('backend.layouts.includes.notices')
     <style>
@@ -43,7 +51,7 @@
                                     <div class="row">
                                         <div class="d-flex align-items-start">
                                             
-                                            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"                     aria-orientation="vertical">
+                                            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                                 <button class="nav-link active" id="v-pills-general-tab" data-bs-toggle="pill" data-bs-target="#v-pills-general" type="button" role="tab" aria-controls="v-pills-general" aria-selected="true">General Settings</button>
                                                 <button class="nav-link"  id="v-pills-bookings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-bookings" type="button" role="tab" aria-controls="v-pills-bookings" aria-selected="false">Booking Settings</button>
                                                 <button class="nav-link"  id="v-pills-additional-tab" data-bs-toggle="pill" data-bs-target="#v-pills-additional" type="button" role="tab" aria-controls="v-pills-additional" aria-selected="false">Additional Settings</button>
