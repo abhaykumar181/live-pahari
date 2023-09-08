@@ -67,3 +67,7 @@ select.form-control { -webkit-appearance: menulist; }
 /********************2023-08-16 End  *****************/
 #preview img {height: 90px;width: 50%; padding: 3px;}
 .package-thumbnails{height: 100px;width: 100%; }
+/******************** 2023-09-08 Start ********************/
+.settingsPage .nav-pills { border: 1px solid #ddd; border-radius: 5px; .nav-link{ color:black;} }
+.settingsPage .nav-pills .nav-link.active, .nav-pills .show>.nav-link{background-color: grey; color:white; }
+/******************** 2023-09-08 End ********************/

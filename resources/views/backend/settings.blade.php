@@ -20,19 +20,9 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-    <style>
-        .nav-pills {
-            border: 1px solid #ddd; 
-            .nav-link{
-                color:black
-            }
-        }
-    </style>
 
     @include('backend.layouts.includes.notices')
-    <style>
-        
-        </style>
+    
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
@@ -49,7 +39,7 @@
                             <div class="card-body">
                                 <div class="container">
                                     <div class="row">
-                                        <div class="d-flex align-items-start">
+                                        <div class="d-flex align-items-start settingsPage">
                                             
                                             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                                 <button class="nav-link active" id="v-pills-general-tab" data-bs-toggle="pill" data-bs-target="#v-pills-general" type="button" role="tab" aria-controls="v-pills-general" aria-selected="true">General Settings</button>

@@ -37,15 +37,23 @@ class SettingsController extends Controller
                 'numberofGuests' => 'required',
                 'numberofcuratedGuests' => 'required',
             ];
-
+            
             $request->validate($validateInput);
-
+            
+            if( $request->numberofGuests < $request->numberofcuratedGuests ){
+                return redirect()->back()->with('error','Curate guests can\'t be more than max number of guests.');
+            }
+            
+            if( $request->numberofGuests == $request->numberofcuratedGuests ){
+                return redirect()->back()->with('error','Max guests and curate guests can\'t be same.');
+            }
+            
             $imageName = $request->thumbnailName ? $request->thumbnailName : null;
             if($request->hasFile('logo')){
                 $imageName = time() . '.' . $request->logo->extension();
                 $request->logo->move(public_path('storage/images'), $imageName);
             }
-
+            
             $settings = Settings::first();
             $settings->title = $request->title;
             $settings->slug = getSlug($request->title);
@@ -55,15 +63,16 @@ class SettingsController extends Controller
             $settings->headerscripts = $request->headerscripts;
             $settings->footerscripts = $request->footerscripts;
             
+            
             if($settings->save()){
                 return redirect()->route('admin.settings.settings')->with('message','Settings updated successfully.');
             }else{
                 return redirect()->back()->with('error','Failed to update Settings.');
             }
-
+            
         }catch(\Illuminate\Database\QueryException $e){
             return redirect()->back()->with('error','Failed to update Settings.');
         }
     }
-
+    
 }
