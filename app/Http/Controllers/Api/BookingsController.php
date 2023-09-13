@@ -217,9 +217,9 @@ class BookingsController extends Controller
                 'orderId' => 'required',
                 'orderStatus' => 'required',
             ];
-        
+            
             $request->validate($validateInput);
-
+            
             $order = BookingOrder::find($request->orderId);
             if(is_null($order)){
                 return response()->json(['success'=>false, 'message'=>'Invalid Order Request.'], 404);
@@ -227,6 +227,7 @@ class BookingsController extends Controller
             $order->status = $request->orderStatus;
             $order->save();
             $bookingCount= BookingOrder::where('bookingId', $request->bookingId)->count();
+            $booking = Bookings::find($request->bookingId);
             // get order count
             if($bookingCount == 1 && $request->orderStatus == "paid"){
                 $pendingConfirmations = BookingsConfirmations::where('bookingId', $request->bookingId)->where('confirmation','pending')->get();
@@ -242,17 +243,16 @@ class BookingsController extends Controller
                 // TODO: Add booking Notification email with booking details
                 $bookingOrderStatus = BookingOrder::find($request->orderId)->status;
                 if($bookingOrderStatus == 'paid'){
-                    $booking = Bookings::find($request->bookingId);
                     Mail::to($booking->email)->send(new BookingNotification($booking));
                 }
-
+                
             }else{
                 if($request->orderStatus == "paid"){
-                    $orederItems = BookingsMeta::where(['bookingId' => $booking->id, "orderId" => $request->orderId])->get();
-
-                    foreach($orederItems as $item){
+                    $orderItems = BookingsMeta::where(['bookingId' => $booking->id, "orderId" => $request->orderId])->get();
+                    
+                    foreach($orderItems as $item){
                         if($item->objectType == "property"){
-                            $confirmationExist = BookingsConfirmations::where(["propertyId" => $item->objectId, "bookingId" => $request->bookingId])->update(["payment" => "paid"]);
+                            $confirmationExist = BookingsConfirmations::where(["propertyId" => $item->objectId, "bookingId" => $request->bookingId])->update(['payment' => 'paid']);
                         }
                     }
                 }
@@ -304,7 +304,7 @@ class BookingsController extends Controller
                         }
 
                         $propertyConfirmed = BookingsConfirmations::where(["propertyId" => $property->id, "bookingId" => $booking->id])->first();
-                        // dd($propertyConfirmed);
+                        
                         if(is_null($propertyConfirmed)){
                             return ['success'=> false, 'message'=>'Invalid Property ID.', 'status_code' => 404];
                         }
@@ -394,8 +394,8 @@ class BookingsController extends Controller
                 /*if($request->checkinDate < $booking->first()->checkInDate){
                     return response()->json(['success'=>false, 'message'=>'Package not available for this date.'], 404);
                 }*/
-            }           
-
+            }
+            
         }catch(\Illuminate\Database\QueryException $e){
             return redirect()->json('Internal Server Error.', 500);
         }

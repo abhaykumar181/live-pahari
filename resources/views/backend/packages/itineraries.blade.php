@@ -50,7 +50,7 @@
                                                 <div class="accordion" id="packageItinerariesItems">
                                                     @if(!empty($packageItineraries))
                                                         @php 
-                                                            $currentItems = 1; 
+                                                            $currentItems = 1;
                                                             $itenariesDays = old('numberofDays') ? old('numberofDays') : $package->days;
                                                         @endphp
 

@@ -24,9 +24,13 @@ class BookingController extends Controller
     protected function viewDetails($confirmationId){
         $data['confirmationId'] = $confirmationId;
         $data['confirmationItem'] = BookingsConfirmations::whereRaw(" md5(id)='".$confirmationId."' ")->first();
-        $data['property'] = Properties::find($data['confirmationItem']->propertyId);
-        $data['booking'] = Bookings::find($data['confirmationItem']->bookingId);
-        return view('frontend.bookings.booking-confirmation', $data);
+        if(!$data['confirmationItem']){
+            abort(404);
+        }else{
+            $data['property'] = Properties::find($data['confirmationItem']->propertyId);
+            $data['booking'] = Bookings::find($data['confirmationItem']->bookingId);   
+            return view('frontend.bookings.booking-confirmation', $data);
+        }
     }
 
     /**
@@ -48,15 +52,27 @@ class BookingController extends Controller
             if($bookingConfirmation->save()){
                 $booking = Bookings::find($bookingConfirmation->bookingId);
                 if($request->confirm){
+                    return redirect()->route('bookings.confirmationStatus')->with('message','Customer confirmation request has been accepted.');
                     Mail::to($booking->email)->send(new ConfirmationAccepted($bookingConfirmation));
-                    return redirect()->back()->with('message','Customer confirmation request has been accepted.');
                 }elseif($request->reject){
+                    return redirect()->route('bookings.confirmationStatus')->with('message','Customer confirmation request has been rejected.');
                     Mail::to($booking->email)->send(new ConfirmationRejected($bookingConfirmation));
-                    return redirect()->back()->with('message','Customer confirmation request has been rejected.');
                 }
             }
         }catch(\Illuminate\database\QueryException $e){
             return redirect()->back()->with('error','Server Error. Please try again.');
         }
     }
+
+    /**
+     * Display Confirmation Status  
+     * 
+     * @since 1.0.0
+     * 
+     * @return html
+     */
+
+     protected function confirmationStatus(){
+        return view('frontend.bookings.confirmation-message');
+     }
 }

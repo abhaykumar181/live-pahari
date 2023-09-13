@@ -84,8 +84,7 @@ jQuery(document).ready(function ($) {
 				data: { addNewdays, currentItems },
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				
+				},				
 				success : function(response){
 					$('.accordion').append(response.content);
 				}

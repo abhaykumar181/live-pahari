@@ -52,14 +52,17 @@ Route::group(['as'=>'admin.'], function(){
 
             // Web Routes for Packages
             Route::group(['as'=>'packages.', 'prefix'=>'packages', 'controller'=>App\Http\Controllers\Backend\PackageController::class], function(){
+                // Packages
                 Route::get('/','index')->name('index');
                 Route::get('/create','create')->name('create');
                 Route::post('/create','store')->name('store');
                 Route::get('/edit/{packageId}','edit')->name('edit');
                 Route::get('/delete/{packageId}','delete')->name('delete');
+                // Itineraries
                 Route::get('/itineraries/{packageId}','itineraries')->name('itineraries');
-                Route::post('/get-accordion','gerItineraries')->name('accordion');
+                Route::post('/get-accordion','getItineraries')->name('accordion');
                 Route::post('/store-itineraries','storeItineraries')->name('storeitineraries');
+                // Gallery
                 Route::get('/gallery/{packageId}','gallery')->name('gallery');
                 Route::post('/store-galleryimages','storeGalleryImages')->name('storegalleryImages');
                 Route::get('/delete-thumbnail/{thumbnailId}','deleteThumbnail')->name('deleteThumbnail');
@@ -89,8 +92,12 @@ Route::group(['as'=>'admin.'], function(){
     });    
 });
 
-// Web Routes for email.
+// Web Routes for Confirmation Request.
 Route::group(['as'=>'bookings.', 'prefix' => 'bookings', 'controller' => App\Http\Controllers\BookingController::class], function(){
     Route::get('/confirmation/{id}', 'viewDetails')->name('viewDetails');
     Route::post('/property-action', 'propertyActions')->name('propertyActions');
+    Route::get('/confirmation-status', 'confirmationStatus')->name('confirmationStatus');
 });
+
+// Web Route for (404) Page not found.
+Route::get('/404', ['controller' => App\Http\Controllers\PageNotFoundController::class]);

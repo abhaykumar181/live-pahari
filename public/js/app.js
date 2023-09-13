@@ -1,6 +1,6 @@
 // Confirming Property.
 $(document).on('click', '#btn-confirm', function(e) {
-    e.preventDefault();
+    // e.preventDefault();
     swal({
         title: "Are you sure?",
         text: "Are you sure want to confirm this request?",
@@ -19,7 +19,7 @@ $(document).on('click', '#btn-confirm', function(e) {
 
 // Rejecting Property.
 $(document).on('click', '#btn-reject', function(e) {
-    e.preventDefault();
+    // e.preventDefault();
     swal({
         title: "Are you sure?",
         text: "Are you sure want to reject this request?",

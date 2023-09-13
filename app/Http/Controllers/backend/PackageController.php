@@ -87,7 +87,7 @@ class PackageController extends Controller
      * 
      *  @return html 
      */
-    protected function gerItineraries(Request $request){
+    protected function getItineraries(Request $request){
         $data['itenariesDays'] = $request->addNewdays;
         $data['currentItems'] =  $request->currentItems +1;        
         $data['content']= view('backend.partials.itinerariesItems',$data)->render();
@@ -152,12 +152,12 @@ class PackageController extends Controller
     
                     if(!empty($existingAddonLocations)){
                         foreach($existingAddonLocations as $locationId){
-                            if(!in_array($existingAddonLocations,$request->locations)){
-                                $updateLocations = true;                            
+                            if(!in_array($locationId, $request->locations)){
+                                $updateLocations = true;
                             }
                         }
     
-                        if(count(array_diff($request->locations,$existingAddonLocations)) > 0){
+                        if(count(array_diff($request->locations, $existingAddonLocations)) > 0){
                             $updateLocations = true;
                         }
                     }
@@ -170,7 +170,7 @@ class PackageController extends Controller
                 if($updateLocations === true){
                     if($request->post('id')){
                         LocationRelationship::where(
-                            ['objectId' => $request->post('id'),'objectType' => 'package']
+                            ['objectId' => $request->post('id'), 'objectType' => 'package']
                         )->delete();
                     }
     
@@ -270,7 +270,6 @@ class PackageController extends Controller
      */
     protected function storeItineraries(Request $request){
         try{
-
             $validateInput = [
                 "itinaryTitle.*"  => "required",
                 "itineraryDescription.*"  => "required",
@@ -307,12 +306,11 @@ class PackageController extends Controller
                 $packageItinerary->title = $title;
                 $packageItinerary->description = $request->itineraryDescription[$index];
                 $packageItinerary->save();
-            }
-
-            
+            }            
 
             $package = Packages::find($request->packageId);
             $package->days = $request->numberofDays;
+            
             if($package->save()){
                 return redirect()->route('admin.packages.itineraries', ['packageId' => $request->packageId])->with('message','Itineraries updated successfully.');
             }else{

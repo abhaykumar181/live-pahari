@@ -19,12 +19,11 @@
         </h2>
         <div id="collapse{{$currentItems}}" class="accordion-collapse collapse" aria-labelledby="heading{{$currentItems}}" data-bs-parent="#packageItinerariesItems">
             <div class="accordion-body">
-            <div class="form-floating mb-3">
-                <input type="hidden" name="itineraryDay[]" value="{{$currentItems}}" >
-                <input type="text" class="form-control shadow-sm" id="itinaryTitle" name="itinaryTitle[]"  placeholder="Enter itinerary Title" value="{{ $title }}">
-                <label for="itinaryTitle">Itinerary Title</label>
-                
-            </div>
+                <div class="form-floating mb-3">
+                    <input type="hidden" name="itineraryDay[]" value="{{$currentItems}}" >
+                    <input type="text" class="form-control shadow-sm" id="itinaryTitle" name="itinaryTitle[]"  placeholder="Enter itinerary Title" value="{{ $title }}">
+                    <label for="itinaryTitle">Itinerary Title</label>                
+                </div>
 
                 <div class="form-floating">
                     <textarea class="form-control shadow-sm" placeholder="Enter Itinerary description.."  name="itineraryDescription[]" id="itineraryDescription" style="height: 140px">{{$description}}</textarea>

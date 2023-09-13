@@ -18,9 +18,9 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
+                @if($confirmationItem->confirmation == "pending")
                 <div class="col-md-8 mx-auto mt-5">
                     <div class="card card-white rounded-0">
-                        @include('backend.layouts.includes.notices')
                         <div class="card-header bg-white py-3 ">
                             <h5 class="mb-0">Confirmation Pending Details</h5>
                         </div>
@@ -126,6 +126,13 @@
 					    </div>
                     </div>
                 </div>
+              @else
+                <div class="card">
+                    <div class="card-body text-danger text-center">
+                        Your link is expired.
+                    </div>
+                </div>
+            @endif
             </div>
         </div>
     </section>
