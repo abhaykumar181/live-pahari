@@ -98,6 +98,3 @@ Route::group(['as'=>'bookings.', 'prefix' => 'bookings', 'controller' => App\Htt
     Route::post('/property-action', 'propertyActions')->name('propertyActions');
     Route::get('/confirmation-status', 'confirmationStatus')->name('confirmationStatus');
 });
-
-// Web Route for (404) Page not found.
-Route::get('/404', ['controller' => App\Http\Controllers\PageNotFoundController::class]);

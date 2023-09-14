@@ -48,15 +48,12 @@ class BookingController extends Controller
             }elseif($request->reject){
                 $bookingConfirmation->confirmation = "rejected";
             }
-
             if($bookingConfirmation->save()){
                 $booking = Bookings::find($bookingConfirmation->bookingId);
-                if($request->confirm){
+                if($request->confirm && Mail::to($booking->email)->send(new ConfirmationAccepted($bookingConfirmation))){
                     return redirect()->route('bookings.confirmationStatus')->with('message','Customer confirmation request has been accepted.');
-                    Mail::to($booking->email)->send(new ConfirmationAccepted($bookingConfirmation));
-                }elseif($request->reject){
+                }elseif($request->reject && Mail::to($booking->email)->send(new ConfirmationRejected($bookingConfirmation))){
                     return redirect()->route('bookings.confirmationStatus')->with('message','Customer confirmation request has been rejected.');
-                    Mail::to($booking->email)->send(new ConfirmationRejected($bookingConfirmation));
                 }
             }
         }catch(\Illuminate\database\QueryException $e){
