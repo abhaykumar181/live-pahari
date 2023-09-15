@@ -1,30 +1,35 @@
 <x-mail::message>
 
+# Booking Confirmation
+
 Dear *{{ $bookingUsername }}*,
 
 We are thrilled to confirm your booking for *{{ $tourName->title }}*! Get ready for an incredible experience. Below are all the details you'll need. Simply present this email on the day of your arrival.
+
 # Booking Details
 <x-mail::table>
 | Booking Code | Check-in    | Check-out    | Total     | Status        |
 |:-------------|:------------|:-------------|:----------|--------------:|
 | {{ $bookingCode }} | {{ $checkInDate }} | {{ $checkOutDate }} | ${{ $orderTotalPrice->price }} | {{ ucwords($bookingStatus) }} |
-</x-mail::table>
-
+<x-mail::table>
+    
 # Order Summary
 <x-mail::table>
-|  Order Items  | Guests    | Rate Per Unit    |  Total  |
-|:--------------|:----------|:-----------------|:--------|
+|  Order Items  | Guests    | Rate per Unit    |  Total  |
+|:--------------|:---------:|:-----------------|:--------|
 | {{ $tourName->title }} | {{ $guests }} | ${{ $packagePerUnitRate }} | ${{ $packagePerUnitRate * $guests }} |
+|  Order Items  | Guests    | Rate per Unit    |  Total  |
 @foreach($bookingItems as $item)
 @php
-    $addonId = $item->objectId;
-    $addon = App\Models\Addons::find($addonId);
+$addonId = $item->objectId;
+$addon = App\Models\Addons::find($addonId);
 @endphp
-| {{ $addon->title }} | {{ $guests }} | ${{ $item->baseprice }} | ${{ $item->totalPrice }} |
-@endforeach
-| | | |Total: ${{ $totalPrice }}|
-</x-mail::table>
 
+| {{ $addon->title }} | {{ $guests }} | ${{ $item->baseprice }} | ${{ $item->totalPrice }} |
+|:--------------|:---------:|:-----------------|:--------|
+@endforeach
+||||Total: ${{ $totalPrice }}|
+</x-mail::table>
 
 @if(sizeof($pendingConfirmations))
 # Property Details
