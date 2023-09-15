@@ -54,11 +54,11 @@
                                     @php $serialno= 1;  @endphp
                                     @foreach($addons as $key => $addon)
                                     <tr>
-                                        <th>{{$serialno++}}</th>
-                                        <td>{{$addon->title}}</td>
-                                        <td>{{$addon->price}}</td>
-                                        <td>{{ucwords($addon->priceType)}}</td>
-                                        <td>{{$addon->status === 1 ? 'Active' : 'Inactive'}}</td>
+                                        <th>{{ $serialno++ }}</th>
+                                        <td>{{ $addon->title }}</td>
+                                        <td>{{ $addon->price }}</td>
+                                        <td>{{ ucwords($addon->priceType) }}</td>
+                                        <td>{{ $addon->status === 1 ? 'Active' : 'Inactive' }}</td>
                                         <td>
                                              <a href="{{route('admin.addons.edit', ['addonId'=> $addon->id ])}}" class="btn-sm btn-primary text-decoration-none shadow-sm d-inline-block"> <i class="fa-solid fa-pencil"></i> </a>
                                              <a href="javascript:void();" class="btn-sm btn-danger text-decoration-none shadow-sm d-inline-block delete-addon " data-type="addon" data-id="{{ $addon->id }}"> <i class="fa-solid fa-trash"></i> </a>

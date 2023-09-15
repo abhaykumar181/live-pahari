@@ -47,6 +47,5 @@ class AdminloginController extends Controller
         catch(\Illuminate\Database\QueryException $e){
             return redirect(route('admin.login'))->with('error','login failed.');
         }
-        
     }
 }

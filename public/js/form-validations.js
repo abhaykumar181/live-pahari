@@ -122,6 +122,7 @@ jQuery(document).ready(function($) {
         errorElement: 'span',
         errorClass: 'error',
         onkeyup: false,
+        ignore: ".ignore",
         rules: {
             title: {
                 required: true
@@ -193,11 +194,12 @@ jQuery(document).ready(function($) {
 
 
 
-    // Validate Addon Form
+    // Validate Property Form
     $(".property_form").validate({
         errorElement: 'span',
         errorClass: 'error',
         onkeyup: false,
+        ignore: ".ignore",
         rules: {
             title: {
                 required: true

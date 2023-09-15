@@ -30,7 +30,7 @@ class AddonsController extends Controller
      * 
      * @return html
      */
-    protected function create(){
+    protected function create(Request $request){
         $data['allLocations'] = Locations::all();
         return view('backend.addons.create',$data);
     }
