@@ -104,7 +104,7 @@ class BookingsController extends Controller
             $package = Packages::find($request->packageId);
             if(is_null($package)){
                 return response()->json(['success'=>false, 'message'=>'Invalid Package Request.'], 404);
-            }            
+            }
 
             $response = DB::transaction(function() use ($request, $package) {
                 $packageId = ( $request->packageId < 10 && $request->packageId > 0 )? '0'.$request->packageId : $request->packageId;

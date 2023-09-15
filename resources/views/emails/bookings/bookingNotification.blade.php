@@ -22,7 +22,7 @@ We are thrilled to confirm your booking for *{{ $tourName->title }}*! Get ready 
 @endphp
 | {{ $addon->title }} | {{ $guests }} | ${{ $item->baseprice }} | ${{ $item->totalPrice }} |
 @endforeach
-| | | |Total: ${{ $totalPrice }}|
+| | | |<strong> Total: </strong>${{ $totalPrice }} |
 </x-mail::table>
 
 
